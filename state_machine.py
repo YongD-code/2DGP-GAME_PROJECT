@@ -12,3 +12,9 @@ class StateMachine:
     def draw(self):
         self.current_state.draw(self.char)
         pass
+
+    def change_state(self,new_state):
+        self.current_state.exit(self.char)
+        self.current_state = new_state
+        self.current_state.enter(self.char)
+        pass
