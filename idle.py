@@ -1,11 +1,11 @@
 from pico2d import *
 
 class Idle:
-    def __enter__(player):
+    def enter(player):
         player.image = load_image('_idle.png')
         player.frame = 0
 
-    def __exit__(player):
+    def exit(player):
         pass
 
     def update(player):
