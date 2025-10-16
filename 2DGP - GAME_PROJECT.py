@@ -1,29 +1,8 @@
 from pico2d import *
-import random
-
-class Background:
-    def __init__(self):
-        self.image = load_image('background.png')
-
-    def update(self):
-        pass
-
-    def draw(self):
-        self.image.draw(640, 360)
-
-class Player:
-    def __init__(self):
-        self.image = load_image('_idle.png')
-        self.x,self.y = 80,120
-        self.frame = 0
-        self.w = 120
-        self.h = 80
-
-    def update(self):
-        self.frame = (self.frame + 1) % 10
-
-    def draw(self):
-        self.image.clip_draw(self.frame * self.w, 0, self.w, self.h, self.x, self.y,self.w*3,self.h*3)
+from background import Background
+from player import Player
+from idle import Idle
+from run import Run
 
 def handle_events():
     global running
