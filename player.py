@@ -8,6 +8,10 @@ def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 def right_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
+def left_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
+def left_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
 
 class Player:
     def __init__(self):
@@ -23,8 +27,8 @@ class Player:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN},
-                self.RUN: {right_up: self.IDLE}
+                self.IDLE: {right_down: self.RUN,left_down:self.RUN},
+                self.RUN: {right_up: self.IDLE,left_up:self.IDLE}
             },
             self
         )
