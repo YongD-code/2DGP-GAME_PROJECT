@@ -1,15 +1,15 @@
 from pico2d import *
 
 class Idle:
-    def enter(player):
-        player.image = load_image('_Idle.png')
-        player.frame = 0
+    def enter(self,event):
+        self.image = load_image('_Idle.png')
+        self.frame = 0
 
-    def exit(player):
+    def exit(self,event):
         pass
 
-    def update(player):
-        player.frame = (player.frame + 1) % 10
+    def do(self):
+        self.frame = (self.frame + 1) % 10
 
-    def draw(player):
-        player.image.clip_draw(player.frame * player.w, 0, player.w, player.h, player.x, player.y, player.w * 3,player.h * 3)
+    def draw(self):
+        self.image.clip_draw(self.frame * self.w, 0, self.w, self.h, self.x, self.y, self.w * 3,self.h * 3)
