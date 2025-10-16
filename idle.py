@@ -2,7 +2,7 @@ from pico2d import *
 
 class Idle:
     def enter(player):
-        player.image = load_image('_idle.png')
+        player.image = load_image('_Idle.png')
         player.frame = 0
 
     def exit(player):
