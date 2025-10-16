@@ -3,7 +3,7 @@ class StateMachine:
         self.char = char
         self.current_state = start_state
         self.rules = rules
-        self.current_state.enter(self.char)
+        self.current_state.enter(('START',0))
         pass
 
     def update(self):
@@ -19,8 +19,8 @@ class StateMachine:
             if check_event(state_event):
                 self.next_state = self.rules[self.current_state][check_event]
                 self.current_state.exit(state_event)
-                self.next_state.enter(self.char)
                 self.current_state = self.next_state
+                self.next_state.enter(state_event)
                 return
 
         pass
