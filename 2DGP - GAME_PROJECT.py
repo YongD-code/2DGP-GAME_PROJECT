@@ -1,8 +1,6 @@
 from pico2d import *
 from background import Background
 from player import Player
-from idle import Idle
-from run import Run
 
 def handle_events():
     global running
