@@ -13,10 +13,10 @@ class Run:
 
     def do(self):
         self.frame = (self.frame + 1) % 10
-        self.player.x += 5 * self.player.dir
-        if self.player.x > 1160:
+        self.player.x += 15 * self.player.dir
+        if self.player.x > 1240:
             self.player.dir = 0
-        if self.player.x < 120:
+        if self.player.x < 40:
             self.player.dir = 0
 
     def draw(self):
