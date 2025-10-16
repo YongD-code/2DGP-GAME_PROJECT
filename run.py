@@ -1,21 +1,23 @@
-from pico2d import load_image
+from pico2d import *
 
 
 class Run:
-    def enter(player):
-        player.image = load_image('_Run.png')
-        player.frame = 0
+    def __init__(self,player):
+        self.player = player
+    def enter(self,event):
+        self.image = load_image('_Run.png')
+        self.frame = 0
 
-    def exit(player):
+    def exit(self,event):
         pass
 
-    def do(player):
-        player.frame = (player.frame + 1) % 10
-        player.x += 5
-        if player.x > 1160:
-            player.dir = 0
-        if player.x < 120:
-            player.dir = 0
+    def do(self):
+        self.frame = (self.frame + 1) % 10
+        self.player.x += 5 * self.player.dir
+        if self.player.x > 1160:
+            self.player.dir = 0
+        if self.player.x < 120:
+            self.player.dir = 0
 
-    def draw(player):
-        player.image.clip_draw(player.frame, 0, player.w, player.h, player.x, player.y, player.w * 3, player.h * 3)
+    def draw(self):
+        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
