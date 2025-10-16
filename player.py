@@ -1,8 +1,13 @@
-from pico2d import load_image
+from pico2d import *
 
 from idle import Idle
 from state_machine import StateMachine
 from run import Run
+
+def right_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
+def right_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_RIGHT
 
 class Player:
     def __init__(self):
@@ -12,7 +17,17 @@ class Player:
         self.w = 120
         self.h = 80
         self.dir = 1
-        self.state_machine = StateMachine(Idle, self)
+
+        self.IDLE = Idle(self)
+        self.RUN = Run(self)
+        self.state_machine = StateMachine(
+            self.IDLE,
+            {
+                self.IDLE: {right_down: self.RUN},
+                self.RUN: {right_up: self.IDLE}
+            },
+            self
+        )
 
     def update(self):
         self.state_machine.update()
@@ -20,5 +35,5 @@ class Player:
     def draw(self):
         self.state_machine.draw()
 
-    def change_state(self, new_state):
-        self.state_machine.change_state(new_state)
+    def handle_event(self, event):
+        self.state_machine.handle_state_event(('INPUT',event))
