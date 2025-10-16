@@ -38,10 +38,10 @@ class Run:
         self.frame = (self.frame + 1) % 10
         self.player.x += 15 * self.player.dir
 
-        if self.player.x > 1240:
-            self.player.dir = 0
-        if self.player.x < 40:
-            self.player.dir = 0
+        if self.player.x > 1250:
+            self.player.x = 1250
+        if self.player.x < 30:
+            self.player.x = 30
 
     def draw(self):
         self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
