@@ -1,8 +1,8 @@
 class StateMachine:
     def __init__(self,start_state,char):
+        self.char = char
         self.current_state = start_state
         self.current_state.enter(self.char)
-        self.char = char
         pass
 
     def update(self):
