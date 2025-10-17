@@ -30,3 +30,36 @@ class Blacksmith:
 
     def draw(self):
         self.image.clip_draw(self.frame * self.w, 610, self.w , self.h, self.x, self.y)
+
+
+class Ground:
+    def __init__(self):
+        self.image = load_image('Tile_ground.png')
+        self.tile_w = 32
+        self.tile_h = 32
+        self.tile_count = 1280//self.tile_w
+
+    def update(self):
+        pass
+
+    def draw_tile(self, row, col, x, y):
+        left = col * self.tile_w
+        bottom = self.image.h - (row + 1) * self.tile_h
+        self.image.clip_draw(left, bottom, self.tile_w, self.tile_h, x, y)
+
+    def draw(self):
+        for i in range(self.tile_count):
+
+            x = i * self.tile_w + self.tile_w // 2
+
+            y = self.tile_h * 0
+            self.draw_tile(2, 1, x, y)
+
+            y = self.tile_h * 1
+            self.draw_tile(1, 1, x, y)
+
+            y = self.tile_h * 2
+            self.draw_tile(1, 1, x, y)
+
+            y = self.tile_h * 3
+            self.draw_tile(0, 1, x, y)
