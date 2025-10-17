@@ -16,9 +16,9 @@ class Blacksmith:
         self.image = load_image('Blacksmith.png')
         self.frame = 1
         self.w ,self.h = 288,170
-        self.x, self.y = 300,182
+        self.x, self.y = 280,188
         self.last_time = get_time()
-        self.frame_interval = 0.2
+        self.frame_interval = 0.1
 
     def update(self):
         current_time = get_time()
@@ -29,7 +29,7 @@ class Blacksmith:
             self.last_time = current_time
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.w, 610, self.w , self.h, self.x, self.y)
+        self.image.clip_draw(self.frame * self.w, 0, self.w , self.h, self.x, self.y,self.w*1.2 , self.h*1.2)
 
 
 class Ground:
