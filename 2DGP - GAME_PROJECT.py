@@ -41,8 +41,8 @@ def update_world():
 def render_world():
     clear_canvas()
     background.draw()
-    ground.draw()
     blacksmith.draw()
+    ground.draw()
     player.draw()
     update_canvas()
     pass
