@@ -1,6 +1,7 @@
 from pico2d import *
 from background import Background
 from player import Player
+from background import Blacksmith
 
 def handle_events():
     global running
@@ -17,9 +18,10 @@ open_canvas(1280, 720)
 
 
 def reset_world():
-    global running, background,player
+    global running, background,player,blacksmith
     running = True
     background = Background()
+    blacksmith = Blacksmith()
     player = Player()
     pass
 
@@ -29,6 +31,7 @@ reset_world()
 
 def update_world():
     #background.update()
+    blacksmith.update()
     player.update()
     pass
 
@@ -36,6 +39,7 @@ def update_world():
 def render_world():
     clear_canvas()
     background.draw()
+    blacksmith.draw()
     player.draw()
     update_canvas()
     pass
