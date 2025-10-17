@@ -16,7 +16,7 @@ def left_up(e):
 class Player:
     def __init__(self):
         self.image = load_image('_idle.png')
-        self.x,self.y = 80,120
+        self.x,self.y = 80,228
         self.frame = 0
         self.w = 120
         self.h = 80
