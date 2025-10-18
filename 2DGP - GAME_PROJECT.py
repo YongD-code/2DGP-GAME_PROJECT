@@ -3,6 +3,7 @@ from background import Background
 from player import Player
 from background import Blacksmith
 from background import Ground
+from background import Portal
 
 def handle_events():
     global running
@@ -19,9 +20,10 @@ open_canvas(1280, 720)
 
 
 def reset_world():
-    global running, background,player,blacksmith,ground
+    global running, background,player,blacksmith,ground,portal
     running = True
     background = Background()
+    portal = Portal()
     ground = Ground()
     blacksmith = Blacksmith()
     player = Player()
@@ -33,6 +35,7 @@ reset_world()
 
 def update_world():
     #background.update()
+    portal.update()
     blacksmith.update()
     player.update()
     pass
@@ -41,6 +44,7 @@ def update_world():
 def render_world():
     clear_canvas()
     background.draw()
+    portal.draw()
     blacksmith.draw()
     ground.draw()
     player.draw()
