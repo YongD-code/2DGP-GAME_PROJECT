@@ -63,3 +63,36 @@ class Ground:
 
             y = self.tile_h * 3
             self.draw_tile(0, 1, x, y)
+
+
+class Portal:
+    def __init__(self):
+        self.image = load_image('portal.png')
+        self.w,self.h = 64,64
+        self.frame = 0
+        self.frame_row = [4,3]
+        self.frame_count = 0
+        self.x,self.y = 70, 180
+        self.timer = 0
+        self.timer_delay = 0.6
+
+    def update(self):
+        self.timer += 0.3
+        if self.timer > self.timer_delay:
+            self.frame = (self.frame+1) % 7
+            self.timer = 0
+        pass
+
+    def draw(self):
+        if self.frame < 4:
+            row = 1
+            col = self.frame
+        else:
+            row = 0
+            col = self.frame - 4
+
+        left = col * self.w
+        bottom = row * self.h
+
+        self.image.clip_draw(left, bottom, self.w, self.h, self.x, self.y,self.w*3,self.h*3)
+        pass
