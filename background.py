@@ -35,6 +35,7 @@ class Blacksmith:
 class Ground:
     def __init__(self):
         self.image = load_image('Tile_ground.png')
+        self.farm_image = load_image('Farm_Tile.png')
         self.tile_w = 32
         self.tile_h = 32
         self.tile_count = 1280//self.tile_w
@@ -49,20 +50,25 @@ class Ground:
 
     def draw(self):
         for i in range(self.tile_count):
-
             x = i * self.tile_w + self.tile_w // 2
-
-            y = self.tile_h * 0
-            self.draw_tile(2, 1, x, y)
-
-            y = self.tile_h * 1
-            self.draw_tile(1, 1, x, y)
-
-            y = self.tile_h * 2
-            self.draw_tile(1, 1, x, y)
-
-            y = self.tile_h * 3
-            self.draw_tile(0, 1, x, y)
+            if 15 <= i <= 20:
+                y = self.tile_h * 0
+                self.draw_tile(2, 1, x, y)
+                y = self.tile_h * 1
+                self.draw_tile(1, 1, x, y)
+                y = self.tile_h * 2
+                self.draw_tile(1, 1, x, y)
+                y = self.tile_h * 3
+                self.farm_image.clip_draw(128,96,32,32,x,y)
+            else:
+                y = self.tile_h * 0
+                self.draw_tile(2, 1, x, y)
+                y = self.tile_h * 1
+                self.draw_tile(1, 1, x, y)
+                y = self.tile_h * 2
+                self.draw_tile(1, 1, x, y)
+                y = self.tile_h * 3
+                self.draw_tile(0, 1, x, y)
 
 
 class Portal:
