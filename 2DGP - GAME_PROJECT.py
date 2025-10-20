@@ -39,8 +39,8 @@ def update_world():
     #background.update()
     portal.update()
     blacksmith.update()
-    npc.update()
     player.update()
+    npc.update(player.x)
     pass
 
 
