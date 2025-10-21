@@ -51,7 +51,7 @@ class Ground:
     def draw(self):
         for i in range(self.tile_count):
             x = i * self.tile_w + self.tile_w // 2
-            if 15 <= i <= 20:
+            if 16 <= i <= 21:
                 y = self.tile_h * 0
                 self.draw_tile(2, 1, x, y)
                 y = self.tile_h * 1
