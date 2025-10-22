@@ -33,9 +33,9 @@ class Player:
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN,left_down:self.RUN},
+                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST},
                 self.RUN: {right_up: self.IDLE,left_up:self.IDLE},
-                self.HARVEST:{down_down: self.HARVEST},
+                self.HARVEST:{down_up: self.IDLE},
             },
             self
         )
