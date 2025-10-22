@@ -3,6 +3,7 @@ from pico2d import *
 from idle import Idle
 from state_machine import StateMachine
 from run import Run
+from harvest import Harvest
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -12,6 +13,10 @@ def left_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_LEFT
 def left_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_LEFT
+def down_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
+def down_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
 
 class Player:
     def __init__(self):
@@ -24,11 +29,13 @@ class Player:
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
+        self.HARVEST = Harvest(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
                 self.IDLE: {right_down: self.RUN,left_down:self.RUN},
-                self.RUN: {right_up: self.IDLE,left_up:self.IDLE}
+                self.RUN: {right_up: self.IDLE,left_up:self.IDLE},
+                self.HARVEST:{down_down: self.HARVEST},
             },
             self
         )
