@@ -16,7 +16,7 @@ class Blacksmith:
         self.image = load_image('Blacksmith.png')
         self.frame = 1
         self.w ,self.h = 288,170
-        self.x, self.y = 280,190
+        self.x, self.y = 290,190
         self.last_time = get_time()
         self.frame_interval = 0.1
 
