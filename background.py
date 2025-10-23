@@ -102,3 +102,16 @@ class Portal:
 
         self.image.clip_draw(left, bottom, self.w, self.h, self.x, self.y,self.w*3,self.h*3)
         pass
+
+class House:
+    def __init__(self):
+        self.image = load_image('player_house.png')
+        self.x, self.y = 1024, 288
+        self.w, self.h = 512,512
+
+    def update(self):
+        pass
+
+    def draw(self):
+        self.image.draw(self.x, self.y,self.w,self.h)
+
