@@ -69,22 +69,31 @@ class Roll:
     def enter(self,event):
         self.frame = 0
         if self.player.dir == 1:
+            self.frame = 0
             self.image = self.image_right
         elif self.player.dir == -1:
+            self.frame = 11
             self.image = self.image_left
 
     def exit(self,event):
         pass
 
     def do(self):
-        self.frame += 1
-        if self.frame>=12:
+        if self.player.dir == 1:
+            self.frame += 1
+            check_RL =  self.frame>=12
+
+        else:
+            self.frame -= 1
+            check_RL = self.frame<0
+
+        self.player.x += 15 * self.player.dir
+
+        if check_RL:
             if self.prev_state == self.player.RUN:
                 self.player.state_machine.change_state(self.player.RUN)
             else:
                 self.player.state_machine.change_state(self.player.IDLE)
-
-        self.player.x += 15 * self.player.dir
 
     def draw(self):
         self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
