@@ -30,6 +30,8 @@ class Player:
         self.w = 120
         self.h = 80
         self.dir = 1
+        self.right_input = False
+        self.left_input = False
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -41,7 +43,7 @@ class Player:
                 self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL},
                 self.RUN: {right_up: self.IDLE,left_up:self.IDLE,z_down:self.ROLL},
                 self.HARVEST:{down_up: self.IDLE},
-                self.ROLL:{}
+                self.ROLL:{right_down:self.RUN,left_down:self.RUN},
             },
             self
         )
@@ -53,6 +55,21 @@ class Player:
         self.state_machine.draw()
 
     def handle_event(self, event):
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_RIGHT:
+                self.right_input = True
+                self.dir = 1
+            elif event.key == SDLK_LEFT:
+                self.left_input = True
+                self.dir = -1
+        elif event.type == SDL_KEYUP:
+            if event.key == SDLK_RIGHT:
+                self.right_input = False
+            elif event.key == SDLK_LEFT:
+                self.left_input = False
+
+        if self.state_machine.current_state == self.ROLL:
+            return
         self.state_machine.handle_state_event(('INPUT',event))
 
 
@@ -90,7 +107,11 @@ class Roll:
         self.player.x += 15 * self.player.dir
 
         if check_RL:
-            if self.prev_state == self.player.RUN:
+            if self.player.right_input:
+                self.player.dir = 1
+                self.player.state_machine.change_state(self.player.RUN)
+            elif self.player.left_input:
+                self.player.dir = -1
                 self.player.state_machine.change_state(self.player.RUN)
             else:
                 self.player.state_machine.change_state(self.player.IDLE)
