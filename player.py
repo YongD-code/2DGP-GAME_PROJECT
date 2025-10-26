@@ -79,7 +79,7 @@ class Roll:
     def draw(self):
         self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
 
-class jump:
+class Jump:
     def __init__(self,player):
         self.player = player
         self.image_right = load_image('jump.png')
