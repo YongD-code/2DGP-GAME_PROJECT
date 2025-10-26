@@ -188,8 +188,6 @@ class Attack:
             self.frame -= 1
             check_RL = self.frame<0
 
-        # self.player.x += 5 * self.player.lock_dir
-
         if check_RL:
             if self.player.right_input:
                 self.player.dir = 1
