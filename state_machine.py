@@ -15,12 +15,17 @@ class StateMachine:
         pass
 
     def handle_state_event(self,state_event):
-        for check_event in self.rules[self.current_state].keys():
+        for check_event,next_state in self.rules[self.current_state].items():
             if check_event(state_event):
                 self.next_state = self.rules[self.current_state][check_event]
+                self.next_state.prev_state = self.current_state
                 self.current_state.exit(state_event)
                 self.current_state = self.next_state
                 self.next_state.enter(state_event)
                 return
-
         pass
+
+    def change_state(self,next_state):
+        self.current_state.exit(('CHANGE',0))
+        self.current_state = next_state
+        self.current_state.enter(('CHANGE',0))
