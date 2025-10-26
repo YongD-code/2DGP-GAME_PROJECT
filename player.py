@@ -37,18 +37,21 @@ class Player:
         self.dir = 1
         self.right_input = False
         self.left_input = False
+        self.lock_dir = 1
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
         self.HARVEST = Harvest(self)
         self.ROLL = Roll(self)
+        self.ATTACK = Attack(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL},
-                self.RUN: {right_up: self.IDLE,left_up:self.IDLE,z_down:self.ROLL},
+                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL,c_down: self.ATTACK},
+                self.RUN: {right_up: self.IDLE,left_up:self.IDLE,z_down:self.ROLL,c_down: self.ATTACK},
                 self.HARVEST:{down_up: self.IDLE},
                 self.ROLL:{right_down:self.RUN,left_down:self.RUN},
+                self.ATTACK:{right_down:self.RUN,left_down:self.RUN}
             },
             self
         )
@@ -87,10 +90,9 @@ class Roll:
         self.image = self.image_right
         self.frame = 0
         self.prev_state = None
-        self.lock_dir = 1
 
     def enter(self,event):
-        self.lock_dir = self.player.dir
+        self.player.lock_dir = self.player.dir
 
         if self.player.dir == 1:
             self.frame = 0
@@ -104,7 +106,7 @@ class Roll:
         pass
 
     def do(self):
-        if self.lock_dir == 1:
+        if self.player.lock_dir == 1:
             self.frame += 1
             check_RL =  self.frame>=12
 
@@ -112,7 +114,7 @@ class Roll:
             self.frame -= 1
             check_RL = self.frame<0
 
-        self.player.x += 15 * self.lock_dir
+        self.player.x += 15 * self.player.lock_dir
 
         if check_RL:
             if self.player.right_input:
@@ -164,21 +166,39 @@ class Attack:
         self.frame = 0
 
     def enter(self,event):
-        self.frame = 0
+        self.player.lock_dir = self.player.dir
 
         if self.player.dir == 1:
+            self.frame = 0
             self.image = self.image_right
+
         elif self.player.dir == -1:
+            self.frame = 9
             self.image = self.image_left
 
     def exit(self,event):
         pass
 
     def do(self):
-        if self.frame < 5:
+        if self.player.lock_dir == 1:
             self.frame += 1
+            check_RL =  self.frame>=10
+
         else:
-            self.frame = 5
+            self.frame -= 1
+            check_RL = self.frame<0
+
+        # self.player.x += 5 * self.player.lock_dir
+
+        if check_RL:
+            if self.player.right_input:
+                self.player.dir = 1
+                self.player.state_machine.change_state(self.player.RUN)
+            elif self.player.left_input:
+                self.player.dir = -1
+                self.player.state_machine.change_state(self.player.RUN)
+            else:
+                self.player.state_machine.change_state(self.player.IDLE)
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
+        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 2.9,self.player.h * 2.9)
