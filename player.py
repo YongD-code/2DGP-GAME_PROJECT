@@ -82,12 +82,15 @@ class Roll:
         self.image = self.image_right
         self.frame = 0
         self.prev_state = None
+        self.lock_dir = 1
 
     def enter(self,event):
-        self.frame = 0
+        self.lock_dir = self.player.dir
+
         if self.player.dir == 1:
             self.frame = 0
             self.image = self.image_right
+
         elif self.player.dir == -1:
             self.frame = 11
             self.image = self.image_left
@@ -96,7 +99,7 @@ class Roll:
         pass
 
     def do(self):
-        if self.player.dir == 1:
+        if self.lock_dir == 1:
             self.frame += 1
             check_RL =  self.frame>=12
 
@@ -104,7 +107,7 @@ class Roll:
             self.frame -= 1
             check_RL = self.frame<0
 
-        self.player.x += 15 * self.player.dir
+        self.player.x += 15 * self.lock_dir
 
         if check_RL:
             if self.player.right_input:
