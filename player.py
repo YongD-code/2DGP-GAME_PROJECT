@@ -25,6 +25,10 @@ def c_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_c
 def c_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_c
+def x_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_x
+def x_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_x
 
 
 class Player:
@@ -44,14 +48,16 @@ class Player:
         self.HARVEST = Harvest(self)
         self.ROLL = Roll(self)
         self.ATTACK = Attack(self)
+        self.JUMP = Jump(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL,c_down: self.ATTACK},
-                self.RUN: {right_up: self.IDLE,left_up:self.IDLE,z_down:self.ROLL,c_down: self.ATTACK},
+                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL,c_down: self.ATTACK,x_down: self.JUMP},
+                self.RUN: {right_up: self.IDLE,left_up:self.IDLE,z_down:self.ROLL,c_down: self.ATTACK,x_down: self.JUMP},
                 self.HARVEST:{down_up: self.IDLE},
                 self.ROLL:{right_down:self.RUN,left_down:self.RUN},
-                self.ATTACK:{right_down:self.RUN,left_down:self.RUN}
+                self.ATTACK:{right_down:self.RUN,left_down:self.RUN},
+                self.JUMP:{}
             },
             self
         )
@@ -132,30 +138,60 @@ class Roll:
 class Jump:
     def __init__(self,player):
         self.player = player
-        self.image_right = load_image('jump.png')
-        self.image_left = load_image('jump_R.png')
-        self.image = self.image_right
+        self.image_jump_right = load_image('jump.png')
+        self.image_jump_left = load_image('jump_R.png')
+
+        self.image_fall_right = load_image('jump_fall.png')
+        self.image_fall_left = load_image('jump_fall_R.png')
+
+        self.image = self.image_jump_right
         self.frame = 0
+        self.prev_state = None
 
     def enter(self,event):
         self.frame = 0
 
         if self.player.dir == 1:
-            self.image = self.image_right
+            self.image = self.image_jump_right
         elif self.player.dir == -1:
-            self.image = self.image_left
+            self.image = self.image_jump_left
+
+        self.player.jump_y = 18
+        if self.prev_state == self.player.RUN:
+            self.player.jump_x = 10 * self.player.dir
+        else:
+            self.player.jump_x = 0
 
     def exit(self,event):
+        self.player.jump_x = 0
+        self.player.jump_y = 0
         pass
 
     def do(self):
-        if self.frame < 5:
-            self.frame += 1
+        self.player.jump_y -= 2.5
+        self.player.y += self.player.jump_y
+        self.player.x += self.player.jump_x
+
+        self.frame += 1.5
+
+        if self.player.jump_y > 2:
+            self.image = self.image_jump_right if self.player.dir == 1 else self.image_jump_left
+            if self.frame >= 3:
+                self.frame = 2.9
         else:
-            self.frame = 5
+            self.image = self.image_fall_right if self.player.dir == 1 else self.image_fall_left
+            if self.frame >= 2:
+                self.frame = 1.9
+
+        if self.player.y <= 228:
+            self.player.y = 228
+            if self.player.right_input or self.player.left_input:
+                self.player.state_machine.change_state(self.player.RUN)
+            else:
+                self.player.state_machine.change_state(self.player.IDLE)
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
+        self.image.clip_draw(int(self.frame) * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
 
 class Attack:
     def __init__(self,player):
