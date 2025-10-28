@@ -7,6 +7,7 @@ from background import Portal
 from NPC import Npc
 from background import House
 from time_clock import GameTime
+from crop import Crop
 
 def handle_events():
     global running
@@ -22,7 +23,7 @@ open_canvas(1280, 720)
 
 
 def reset_world():
-    global running, background,player,blacksmith,ground,portal,npc,house,gametime
+    global running, background,player,blacksmith,ground,portal,npc,house,gametime,crop
     running = True
     background = Background()
     portal = Portal()
@@ -30,6 +31,7 @@ def reset_world():
     blacksmith = Blacksmith()
     house = House()
     npc = Npc()
+    crop = Crop(600,96)
     player = Player()
     gametime = GameTime()
     pass
@@ -44,7 +46,7 @@ def update_world():
     now = get_time()
     frame_time = now - prev_time
     prev_time = now
-
+    
     #background.update()
     portal.update()
     blacksmith.update()
