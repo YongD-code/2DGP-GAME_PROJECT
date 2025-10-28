@@ -31,7 +31,7 @@ def reset_world():
     blacksmith = Blacksmith()
     house = House()
     npc = Npc()
-    crop = Crop(600,96)
+    crop = []
     player = Player()
     gametime = GameTime()
     pass
@@ -46,7 +46,7 @@ def update_world():
     now = get_time()
     frame_time = now - prev_time
     prev_time = now
-    
+
     #background.update()
     portal.update()
     blacksmith.update()
