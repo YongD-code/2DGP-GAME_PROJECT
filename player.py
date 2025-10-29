@@ -4,6 +4,7 @@ from idle import Idle
 from state_machine import StateMachine
 from run import Run
 from harvest import Harvest
+from crop import Crop
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -86,7 +87,12 @@ class Player:
             return
         self.state_machine.handle_state_event(('INPUT',event))
 
-
+    def find_crop(self):
+        global crops
+        for crop in crops:
+            if (self.x - 32 < crop.x < self.x + 32) and (self.y - 16 < crop.y < self.y + 32):
+                return crop
+        return None
 
 class Roll:
     def __init__(self,player):
