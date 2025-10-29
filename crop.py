@@ -7,6 +7,10 @@ class Crop:
         self.stage = 0
         self.max_stage = 3
         self.timer = 0
+        self.harvested = False
+
+    def harvest(self):
+        self.harvested = True
 
     def update(self,frame_time):
         self.timer += frame_time
@@ -15,4 +19,5 @@ class Crop:
             self.timer = 0
 
     def draw(self):
-        self.image.clip_draw(self.stage * 32, 0, 32, 32, self.x, self.y, 64, 64)
+        if not self.harvested:
+            self.image.clip_draw(self.stage * 32, 0, 32, 32, self.x, self.y, 64, 64)
