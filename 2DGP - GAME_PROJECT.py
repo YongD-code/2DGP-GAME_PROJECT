@@ -1,11 +1,8 @@
 from pico2d import *
-from background import Background
+import world
+from background import Background, Blacksmith, Ground, House, Portal
 from player import Player
-from background import Blacksmith
-from background import Ground
-from background import Portal
 from NPC import Npc
-from background import House
 from time_clock import GameTime
 from crop import Crop
 
@@ -17,23 +14,37 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
-        else: player.handle_event(event)
+        else: world.player.handle_event(event)
             
 open_canvas(1280, 720)
 
 
 def reset_world():
-    global running, background,player,blacksmith,ground,portal,npc,house,gametime,crops
+    global running
     running = True
+
     background = Background()
-    portal = Portal()
     ground = Ground()
     blacksmith = Blacksmith()
     house = House()
+    portal = Portal()
     npc = Npc()
-    crops = []
     player = Player()
     gametime = GameTime()
+
+    world.player = player
+    world.gametime = gametime
+
+    world.add_object(background, 0)
+    world.add_object(ground, 1)
+    world.add_object(portal, 0)
+    world.add_object(blacksmith, 0)
+    world.add_object(house, 1)
+    world.add_object(npc, 2)
+    world.add_object(player, 2)
+    world.add_object(gametime, 3)
+
+    world.crops = []
     pass
 
 
@@ -47,31 +58,18 @@ def update_world():
     frame_time = now - prev_time
     prev_time = now
 
-    #background.update()
-    portal.update()
-    blacksmith.update()
-    house.update()
-    player.update()
-    npc.update(player.x)
-    gametime.update(frame_time)
+    world.update(frame_time)
 
-    for crop in crops:
+    for crop in world.crops:
         crop.update(frame_time)
     pass
 
 
 def render_world():
     clear_canvas()
-    background.draw()
-    portal.draw()
-    blacksmith.draw()
-    ground.draw()
-    house.draw()
-    npc.draw()
-    for crop in crops:
+    world.render()
+    for crop in world.crops:
         crop.draw()
-    player.draw()
-    gametime.draw()
     update_canvas()
     pass
 
