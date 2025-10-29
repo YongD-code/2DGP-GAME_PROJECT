@@ -1,5 +1,5 @@
 from pico2d import *
-
+import world
 
 class Background:
     def __init__(self):
