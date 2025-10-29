@@ -23,7 +23,7 @@ open_canvas(1280, 720)
 
 
 def reset_world():
-    global running, background,player,blacksmith,ground,portal,npc,house,gametime,crop
+    global running, background,player,blacksmith,ground,portal,npc,house,gametime,crops
     running = True
     background = Background()
     portal = Portal()
@@ -31,7 +31,7 @@ def reset_world():
     blacksmith = Blacksmith()
     house = House()
     npc = Npc()
-    crop = []
+    crops = []
     player = Player()
     gametime = GameTime()
     pass
@@ -54,6 +54,9 @@ def update_world():
     player.update()
     npc.update(player.x)
     gametime.update(frame_time)
+
+    for crop in crops:
+        crop.update(frame_time)
     pass
 
 
@@ -65,6 +68,8 @@ def render_world():
     ground.draw()
     house.draw()
     npc.draw()
+    for crop in crops:
+        crop.draw()
     player.draw()
     gametime.draw()
     update_canvas()
