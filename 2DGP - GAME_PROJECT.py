@@ -41,7 +41,7 @@ def reset_world():
     world.add_object(blacksmith, 0)
     world.add_object(house, 1)
     world.add_object(npc, 2)
-    world.add_object(player, 2)
+    world.add_object(player, 3)
     world.add_object(gametime, 3)
 
     world.crops = []
