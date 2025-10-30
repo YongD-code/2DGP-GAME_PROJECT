@@ -1,4 +1,5 @@
 from pico2d import *
+import world
 
 class Npc:
     def __init__(self):
@@ -12,11 +13,10 @@ class Npc:
         self.face = True
 
     def update(self,player_x = None):
-        if player_x is not None:
-            if player_x > self.x:
-                self.face = True
-            else:
-                self.face = False
+        if world.player.x > self.x:
+            self.face = True
+        else:
+            self.face = False
 
         self.timer += get_time()
         if self.timer > self.timer_delay:
