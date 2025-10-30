@@ -21,12 +21,12 @@ class Harvest:
             self.image = self.image_right
         elif self.player.dir == -1:
             self.image = self.image_left
-
+        crop = Crop(self.player.x,120)
         check_crop = self.player.find_crop()
-        if check_crop:
-            world.crops.remove(check_crop)
+        if check_crop and crop.stage <= crop.max_stage:
+            world.crops.remove(crop)
         else:
-            world.crops.append(Crop(self.player.x, 120))
+            world.crops.append(crop)
 
     def exit(self,event):
         pass
