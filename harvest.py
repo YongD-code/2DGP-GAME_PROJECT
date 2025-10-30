@@ -26,7 +26,7 @@ class Harvest:
         if check_crop:
             world.crops.remove(check_crop)
         else:
-            world.crops.append(Crop(self.player.x, 96))
+            world.crops.append(Crop(self.player.x, 120))
 
     def exit(self,event):
         pass
