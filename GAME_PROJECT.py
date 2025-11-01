@@ -6,22 +6,17 @@ from NPC import Npc
 from time_clock import GameTime
 from crop import Crop
 
-def handle_events():
-    global running
-    events = get_events()
-    for event in events:
-        if event.type == SDL_QUIT:
-            running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            running = False
-        else: world.player.handle_event(event)
-            
-open_canvas(1280, 720)
+import game_framework
+import title_mode
 
+running = True
+prev_time = 0.0
 
-def reset_world():
-    global running
+def init():
+    global running, prev_time
+
     running = True
+    prev_time = get_time()
 
     background = Background()
     ground = Ground()
@@ -48,12 +43,27 @@ def reset_world():
     pass
 
 
-reset_world()
+def finish():
+    world.clear()
+    pass
 
-prev_time = get_time()
+def handle_events():
+    global running
 
-def update_world():
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            game_framework.change_mode(title_mode)
+        else:
+            world.player.handle_event(event)
+    pass
+
+
+def update():
     global prev_time
+
     now = get_time()
     frame_time = now - prev_time
     prev_time = now
@@ -65,22 +75,20 @@ def update_world():
     pass
 
 
-def render_world():
+def draw():
     clear_canvas()
     world.render()
+
     for crop in world.crops:
         crop.draw()
+
     update_canvas()
     pass
 
 
-while running:
-    handle_events()
-    update_world()
-    render_world()
-    delay(0.05)
+def pause():
+    pass
 
 
-
-close_canvas()
-
+def resume():
+    pass
