@@ -36,5 +36,6 @@ def remove_object(o, layer):
             layer.remove(o)
             return
 
-
-
+def clear():
+    for layer in world:
+        layer.clear()
