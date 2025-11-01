@@ -23,13 +23,12 @@ def update():
 
 def draw():
     clear_canvas()
-    image.draw(400, 300)
+    image.draw(640, 360)
     update_canvas()
     pass
 
 def handle_events():
-    event_list = get_events() #버퍼로부터 모든 입력을 갖고 온다. 일단.
-    #no nothing
+    events = get_events()
     pass
 
 
