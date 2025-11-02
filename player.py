@@ -3,7 +3,7 @@ import world
 from idle import Idle
 from state_machine import StateMachine
 from run import Run
-from harvest import Harvest
+from harvest import Harvest,Plant
 from crop import Crop
 
 def right_down(e):
@@ -30,7 +30,10 @@ def x_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_x
 def x_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_x
-
+def s_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+def s_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
 class Player:
     def __init__(self):
@@ -50,15 +53,17 @@ class Player:
         self.ROLL = Roll(self)
         self.ATTACK = Attack(self)
         self.JUMP = Jump(self)
+        self.PLANT = Plant(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
-                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL,c_down: self.ATTACK,x_down: self.JUMP},
+                self.IDLE: {right_down: self.RUN,left_down:self.RUN, down_down:self.HARVEST, z_down:self.ROLL,c_down: self.ATTACK,x_down: self.JUMP,s_down:self.PLANT},
                 self.RUN: {right_up: self.IDLE,left_up:self.IDLE,z_down:self.ROLL,c_down: self.ATTACK,x_down: self.JUMP},
                 self.HARVEST:{down_up: self.IDLE},
                 self.ROLL:{right_down:self.RUN,left_down:self.RUN},
                 self.ATTACK:{right_down:self.RUN,left_down:self.RUN},
-                self.JUMP:{}
+                self.JUMP:{},
+                self.PLANT: {s_up: self.IDLE}
             },
             self
         )
