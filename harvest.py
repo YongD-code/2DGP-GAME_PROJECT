@@ -59,3 +59,42 @@ class Plant:
         self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
 
 
+class Harvest:
+    def __init__(self, player):
+        self.player = player
+        self.image_right = load_image('harvest.png')
+        self.image_left = load_image('harvest_R.png')
+        self.image = self.image_right
+        self.frame = 0
+
+    def enter(self, event):
+        self.frame = 0
+        self.image = self.image_right if self.player.dir == 1 else self.image_left
+
+        tile_x = int(self.player.x // TILE_SIZE)
+        tile_y = int(120 // TILE_SIZE)
+
+        existing_crop = None
+        for c in world.crops:
+            cx = int(c.x // TILE_SIZE)
+            cy = int(c.y // TILE_SIZE)
+            if cx == tile_x and cy == tile_y:
+                existing_crop = c
+                break
+
+        if existing_crop and existing_crop.stage <= existing_crop.max_stage:
+            existing_crop.harvest()
+            world.crops.remove(existing_crop)
+
+    def exit(self, event):
+        pass
+
+    def do(self):
+        if self.frame < 2:
+            self.frame += 1
+        else:
+            self.frame = 2
+
+    def draw(self):
+        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,
+                             self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
