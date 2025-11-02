@@ -8,8 +8,12 @@ def down_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
 def down_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_DOWN
+def s_down(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_s
+def s_up(e):
+    return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
-class Harvest:
+class Plant:
     def __init__(self,player):
         self.player = player
         self.image_right = load_image('harvest.png')
@@ -32,17 +36,15 @@ class Harvest:
                 existing_crop = c
                 break
 
-        if existing_crop and existing_crop.stage <= existing_crop.max_stage:
-            existing_crop.harvest()
-            world.crops.remove(existing_crop)
+        if existing_crop :
+            return
 
-        elif not existing_crop:
-            new_crop = Crop(tile_x * TILE_SIZE + TILE_SIZE // 2,
-                            tile_y * TILE_SIZE + TILE_SIZE // 2)
-            world.crops.append(new_crop)
 
-        else:
-            pass
+        new_crop = Crop(tile_x * TILE_SIZE + TILE_SIZE // 2,
+
+                        tile_y * TILE_SIZE + TILE_SIZE // 2)
+
+        world.crops.append(new_crop)
 
     def exit(self,event):
         pass
@@ -55,3 +57,5 @@ class Harvest:
 
     def draw(self):
         self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
+
+
