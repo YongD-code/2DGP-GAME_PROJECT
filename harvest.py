@@ -2,6 +2,8 @@ from pico2d import *
 from crop import Crop
 import world
 
+TILE_SIZE = 32
+
 def down_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_DOWN
 def down_up(e):
@@ -15,18 +17,32 @@ class Harvest:
         self.image = self.image_right
         self.frame = 0
 
-    def enter(self,event):
+    def enter(self, event):
         self.frame = 0
-        if self.player.dir == 1:
-            self.image = self.image_right
-        elif self.player.dir == -1:
-            self.image = self.image_left
-        crop = Crop(self.player.x,120)
-        check_crop = self.player.find_crop()
-        if check_crop and crop.stage <= crop.max_stage:
-            world.crops.remove(crop)
+        self.image = self.image_right if self.player.dir == 1 else self.image_left
+
+        tile_x = int(self.player.x // TILE_SIZE)
+        tile_y = int(120 // TILE_SIZE)
+
+        existing_crop = None
+        for c in world.crops:
+            cx = int(c.x // TILE_SIZE)
+            cy = int(c.y // TILE_SIZE)
+            if cx == tile_x and cy == tile_y:
+                existing_crop = c
+                break
+
+        if existing_crop and existing_crop.stage <= existing_crop.max_stage:
+            existing_crop.harvest()
+            world.crops.remove(existing_crop)
+
+        elif not existing_crop:
+            new_crop = Crop(tile_x * TILE_SIZE + TILE_SIZE // 2,
+                            tile_y * TILE_SIZE + TILE_SIZE // 2)
+            world.crops.append(new_crop)
+
         else:
-            world.crops.append(crop)
+            pass
 
     def exit(self,event):
         pass
