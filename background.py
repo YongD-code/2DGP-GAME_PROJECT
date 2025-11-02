@@ -39,6 +39,10 @@ class Ground:
         self.tile_w = 32
         self.tile_h = 32
         self.tile_count = 1280//self.tile_w
+        self.farmable_tiles = list(range(16, 22))
+
+    def can_plant(self,tile_x,tile_y):
+        return tile_y == 3 and tile_x in self.farmable_tiles
 
     def update(self):
         pass
