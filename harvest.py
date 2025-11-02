@@ -28,22 +28,17 @@ class Plant:
         tile_x = int(self.player.x // TILE_SIZE)
         tile_y = int(120 // TILE_SIZE)
 
-        existing_crop = None
+        if not world.ground.can_plant(tile_x, tile_y):
+            return
+
         for c in world.crops:
             cx = int(c.x // TILE_SIZE)
             cy = int(c.y // TILE_SIZE)
             if cx == tile_x and cy == tile_y:
-                existing_crop = c
-                break
-
-        if existing_crop :
-            return
-
+                return
 
         new_crop = Crop(tile_x * TILE_SIZE + TILE_SIZE // 2,
-
                         tile_y * TILE_SIZE + TILE_SIZE // 2)
-
         world.crops.append(new_crop)
 
     def exit(self,event):
