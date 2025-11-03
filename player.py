@@ -4,7 +4,8 @@ from idle import Idle
 from state_machine import StateMachine
 from run import Run
 from harvest import Harvest,Plant
-from crop import Crop
+import game_framework
+import dungeon_mode
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -82,6 +83,9 @@ class Player:
             elif event.key == SDLK_LEFT:
                 self.left_input = True
                 self.dir = -1
+            elif event.key == SDLK_UP:
+                if self.on_portal():
+                    game_framework.change_mode(dungeon_mode)
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 self.right_input = False
@@ -98,6 +102,16 @@ class Player:
             if (self.x - 32 < crop.x < self.x + 32) and (self.y - 16 < crop.y < self.y + 32):
                 return crop
         return None
+
+    def on_portal(self):
+        portal = world.portal
+        if portal is None:
+            return False
+
+        dx = self.x - portal.x
+        dy = self.y - portal.y
+        distance = (dx ** 2 + dy ** 2) ** 0.5
+        return distance < portal.radius
 
 class Roll:
     def __init__(self,player):
