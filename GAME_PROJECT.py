@@ -30,6 +30,7 @@ def init():
     world.player = player
     world.gametime = gametime
     world.ground = ground
+    world.portal = portal
 
     world.add_object(background, 0)
     world.add_object(ground, 1)
