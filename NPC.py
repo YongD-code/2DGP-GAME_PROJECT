@@ -6,7 +6,7 @@ class Npc:
         self.right_frames = [load_image(f'NPC_Idle{i}.png') for i in range(1,10)]
         self.left_frames = [load_image(f'NPC_Idle{i}_R.png') for i in range(1,10)]
         self.frame_index = 0
-        self.x, self.y = 1050, 180
+        self.x, self.y = 1060, 180
         self.w,self.h = 64,64
         self.timer = 0
         self.timer_delay = 0.15
