@@ -85,7 +85,7 @@ class Portal:
         self.x,self.y = 70, 180
         self.timer = 0
         self.timer_delay = 0.6
-        self.radius = 40
+        self.radius = 80
 
     def update(self):
         self.timer += 0.3
