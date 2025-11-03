@@ -39,7 +39,7 @@ class Ground:
         self.tile_w = 32
         self.tile_h = 32
         self.tile_count = 1280//self.tile_w
-        self.farmable_tiles = list(range(16, 22))
+        self.farmable_tiles = list(range(15, 25))
 
     def can_plant(self,tile_x,tile_y):
         return tile_y == 3 and tile_x in self.farmable_tiles
@@ -55,7 +55,7 @@ class Ground:
     def draw(self):
         for i in range(self.tile_count):
             x = i * self.tile_w + self.tile_w // 2
-            if 16 <= i <= 21:
+            if 15 <= i <= 24:
                 y = self.tile_h * 0
                 self.draw_tile(2, 1, x, y)
                 y = self.tile_h * 1
@@ -117,5 +117,5 @@ class House:
         pass
 
     def draw(self):
-        self.image.draw(self.x, self.y,self.w,self.h)
+        self.image.clip_draw(0,0,self.w,self.h,self.x, self.y,self.w * 0.8,self.h * 1)
 
