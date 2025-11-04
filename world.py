@@ -1,3 +1,5 @@
+ground_y = 228
+
 # layer 0 = 배경
 # layer 1 = 건물, 지형
 # layer 2 = 캐릭터, NPC, 포탈
@@ -39,3 +41,7 @@ def remove_object(o, layer):
 def clear():
     for layer in world:
         layer.clear()
+
+def set_ground_y(y):
+    global ground_y
+    ground_y = y

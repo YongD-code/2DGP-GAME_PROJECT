@@ -13,7 +13,7 @@ def init():
     player = Player()
     player.x, player.y = 110,180
     world.player = player
-
+    world.set_ground_y(180)
     world.add_object(player, 1)
 
 def finish():

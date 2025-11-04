@@ -5,7 +5,7 @@ from state_machine import StateMachine
 from run import Run
 from harvest import Harvest,Plant
 import game_framework
-import dungeon_mode
+
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -85,6 +85,7 @@ class Player:
                 self.dir = -1
             elif event.key == SDLK_UP:
                 if self.on_portal():
+                    import dungeon_mode
                     game_framework.change_mode(dungeon_mode)
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
@@ -213,8 +214,8 @@ class Jump:
             if self.frame >= 2:
                 self.frame = 1.9
 
-        if self.player.y <= 228:
-            self.player.y = 228
+        if self.player.y <= world.ground_y:
+            self.player.y = world.ground_y
             if self.player.right_input or self.player.left_input:
                 self.player.state_machine.change_state(self.player.RUN)
             else:
