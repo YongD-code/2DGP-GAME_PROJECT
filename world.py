@@ -39,9 +39,16 @@ def remove_object(o, layer):
             return
 
 def clear():
+    global gametime
+    saved_gametime = gametime
     for layer in world:
         layer.clear()
+    gametime = saved_gametime
 
 def set_ground_y(y):
     global ground_y
     ground_y = y
+
+def set_gametime(gt):
+    global gametime
+    gametime = gt

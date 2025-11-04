@@ -15,6 +15,8 @@ def init():
     world.player = player
     world.set_ground_y(180)
     world.add_object(player, 1)
+    if world.gametime is not None:
+        world.add_object(world.gametime, 3)
 
 def finish():
     world.clear()

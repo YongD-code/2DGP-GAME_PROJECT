@@ -13,7 +13,7 @@ running = True
 prev_time = 0.0
 
 def init():
-    global running, prev_time
+    global running, prev_time,gametime
 
     running = True
     prev_time = get_time()
@@ -25,10 +25,8 @@ def init():
     portal = Portal()
     npc = Npc()
     player = Player()
-    gametime = GameTime()
 
     world.player = player
-    world.gametime = gametime
     world.ground = ground
     world.portal = portal
 
@@ -41,7 +39,14 @@ def init():
     world.add_object(house, 1)
     world.add_object(npc, 2)
     world.add_object(player, 3)
-    world.add_object(gametime, 3)
+
+    if world.gametime is None:
+        gametime = GameTime()
+        world.gametime = gametime
+        world.add_object(gametime, 3)
+    else:
+        gametime = world.gametime
+        world.add_object(gametime, 3)
 
     world.crops = []
     pass
