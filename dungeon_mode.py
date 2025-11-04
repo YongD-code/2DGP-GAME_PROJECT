@@ -34,6 +34,7 @@ def handle_events():
 def update():
     frame_time = 0.05
     world.update(frame_time)
+    delay(frame_time)
 
 def draw():
     clear_canvas()
