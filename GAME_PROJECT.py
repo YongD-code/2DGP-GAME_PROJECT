@@ -83,7 +83,7 @@ def update():
     for crop in world.crops:
         crop.update(frame_time)
 
-    delay(0.05)
+    delay(0.04)
     pass
 
 

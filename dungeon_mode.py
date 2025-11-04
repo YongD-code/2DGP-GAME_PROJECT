@@ -33,7 +33,7 @@ def handle_events():
             world.player.handle_event(e)
 
 def update():
-    frame_time = 0.05
+    frame_time = 0.04
     world.update(frame_time)
     delay(frame_time)
 
