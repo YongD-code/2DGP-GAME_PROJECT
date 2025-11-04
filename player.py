@@ -158,10 +158,10 @@ class Roll:
             else:
                 self.player.state_machine.change_state(self.player.IDLE)
 
-        if self.player.x > 1250:
-            self.player.x = 1250
-        if self.player.x < 30:
-            self.player.x = 30
+        if self.player.x > world.right_boundary:
+            self.player.x = world.right_boundary
+        if self.player.x < world.left_boundary:
+            self.player.x = world.left_boundary
 
     def draw(self):
         self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
@@ -221,10 +221,10 @@ class Jump:
             else:
                 self.player.state_machine.change_state(self.player.IDLE)
 
-        if self.player.x > 1250:
-            self.player.x = 1250
-        if self.player.x < 30:
-            self.player.x = 30
+        if self.player.x > world.right_boundary:
+            self.player.x = world.right_boundary
+        if self.player.x < world.left_boundary:
+            self.player.x = world.left_boundary
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
