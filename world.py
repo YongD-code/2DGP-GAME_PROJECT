@@ -1,5 +1,6 @@
 ground_y = 228
-
+left_boundary = 30
+right_boundary = 1250
 # layer 0 = 배경
 # layer 1 = 건물, 지형
 # layer 2 = 캐릭터, NPC, 포탈
@@ -52,3 +53,7 @@ def set_ground_y(y):
 def set_gametime(gt):
     global gametime
     gametime = gt
+
+def set_boundary(left, right):
+    global left_boundary, right_boundary
+    left_boundary, right_boundary = left, right

@@ -31,6 +31,7 @@ def init():
     world.portal = portal
 
     world.set_ground_y(228)
+    world.set_boundary(30,1250)
 
     world.add_object(background, 0)
     world.add_object(ground, 1)

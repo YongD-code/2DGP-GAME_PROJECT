@@ -14,6 +14,7 @@ def init():
     player.x, player.y = 110,180
     world.player = player
     world.set_ground_y(180)
+    world.set_boundary(110, 1170)
     world.add_object(player, 1)
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
