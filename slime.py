@@ -8,8 +8,7 @@ class Slime:
         self.cols = 7
         self.rows = 6
         self.w = 128 // self.cols
-        self.h = 170 // self.rows
-
+        self.h = 20
 
         self.x, self.y = x, y
         self.dir = -1
@@ -18,13 +17,19 @@ class Slime:
         self.action = 0
         self.time_acc = 0.0
 
+        self.idle_frame_count = 4
+        self.idle_row = 6
+
     def update(self, frame_time):
         self.time_acc += frame_time
         if self.time_acc > 0.15:
-            self.frame = (self.frame + 1) % self.cols
+            if self.action == 0:
+                self.frame = (self.frame + 1) % self.idle_frame_count
+            else:
+                self.frame = (self.frame + 1) % self.cols
             self.time_acc = 0.0
 
-        self.x += self.dir * self.speed * frame_time
+        self.action = 0
 
         from world import left_boundary, right_boundary
         if self.x < left_boundary + 40:
@@ -35,10 +40,10 @@ class Slime:
             self.dir = -1
 
     def draw(self):
-        row = 0
+        row = 6
 
         x_clip = int(self.frame) * self.w
-        y_clip = (self.rows - 1 - row) * self.h
+        y_clip = (self.rows + row) * self.h
 
         img = self.image_right if self.dir == 1 else self.dir == -1 and self.image_right
 
