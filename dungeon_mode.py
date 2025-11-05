@@ -3,6 +3,7 @@ import game_framework
 import world
 from player import Player
 import GAME_PROJECT
+from slime import Slime
 
 def init():
     global background, player
@@ -18,6 +19,10 @@ def init():
     world.add_object(player, 1)
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
+
+    slime_list = [Slime(500, world.ground_y), Slime(900, world.ground_y)]
+    for s in slime_list:
+        world.add_object(s, 1)
 
 def finish():
     world.clear()
