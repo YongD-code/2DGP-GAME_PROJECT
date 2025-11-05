@@ -50,4 +50,4 @@ class Slime:
         if self.dir == 1:
             img.clip_draw(x_clip, y_clip,self.w, self.h,self.x, self.y,self.w, self.h)
         else:
-            img.clip_composite_draw(x_clip, y_clip,self.w, self.h,0, 'h',self.x, self.y, self.w*2, self.h*2)
+            img.clip_composite_draw(x_clip, y_clip,self.w, self.h,0, 'h',self.x, self.y, self.w*3, self.h*3)
