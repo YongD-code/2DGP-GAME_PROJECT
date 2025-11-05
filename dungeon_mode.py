@@ -20,7 +20,7 @@ def init():
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
 
-    slime_list = [Slime(500, world.ground_y), Slime(900, world.ground_y)]
+    slime_list = [Slime(500, 85), Slime(900, 85)]
     for s in slime_list:
         world.add_object(s, 1)
 
