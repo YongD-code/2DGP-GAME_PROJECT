@@ -29,6 +29,9 @@ class DungeonMap:
         for i in range(12, 16):
             self.tiles.append(DungeonTile(32 + i * 32, 320, 2, 8))
 
+    def update(self):
+        pass
+
     def draw(self):
         for t in self.tiles:
             t.draw()
