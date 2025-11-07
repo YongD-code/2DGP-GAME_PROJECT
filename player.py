@@ -303,23 +303,28 @@ class Attack:
         pass
 
     def do(self):
+        frame_time = game_framework.frame_time
+        fps = FPS_ATTACK * frame_time
+
         if self.player.lock_dir == 1:
-            self.frame += 1
-            check_RL =  self.frame>=10
+            self.frame += fps
+            if self.frame >= 9.9:
+                if self.player.right_input:
+                    self.player.state_machine.change_state(self.player.RUN)
+                elif self.player.left_input:
+                    self.player.state_machine.change_state(self.player.RUN)
+                else:
+                    self.player.state_machine.change_state(self.player.IDLE)
 
         else:
-            self.frame -= 1
-            check_RL = self.frame<0
-
-        if check_RL:
-            if self.player.right_input:
-                self.player.dir = 1
-                self.player.state_machine.change_state(self.player.RUN)
-            elif self.player.left_input:
-                self.player.dir = -1
-                self.player.state_machine.change_state(self.player.RUN)
-            else:
-                self.player.state_machine.change_state(self.player.IDLE)
+            self.frame -= fps
+            if self.frame <= 0.1:
+                if self.player.right_input:
+                    self.player.state_machine.change_state(self.player.RUN)
+                elif self.player.left_input:
+                    self.player.state_machine.change_state(self.player.RUN)
+                else:
+                    self.player.state_machine.change_state(self.player.IDLE)
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 2.9,self.player.h * 2.9)
+        self.image.clip_draw(int(self.frame) * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 2.9,self.player.h * 2.9)
