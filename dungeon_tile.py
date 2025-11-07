@@ -9,6 +9,9 @@ class DungeonTile:
         self.col = col
         self.row = row
 
+    def update(self):
+        pass
+    
     def draw(self):
         left = self.col * self.w
         bottom = self.image.h - (self.row + 1) * self.h
