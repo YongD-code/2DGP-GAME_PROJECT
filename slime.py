@@ -2,8 +2,9 @@ from pico2d import *
 
 class Slime:
     def __init__(self, x, y):
-        self.image_right = load_image('blue_slime.png')
-        #self.image_left = load_image('blue_slime_R.png')
+        self.blue_slime = load_image('blue_slime.png')
+        self.green_slime = load_image('green_slime.png')
+        self.red_slime = load_image('red_slime.png')
 
         self.cols = 7
         self.rows = 6
@@ -45,7 +46,7 @@ class Slime:
         x_clip = int(self.frame) * self.w
         y_clip = (self.rows + row) * self.h
 
-        img = self.image_right if self.dir == 1 else self.dir == -1 and self.image_right
+        img = self.blue_slime if self.dir == 1 else self.dir == -1 and self.blue_slime
 
         if self.dir == 1:
             img.clip_draw(x_clip, y_clip,self.w, self.h,self.x, self.y,self.w, self.h)
