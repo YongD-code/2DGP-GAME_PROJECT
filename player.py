@@ -87,6 +87,13 @@ class Player:
                 if self.on_portal():
                     import dungeon_mode
                     game_framework.change_mode(dungeon_mode)
+            elif event.key == SDLK_x:
+                if self.state_machine.current_state == self.JUMP:
+                    if self.JUMP.jump_count < self.JUMP.max_jump:
+                        self.JUMP.enter(event)
+                else:
+                    self.state_machine.change_state(self.JUMP)
+
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 self.right_input = False
@@ -179,6 +186,9 @@ class Jump:
         self.frame = 0
         self.prev_state = None
 
+        self.jump_count = 0
+        self.max_jump = 2
+
     def enter(self,event):
         self.frame = 0
 
@@ -187,16 +197,30 @@ class Jump:
         elif self.player.dir == -1:
             self.image = self.image_jump_left
 
-        self.player.jump_y = 18
-        if self.prev_state == self.player.RUN:
-            self.player.jump_x = 10 * self.player.dir
+        if self.jump_count == 0:
+            self.player.jump_y = 18
+            if self.player.right_input:
+                self.player.jump_x = 10
+                self.player.dir = 1
+            elif self.player.left_input:
+                self.player.jump_x = -10
+                self.player.dir = -1
+            else:
+                self.player.jump_x = 0
         else:
-            self.player.jump_x = 0
+            self.player.jump_y = 16
+            if self.player.right_input:
+                self.player.jump_x = 10
+                self.player.dir = 1
+            elif self.player.left_input:
+                self.player.jump_x = -10
+                self.player.dir = -1
+
+        self.jump_count += 1
 
     def exit(self,event):
         self.player.jump_x = 0
         self.player.jump_y = 0
-        pass
 
     def do(self):
         self.player.jump_y -= 2.5
@@ -216,6 +240,7 @@ class Jump:
 
         if self.player.y <= world.ground_y:
             self.player.y = world.ground_y
+            self.jump_count = 0
             if self.player.right_input or self.player.left_input:
                 self.player.state_machine.change_state(self.player.RUN)
             else:
