@@ -376,15 +376,14 @@ class Attack:
                     self.frame = 0.0
                     self.end_attack()
 
+
+    def end_attack(self):
+        self.done = True
+
+        if self.player.right_input or self.player.left_input:
+            self.player.state_machine.change_state(self.player.RUN)
         else:
-            self.frame -= fps
-            if self.frame <= 0.1:
-                if self.player.right_input:
-                    self.player.state_machine.change_state(self.player.RUN)
-                elif self.player.left_input:
-                    self.player.state_machine.change_state(self.player.RUN)
-                else:
-                    self.player.state_machine.change_state(self.player.IDLE)
+            self.player.state_machine.change_state(self.player.IDLE)
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 2.9,self.player.h * 2.9)
