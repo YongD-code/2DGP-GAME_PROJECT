@@ -108,6 +108,10 @@ class Player:
             elif event.key == SDLK_LEFT:
                 self.left_input = True
                 self.dir = -1
+            elif event.key == SDLK_c:
+                self.attack_queued = True
+                if self.state_machine.current_state is not self.ATTACK:
+                    self.state_machine.change_state(self.ATTACK)
             elif event.key == SDLK_UP:
                 if self.on_portal():
                     import dungeon_mode
