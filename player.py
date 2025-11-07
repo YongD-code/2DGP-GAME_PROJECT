@@ -36,6 +36,24 @@ def s_down(e):
 def s_up(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYUP and e[1].key == SDLK_s
 
+
+PIXEL_PER_METER = 60.0
+
+RUN_SPEED_KMPH = 12.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+ROLL_SPEED_KMPH = 20.0
+ROLL_SPEED_MPS = (ROLL_SPEED_KMPH * 1000.0 / 3600.0)
+ROLL_SPEED_PPS = ROLL_SPEED_MPS * PIXEL_PER_METER
+
+JUMP_SPEED_MPS = 8.0
+JUMP_SPEED_PPS = JUMP_SPEED_MPS * PIXEL_PER_METER
+
+GRAVITY_MPS = 14
+GRAVITY_PPS = GRAVITY_MPS * PIXEL_PER_METER
+
 class Player:
     def __init__(self):
         self.image = load_image('_idle.png')
@@ -47,6 +65,8 @@ class Player:
         self.right_input = False
         self.left_input = False
         self.lock_dir = 1
+        self.vx = 0.0
+        self.vy = 0.0
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -147,6 +167,7 @@ class Roll:
         pass
 
     def do(self):
+        frame_time = game_framework.frame_time
         if self.player.lock_dir == 1:
             self.frame += 1
             check_RL =  self.frame>=12
@@ -155,7 +176,7 @@ class Roll:
             self.frame -= 1
             check_RL = self.frame<0
 
-        self.player.x += 15 * self.player.lock_dir
+        self.player.x += ROLL_SPEED_PPS * frame_time * self.player.lock_dir
 
         if check_RL:
             if self.player.right_input:
@@ -200,24 +221,20 @@ class Jump:
             self.image = self.image_jump_left
 
         if self.jump_count == 0:
-            self.player.jump_y = 25
-            if self.player.right_input:
-                self.player.jump_x = 10
-                self.player.dir = 1
-            elif self.player.left_input:
-                self.player.jump_x = -10
-                self.player.dir = -1
-            else:
-                self.player.jump_x = 0
+            self.player.vy = JUMP_SPEED_PPS
         else:
-            self.player.jump_y = 25
-            if self.player.right_input:
-                self.player.jump_x = 10
-                self.player.dir = 1
-            elif self.player.left_input:
-                self.player.jump_x = -10
-                self.player.dir = -1
+            self.player.vy = JUMP_SPEED_PPS * 0.9
 
+        if self.player.right_input:
+            self.player.vx = RUN_SPEED_PPS
+            self.player.dir = 1
+        elif self.player.left_input:
+            self.player.vx = -RUN_SPEED_PPS
+            self.player.dir = -1
+        else:
+            self.player.vx = 0
+
+        self.player.on_ground = False
         self.jump_count += 1
 
     def exit(self,event):
@@ -225,24 +242,27 @@ class Jump:
         self.player.jump_y = 0
 
     def do(self):
-        self.player.jump_y -= 2.5
-        self.player.y += self.player.jump_y
-        self.player.x += self.player.jump_x
+        frame_time = game_framework.frame_time
 
-        self.frame += 1.5
+        self.player.vy -= GRAVITY_PPS * frame_time
+        self.player.y += self.player.vy * frame_time
+        self.player.x += self.player.vx * frame_time
 
-        if self.player.jump_y > 2:
-            self.image = self.image_jump_right if self.player.dir == 1 else self.image_jump_left
+        self.frame += 8 * frame_time
+        if self.player.vy > 0:  # 상승
             if self.frame >= 3:
                 self.frame = 2.9
-        else:
-            self.image = self.image_fall_right if self.player.dir == 1 else self.image_fall_left
+            self.image = self.image_jump_right if self.player.dir == 1 else self.image_jump_left
+        else:  # 하강
             if self.frame >= 2:
                 self.frame = 1.9
+            self.image = self.image_fall_right if self.player.dir == 1 else self.image_fall_left
 
         if self.player.y <= world.ground_y:
             self.player.y = world.ground_y
+            self.player.vy = 0
             self.jump_count = 0
+            self.player.on_ground = True
             if self.player.right_input or self.player.left_input:
                 self.player.state_machine.change_state(self.player.RUN)
             else:
