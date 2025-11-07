@@ -252,7 +252,7 @@ class Jump:
         self.player.y += self.player.vy * frame_time
         self.player.x += self.player.vx * frame_time
 
-        self.frame += 8 * frame_time
+        self.frame += FPS_JUMP * frame_time
         if self.player.vy > 0:  # 상승
             if self.frame >= 3:
                 self.frame = 2.9
