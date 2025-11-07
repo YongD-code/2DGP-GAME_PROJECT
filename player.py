@@ -72,6 +72,7 @@ class Player:
         self.vx = 0.0
         self.vy = 0.0
         self.attack_queued = False
+        self.on_ground = True
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -110,6 +111,8 @@ class Player:
                 self.dir = -1
             elif event.key == SDLK_c:
                 self.attack_queued = True
+                if self.state_machine.current_state == self.JUMP:
+                    return
                 if self.state_machine.current_state is not self.ATTACK:
                     self.state_machine.change_state(self.ATTACK)
             elif event.key == SDLK_UP:
