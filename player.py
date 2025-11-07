@@ -326,15 +326,46 @@ class Attack:
         frame_time = game_framework.frame_time
         fps = FPS_ATTACK * frame_time
 
+        if self.waiting_combo:
+            # 대기 중 입력 버퍼가 있으면 즉시 2타
+            if self.player.attack_queued:
+                self.player.attack_queued = False
+                self._start_combo2()
+                return
+
+            self.combo_timer -= frame_time
+            if self.combo_timer <= 0.0:
+                self.end_attack()
+            return  # 대기 중에는 프레임 고정
+
+            # === 프레임 진행 ===
         if self.player.lock_dir == 1:
             self.frame += fps
-            if self.frame >= 9.9:
-                if self.player.right_input:
-                    self.player.state_machine.change_state(self.player.RUN)
-                elif self.player.left_input:
-                    self.player.state_machine.change_state(self.player.RUN)
-                else:
-                    self.player.state_machine.change_state(self.player.IDLE)
+        else:
+            self.frame -= fps
+
+            # === 1타 ===
+        if self.combo == 1:
+            if self.player.lock_dir == 1:
+                if self.frame >= 4.0:
+                    self.frame = 4.0
+                    self.waiting_combo = True
+                    self.combo_timer = self.combo_delay
+                    # 대기 진입 "즉시" 버퍼 확인
+                    if self.player.attack_queued:
+                        self.player.attack_queued = False
+                        self._start_combo2()
+                        return
+            else:
+                if self.frame <= 5.0:
+                    self.frame = 5.0
+                    self.waiting_combo = True
+                    self.combo_timer = self.combo_delay
+                    if self.player.attack_queued:
+                        self.player.attack_queued = False
+                        self._start_combo2()
+                        return
+
 
         else:
             self.frame -= fps
