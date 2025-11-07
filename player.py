@@ -56,7 +56,7 @@ GRAVITY_PPS = GRAVITY_MPS * PIXEL_PER_METER
 
 FPS_ROLL = 0.9
 FPS_JUMP = 8.0
-FPS_ATTACK = 14.0
+FPS_ATTACK = 20.0
 
 class Player:
     def __init__(self):
@@ -287,6 +287,10 @@ class Attack:
         self.image_left = load_image('attack_R.png')
         self.image = self.image_right
         self.frame = 0
+        self.combo = 1
+        self.combo_timer = 0.0
+        self.combo_delay = 0.5
+        self.combo_input = False
 
     def enter(self,event):
         self.player.lock_dir = self.player.dir
@@ -298,6 +302,7 @@ class Attack:
         elif self.player.dir == -1:
             self.frame = 9
             self.image = self.image_left
+        self.combo = 1
 
     def exit(self,event):
         pass
