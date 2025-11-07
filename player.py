@@ -54,6 +54,10 @@ JUMP_SPEED_PPS = JUMP_SPEED_MPS * PIXEL_PER_METER
 GRAVITY_MPS = 14
 GRAVITY_PPS = GRAVITY_MPS * PIXEL_PER_METER
 
+FPS_ROLL = 16.0
+FPS_JUMP = 8.0
+FPS_ATTACK = 14.0
+
 class Player:
     def __init__(self):
         self.image = load_image('_idle.png')
@@ -167,7 +171,7 @@ class Roll:
         pass
 
     def do(self):
-        frame_time = game_framework.frame_time
+        frame_time = FPS_ROLL * game_framework.frame_time
         if self.player.lock_dir == 1:
             self.frame += 1
             check_RL =  self.frame>=12
