@@ -1,5 +1,14 @@
 from pico2d import *
+
+import game_framework
 import world
+
+PIXEL_PER_METER = 60.0
+RUN_SPEED_KMPH = 12.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -20,7 +29,9 @@ class Run:
         self.frame = 0
 
     def enter(self,event):
-        self.frame = 0
+        frame_time = game_framework.frame_time
+        self.frame = (self.frame + 1) % 10
+        self.player.x += RUN_SPEED_PPS * frame_time * self.player.dir
 
         if right_down(event) or left_up(event):
             self.player.dir = 1
