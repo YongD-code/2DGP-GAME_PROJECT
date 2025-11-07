@@ -200,7 +200,7 @@ class Jump:
             self.image = self.image_jump_left
 
         if self.jump_count == 0:
-            self.player.jump_y = 18
+            self.player.jump_y = 25
             if self.player.right_input:
                 self.player.jump_x = 10
                 self.player.dir = 1
@@ -210,7 +210,7 @@ class Jump:
             else:
                 self.player.jump_x = 0
         else:
-            self.player.jump_y = 16
+            self.player.jump_y = 25
             if self.player.right_input:
                 self.player.jump_x = 10
                 self.player.dir = 1
