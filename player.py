@@ -71,6 +71,7 @@ class Player:
         self.lock_dir = 1
         self.vx = 0.0
         self.vy = 0.0
+        self.attack_queued = False
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
