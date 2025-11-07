@@ -294,7 +294,7 @@ class Attack:
         self.frame = 0
         self.combo = 1
         self.combo_timer = 0.0
-        self.combo_delay = 0.5
+        self.combo_delay = 0.1
         self.combo_input = False
         self.waiting_combo = False
         self.done = False
@@ -305,6 +305,7 @@ class Attack:
         self.combo_timer = 0.0
         self.waiting_combo = False
         self.done = False
+        self.player.attack_queued = False
 
         if self.player.dir == 1:
             self.frame = 0
@@ -314,10 +315,9 @@ class Attack:
             self.frame = 9
             self.image = self.image_left
         self.combo = 1
+
     def handle_event(self, event):
-        if event[0] == 'INPUT' and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_c:
-            if self.combo == 1 and self.combo_timer > 0.0:
-                self.combo_input = True
+        pass
 
     def exit(self,event):
         pass
