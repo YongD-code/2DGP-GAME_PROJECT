@@ -4,12 +4,17 @@ import world
 from player import Player
 import GAME_PROJECT
 from slime import Slime
+from dungeon_tile import DungeonMap
 
 def init():
-    global background, player
+    global background, player,dungeon_map
     background = load_image('dungeon_1stage.png')
 
     world.clear()
+
+    dungeon_map = DungeonMap()
+    world.dungeon_map = dungeon_map
+    world.add_object(dungeon_map,0)
 
     player = Player()
     player.x, player.y = 110,180
