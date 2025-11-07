@@ -303,6 +303,10 @@ class Attack:
             self.frame = 9
             self.image = self.image_left
         self.combo = 1
+    def handle_event(self, event):
+        if event[0] == 'INPUT' and event[1].type == SDL_KEYDOWN and event[1].key == SDLK_c:
+            if self.combo == 1 and self.combo_timer > 0.0:
+                self.combo_input = True
 
     def exit(self,event):
         pass
