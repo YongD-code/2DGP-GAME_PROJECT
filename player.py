@@ -366,6 +366,15 @@ class Attack:
                         self._start_combo2()
                         return
 
+        elif self.combo == 2:
+            if self.player.lock_dir == 1:
+                if self.frame >= 9.0:
+                    self.frame = 9.0
+                    self.end_attack()
+            else:
+                if self.frame <= 0.0:
+                    self.frame = 0.0
+                    self.end_attack()
 
         else:
             self.frame -= fps
