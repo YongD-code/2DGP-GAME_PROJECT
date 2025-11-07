@@ -88,6 +88,8 @@ class Player:
                     import dungeon_mode
                     game_framework.change_mode(dungeon_mode)
             elif event.key == SDLK_x:
+                if self.state_machine.current_state in [self.ROLL, self.ATTACK, self.HARVEST, self.PLANT]:
+                    return
                 if self.state_machine.current_state == self.JUMP:
                     if self.JUMP.jump_count < self.JUMP.max_jump:
                         self.JUMP.enter(event)
