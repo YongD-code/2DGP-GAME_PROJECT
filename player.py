@@ -291,9 +291,15 @@ class Attack:
         self.combo_timer = 0.0
         self.combo_delay = 0.5
         self.combo_input = False
+        self.waiting_combo = False
+        self.done = False
 
     def enter(self,event):
         self.player.lock_dir = self.player.dir
+        self.combo = 1
+        self.combo_timer = 0.0
+        self.waiting_combo = False
+        self.done = False
 
         if self.player.dir == 1:
             self.frame = 0
