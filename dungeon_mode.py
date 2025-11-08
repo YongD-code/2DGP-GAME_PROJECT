@@ -48,6 +48,7 @@ def update():
     frame_time = 0.04
     world.update(frame_time)
     world.handle_collision()
+    world.player.late_update()
     delay(frame_time)
 
 def draw():
