@@ -50,7 +50,7 @@ class Slime:
             left_boundary, right_boundary = 0, 999999
 
         if player is not None:
-            same_floor = abs(player.y - self.y) <= 100
+            same_floor = abs(player.y - self.y - 95) <= 5
             if same_floor:
                 dx = player.x - self.x
                 if abs(dx) <= Slime.DETECT_RADIUS:
