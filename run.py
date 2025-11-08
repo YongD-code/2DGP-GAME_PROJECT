@@ -38,10 +38,10 @@ class Run:
         elif left_down(event) or right_up(event):
             self.player.dir = -1
 
-        if self.player.dir == 1:
-            self.image = self.image_right
-        elif self.player.dir == -1:
-            self.image = self.image_left
+        # if self.player.dir == 1:
+        #     self.image = self.image_right
+        # elif self.player.dir == -1:
+        #     self.image = self.image_left
 
     def exit(self,event):
         pass
@@ -56,4 +56,7 @@ class Run:
             self.player.x = world.left_boundary
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
+        if self.player.dir == 1:
+            self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
+        else :
+            self.image.clip_composite_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,0, 'h',self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
