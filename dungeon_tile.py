@@ -1,5 +1,7 @@
 from pico2d import *
 
+SCALE = 2.5
+
 class DungeonTile:
     def __init__(self, x, y,col = 0, row = 0):
         self.x = x
@@ -15,7 +17,14 @@ class DungeonTile:
     def draw(self):
         left = self.col * self.w
         bottom = self.image.h - (self.row + 1) * self.h
-        self.image.clip_draw(left, bottom, self.w, self.h, self.x, self.y,self.w*2.5,self.h*2.5)
+        self.image.clip_draw(left, bottom, self.w, self.h, self.x, self.y,self.w * SCALE,self.h * SCALE)
+        #바운딩 박스 확인용 나중에 삭제할 예정
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        half_w = (self.w * SCALE) / 2
+        half_h = (self.h * SCALE) / 2
+        return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
 
 class DungeonMap:
     def __init__(self):
