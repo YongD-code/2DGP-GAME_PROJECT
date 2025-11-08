@@ -99,6 +99,8 @@ class Player:
         )
 
     def update(self):
+        self.prev_x = self.x
+        self.prev_y = self.y
         self.state_machine.update()
 
     def draw(self):
