@@ -73,6 +73,9 @@ class Player:
         self.vy = 0.0
         self.attack_queued = False
         self.on_ground = True
+        self.prev_x = self.x
+        self.prev_y = self.y
+
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -96,11 +99,6 @@ class Player:
         )
 
     def update(self):
-        frame_time = game_framework.frame_time
-        if not self.on_ground:
-            self.vy -= GRAVITY_PPS * frame_time
-            self.y += self.vy * frame_time
-
         self.state_machine.update()
 
     def draw(self):
