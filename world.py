@@ -63,3 +63,5 @@ def set_boundary(left, right):
 def add_tiles(tile_list):
     global tiles
     tiles.extend(tile_list)
+
+collision_pairs = {}
