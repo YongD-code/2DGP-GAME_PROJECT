@@ -7,6 +7,7 @@ right_boundary = 1250
 # layer 3 = UI
 world = [[],[],[],[]]
 crops = []
+tiles = []
 
 player = None
 background = None
