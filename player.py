@@ -96,6 +96,11 @@ class Player:
         )
 
     def update(self):
+        frame_time = game_framework.frame_time
+        if not self.on_ground:
+            self.vy -= GRAVITY_PPS * frame_time
+            self.y += self.vy * frame_time
+
         self.state_machine.update()
 
     def draw(self):
