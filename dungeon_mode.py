@@ -29,6 +29,8 @@ def init():
     for s in slime_list:
         world.add_object(s, 1)
 
+    for t in world.dungeon_map.get_tiles():
+        world.add_collision_pair('player:tile', world.player, t)
 def finish():
     world.clear()
 
@@ -45,6 +47,7 @@ def handle_events():
 def update():
     frame_time = 0.04
     world.update(frame_time)
+    world.handle_collision()
     delay(frame_time)
 
 def draw():
