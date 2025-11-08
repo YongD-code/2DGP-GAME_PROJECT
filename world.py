@@ -65,3 +65,12 @@ def add_tiles(tile_list):
     tiles.extend(tile_list)
 
 collision_pairs = {}
+
+def collide(a, b):
+    la, ba, ra, ta = a.get_bb()
+    lb, bb, rb, tb = b.get_bb()
+    if la > rb: return False
+    if ra < lb: return False
+    if ta < bb: return False
+    if ba > tb: return False
+    return True
