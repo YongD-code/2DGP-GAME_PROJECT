@@ -5,6 +5,7 @@ from player import Player
 import GAME_PROJECT
 from slime import Slime
 from dungeon_tile import DungeonMap
+import random
 
 def init():
     global background, player,dungeon_map
@@ -25,7 +26,7 @@ def init():
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
 
-    slime_list = [Slime(500, 85), Slime(900, 85)]
+    slime_list = [Slime(random.randint(500,1000), 85), Slime(random.randint(1000,1300), 85)]
     for s in slime_list:
         world.add_object(s, 1)
 
