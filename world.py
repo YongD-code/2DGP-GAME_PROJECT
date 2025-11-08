@@ -82,3 +82,13 @@ def add_collision_pair(group, a, b):
         collision_pairs[group][0].append(a)
     if b:
         collision_pairs[group][1].append(b)
+
+def handle_collision():
+    for group, (A, B) in collision_pairs.items():
+        for a in A:
+            for b in B:
+                if collide(a, b):
+                    if hasattr(a, 'handle_collision'):
+                        a.handle_collision(group, b)
+                    if hasattr(b, 'handle_collision'):
+                        b.handle_collision(group, a)
