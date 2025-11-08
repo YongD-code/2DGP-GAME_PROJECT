@@ -26,7 +26,14 @@ def init():
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
 
-    slime_list = [Slime(random.randint(500,1000), 85), Slime(random.randint(1000,1300), 85)]
+    slime_list = [Slime(random.randint(500,850), 85,'blue'),
+                  Slime(random.randint(900,1220), 85,'red'),
+                  Slime(random.randint(100,300), 520,'green'),
+                  Slime(random.randint(350, 550), 520, 'red'),
+                  Slime(random.randint(1000,1220), 390,'blue'),
+                  Slime(random.randint(200,350),290,'red'),
+                  Slime(random.randint(400, 700), 290, 'green')
+                  ]
     for s in slime_list:
         world.add_object(s, 1)
 
