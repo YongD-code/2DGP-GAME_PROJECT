@@ -1,7 +1,7 @@
 from pico2d import *
 
 class Slime:
-    def __init__(self, x, y):
+    def __init__(self, x, y,color = 'blue'):
         self.blue_slime = load_image('blue_slime.png')
         self.green_slime = load_image('green_slime.png')
         self.red_slime = load_image('red_slime.png')
@@ -20,6 +20,18 @@ class Slime:
 
         self.idle_frame_count = 4
         self.idle_row = 6
+
+        self.sheet = None
+        self.set_color(color)
+
+    def set_color(self, color: str):
+        c = (color or '').lower()
+        if c == 'green':
+            self.sheet = self.green_slime
+        elif c == 'red':
+            self.sheet = self.red_slime
+        else:
+            self.sheet = self.blue_slime
 
     def update(self, frame_time):
         self.time_acc += frame_time
@@ -46,9 +58,7 @@ class Slime:
         x_clip = int(self.frame) * self.w
         y_clip = (self.rows + row) * self.h
 
-        img = self.blue_slime if self.dir == 1 else self.dir == -1 and self.blue_slime
-
         if self.dir == 1:
-            img.clip_draw(x_clip, y_clip,self.w, self.h,self.x, self.y,self.w, self.h)
+            self.sheet.clip_draw(x_clip, y_clip,self.w, self.h,self.x, self.y,self.w*3, self.h*3)
         else:
-            img.clip_composite_draw(x_clip, y_clip,self.w, self.h,0, 'h',self.x, self.y, self.w*3, self.h*3)
+            self.sheet.clip_composite_draw(x_clip, y_clip,self.w, self.h,0, 'h',self.x, self.y, self.w*3, self.h*3)
