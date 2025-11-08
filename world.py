@@ -17,6 +17,7 @@ house = None
 portal = None
 npc = None
 gametime = None
+dungeon_map = None
 
 def add_object(o, layer):
     world[layer].append(o)
