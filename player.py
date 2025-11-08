@@ -58,6 +58,12 @@ FPS_ROLL = 0.9
 FPS_JUMP = 8.0
 FPS_ATTACK = 20.0
 
+BBOX_HALF_W   = 30.0
+BBOX_HALF_H   = 60.0
+BBOX_Y_OFFSET = -60.0
+EPS           = 0.5
+DIR_X_OFFSET = {1:  -15.0,  -1:  15.0}
+
 class Player:
     def __init__(self):
         self.image = load_image('_idle.png')
@@ -75,7 +81,7 @@ class Player:
         self.on_ground = True
         self.prev_x = self.x
         self.prev_y = self.y
-
+        self.prev_dir = self.dir
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -101,10 +107,12 @@ class Player:
     def update(self):
         self.prev_x = self.x
         self.prev_y = self.y
+        self.prev_dir = self.dir
         self.state_machine.update()
 
     def draw(self):
         self.state_machine.draw()
+        draw_rectangle(*self.get_bb())
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
@@ -159,6 +167,73 @@ class Player:
         dy = self.y - portal.y
         distance = (dx ** 2 + dy ** 2) ** 0.5
         return distance < portal.radius
+
+    def get_bb(self):
+        ox = DIR_X_OFFSET.get(self.dir, 0.0)
+        cx = self.x + ox
+        cy = self.y + BBOX_Y_OFFSET
+        return (cx - BBOX_HALF_W,
+                cy - BBOX_HALF_H,
+                cx + BBOX_HALF_W,
+                cy + BBOX_HALF_H)
+
+    def handle_collision(self, group, other):
+        if group != 'player:tile':
+            return
+
+        cur_ox = DIR_X_OFFSET.get(self.dir, 0.0)
+        l, b, r, t = self.get_bb()
+        cur_cx = self.x + cur_ox
+        cur_cy = self.y + BBOX_Y_OFFSET
+
+        prev_ox = DIR_X_OFFSET.get(self.prev_dir, 0.0)
+        prev_cx = self.prev_x + prev_ox
+        prev_cy = self.prev_y + BBOX_Y_OFFSET
+        prev_l, prev_b = prev_cx - BBOX_HALF_W, prev_cy - BBOX_HALF_H
+        prev_r, prev_t = prev_cx + BBOX_HALF_W, prev_cy + BBOX_HALF_H
+
+        tl, tb, tr, tt = other.get_bb()
+        dx = self.x - self.prev_x
+        dy = self.y - self.prev_y
+
+        if (l > tr) or (r < tl) or (t < tb) or (b > tt):
+            return
+
+        if dy <= 0 and prev_b >= tt - EPS and b <= tt + EPS:
+            new_cy = tt + BBOX_HALF_H
+            self.y = new_cy - BBOX_Y_OFFSET
+            self.vy = 0.0
+            self.on_ground = True
+            if hasattr(self, 'JUMP'):
+                self.JUMP.jump_count = 0
+                if self.state_machine.current_state is self.JUMP:
+                    if self.right_input or self.left_input:
+                        self.state_machine.change_state(self.RUN)
+                    else:
+                        self.state_machine.change_state(self.IDLE)
+            return
+
+        if dy > 0 and prev_t <= tb + EPS and t >= tb - EPS:
+            new_cy = tb - BBOX_HALF_H
+            self.y = new_cy - BBOX_Y_OFFSET
+            self.vy = 0.0
+            return
+
+        cur_right = cur_cx + BBOX_HALF_W
+        prev_right = prev_cx + BBOX_HALF_W
+        if dx > 0 and prev_right <= tl + EPS and cur_right >= tl - EPS:
+            new_cx = tl - BBOX_HALF_W
+            self.x = new_cx - cur_ox
+            self.vx = 0.0
+            return
+
+        cur_left = cur_cx - BBOX_HALF_W
+        prev_left = prev_cx - BBOX_HALF_W
+        if dx < 0 and prev_left >= tr - EPS and cur_left <= tr + EPS:
+            new_cx = tr + BBOX_HALF_W
+            self.x = new_cx - cur_ox
+            self.vx = 0.0
+            return
 
 class Roll:
     def __init__(self,player):
@@ -266,11 +341,11 @@ class Jump:
         self.player.x += self.player.vx * frame_time
 
         self.frame += FPS_JUMP * frame_time
-        if self.player.vy > 0:  # 상승
+        if self.player.vy > 0:
             if self.frame >= 3:
                 self.frame = 2.9
             self.image = self.image_jump_right if self.player.dir == 1 else self.image_jump_left
-        else:  # 하강
+        else:
             if self.frame >= 2:
                 self.frame = 1.9
             self.image = self.image_fall_right if self.player.dir == 1 else self.image_fall_left
