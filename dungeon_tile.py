@@ -50,3 +50,6 @@ class DungeonMap:
 
     def get_tiles(self):
         return self.tiles
+
+    def handle_collision(self, group, other):
+        pass
