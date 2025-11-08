@@ -74,3 +74,11 @@ def collide(a, b):
     if ta < bb: return False
     if ba > tb: return False
     return True
+
+def add_collision_pair(group, a, b):
+    if group not in collision_pairs:
+        collision_pairs[group] = [[], []]
+    if a:
+        collision_pairs[group][0].append(a)
+    if b:
+        collision_pairs[group][1].append(b)
