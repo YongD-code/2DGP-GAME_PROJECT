@@ -63,6 +63,8 @@ BBOX_HALF_H   = 60.0
 BBOX_Y_OFFSET = -60.0
 EPS           = 0.5
 DIR_X_OFFSET = {1:  -15.0,  -1:  15.0}
+BND_DST = 3.0
+
 
 class Player:
     def __init__(self):
@@ -82,6 +84,7 @@ class Player:
         self.prev_x = self.x
         self.prev_y = self.y
         self.prev_dir = self.dir
+        self.forced_fall = False
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -109,6 +112,17 @@ class Player:
         self.prev_y = self.y
         self.prev_dir = self.dir
         self.state_machine.update()
+    def late_update(self):
+        if self.state_machine.current_state is self.JUMP:
+            return
+
+        if self.vy > 0:
+            return
+
+        if not self._has_support_strict():
+            self.forced_fall = True
+            self.on_ground = False
+            self.state_machine.change_state(self.JUMP)
 
     def draw(self):
         self.state_machine.draw()
@@ -235,6 +249,34 @@ class Player:
             self.vx = 0.0
             return
 
+    def _has_support_strict(self):
+        ox = DIR_X_OFFSET.get(self.dir, 0.0)
+        cx = self.x + ox
+        cy = self.y + BBOX_Y_OFFSET
+        foot_y = cy - BBOX_HALF_H
+
+        left = cx - BBOX_HALF_W + 1.0
+        right = cx + BBOX_HALF_W - 1.0
+
+        dm = getattr(world, 'dungeon_map', None)
+        if dm is not None:
+            nearest_gap = None
+            for t in dm.get_tiles():
+                tl, tb, tr, tt = t.get_bb()
+                if right < tl or left > tr:
+                    continue
+                gap = foot_y - tt
+                if 0.0 <= gap <= BND_DST:
+                    nearest_gap = gap if (nearest_gap is None or gap < nearest_gap) else nearest_gap
+            if nearest_gap is not None:
+                return True
+
+        if 0.0 <= (self.y - world.ground_y) <= BND_DST:
+            return True
+
+        return False
+
+
 class Roll:
     def __init__(self,player):
         self.player = player
@@ -312,22 +354,31 @@ class Jump:
         elif self.player.dir == -1:
             self.image = self.image_jump_left
 
-        if self.jump_count == 0:
-            self.player.vy = JUMP_SPEED_PPS
+        if getattr(self.player, 'forced_fall', False):
+            self.player.forced_fall = False
+            self.player.vy = min(self.player.vy, 0.0)
+            if self.player.right_input:
+                self.player.vx = RUN_SPEED_PPS
+                self.player.dir = 1
+            elif self.player.left_input:
+                self.player.vx = -RUN_SPEED_PPS
+                self.player.dir = -1
         else:
-            self.player.vy = JUMP_SPEED_PPS * 0.9
+            if self.jump_count == 0:
+                self.player.vy = JUMP_SPEED_PPS
+            else:
+                self.player.vy = JUMP_SPEED_PPS * 0.9
 
-        if self.player.right_input:
-            self.player.vx = RUN_SPEED_PPS
-            self.player.dir = 1
-        elif self.player.left_input:
-            self.player.vx = -RUN_SPEED_PPS
-            self.player.dir = -1
-        else:
-            self.player.vx = 0
-
+            if self.player.right_input:
+                self.player.vx = RUN_SPEED_PPS
+                self.player.dir = 1
+            elif self.player.left_input:
+                self.player.vx = -RUN_SPEED_PPS
+                self.player.dir = -1
+            else:
+                self.player.vx = 0
+            self.jump_count += 1
         self.player.on_ground = False
-        self.jump_count += 1
 
     def exit(self,event):
         self.player.jump_x = 0
