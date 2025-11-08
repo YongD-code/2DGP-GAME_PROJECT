@@ -47,7 +47,8 @@ def clear():
     for layer in world:
         layer.clear()
     gametime = saved_gametime
-
+    collision_pairs.clear()
+    
 def set_ground_y(y):
     global ground_y
     ground_y = y
