@@ -58,3 +58,7 @@ def set_gametime(gt):
 def set_boundary(left, right):
     global left_boundary, right_boundary
     left_boundary, right_boundary = left, right
+
+def add_tiles(tile_list):
+    global tiles
+    tiles.extend(tile_list)
