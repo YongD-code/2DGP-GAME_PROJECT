@@ -27,7 +27,8 @@ class DungeonTile:
         return self.x - half_w, self.y - half_h, self.x + half_w, self.y + half_h
 
 class DungeonMap:
-    def __init__(self):
+    def __init__(self,stage_num = 1):
+        self.stage_num = stage_num
         self.tiles = []
         self.make_tiles()
 
