@@ -13,6 +13,7 @@ def start(target_stage: int = 1):
 
 def init():
     global load_timer,image
+    image = load_image('Enter_dungeon_framework.png')
     load_timer = 0.0
     pass
 
@@ -42,6 +43,7 @@ def handle_events():
 
 def draw():
     clear_canvas()
+    image.draw(640,360)
     update_canvas()
 
 def pause():  pass
