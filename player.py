@@ -5,7 +5,7 @@ from state_machine import StateMachine
 from run import Run
 from harvest import Harvest,Plant
 import game_framework
-
+from hit import Hit
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -85,6 +85,7 @@ class Player:
         self.prev_y = self.y
         self.prev_dir = self.dir
         self.forced_fall = False
+        self.god_timer = 0.0
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -93,6 +94,7 @@ class Player:
         self.ATTACK = Attack(self)
         self.JUMP = Jump(self)
         self.PLANT = Plant(self)
+        self.HIT = Hit(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
@@ -111,7 +113,12 @@ class Player:
         self.prev_x = self.x
         self.prev_y = self.y
         self.prev_dir = self.dir
+        if self.god_timer > 0.0:
+            self.god_timer -= game_framework.frame_time
+            if self.god_timer < 0.0:
+                self.god_timer = 0.0
         self.state_machine.update()
+
     def late_update(self):
         if self.state_machine.current_state is self.JUMP:
             return
@@ -192,6 +199,12 @@ class Player:
                 cy + BBOX_HALF_H)
 
     def handle_collision(self, group, other):
+        if group == 'player:slime':
+            if self.god_timer > 0.0:
+                return
+            self.take_hit()
+            return
+
         if group != 'player:tile':
             return
 
@@ -275,6 +288,14 @@ class Player:
             return True
 
         return False
+
+    def take_hit(self):
+        self.god_timer = 0.6  # 재피격 쿨타임(무적)
+        self.vx *= 0.5  # 살짝 감속 (선택)
+        if self.vy > 0.0:  # 위로 튀지 않게
+            self.vy = 0.0
+        self.state_machine.change_state(self.HIT)
+        pass
 
 
 class Roll:
