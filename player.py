@@ -86,6 +86,7 @@ class Player:
         self.prev_dir = self.dir
         self.forced_fall = False
         self.god_timer = 0.0
+        self.roll_grace = 0.0
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -118,6 +119,12 @@ class Player:
             self.god_timer -= game_framework.frame_time
             if self.god_timer < 0.0:
                 self.god_timer = 0.0
+
+        if self.roll_grace > 0.0:
+            self.roll_grace -= game_framework.frame_time
+            if self.roll_grace < 0.0:
+                self.roll_grace = 0.0
+
         self.state_machine.update()
 
     def late_update(self):
@@ -201,7 +208,7 @@ class Player:
 
     def handle_collision(self, group, other):
         if group == 'player:slime':
-            if self.god_timer > 0.0:
+            if (self.state_machine.current_state is self.ROLL) or self.roll_grace > 0.0 or self.god_timer > 0.0:
                 return
             self.take_hit()
             return
@@ -319,7 +326,10 @@ class Roll:
             self.frame = 11
             self.image = self.image_left
 
+        self.player.roll_grace = 0.0
+
     def exit(self,event):
+        self.player.roll_grace = 0.08
         pass
 
     def do(self):
