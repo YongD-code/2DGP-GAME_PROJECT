@@ -7,6 +7,7 @@ from harvest import Harvest,Plant
 import game_framework
 from hit import Hit
 
+
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
 def right_up(e):
@@ -86,7 +87,7 @@ class Player:
         self.prev_dir = self.dir
         self.forced_fall = False
         self.god_timer = 0.0
-        self.roll_grace = 0.0
+        self.roll_god = 0.0
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -120,10 +121,10 @@ class Player:
             if self.god_timer < 0.0:
                 self.god_timer = 0.0
 
-        if self.roll_grace > 0.0:
-            self.roll_grace -= game_framework.frame_time
-            if self.roll_grace < 0.0:
-                self.roll_grace = 0.0
+        if self.roll_god > 0.0:
+            self.roll_god -= game_framework.frame_time
+            if self.roll_god < 0.0:
+                self.roll_god = 0.0
 
         self.state_machine.update()
 
@@ -159,8 +160,10 @@ class Player:
                     self.state_machine.change_state(self.ATTACK)
             elif event.key == SDLK_UP:
                 if self.on_portal():
-                    import dungeon_mode
-                    game_framework.change_mode(dungeon_mode)
+                    import loading_mode
+                    loading_mode.start(target_stage=1)
+                    game_framework.change_mode(loading_mode)
+                    return
             elif event.key == SDLK_x:
                 if self.state_machine.current_state in [self.ROLL, self.ATTACK, self.HARVEST, self.PLANT]:
                     return
@@ -208,7 +211,7 @@ class Player:
 
     def handle_collision(self, group, other):
         if group == 'player:slime':
-            if (self.state_machine.current_state is self.ROLL) or self.roll_grace > 0.0 or self.god_timer > 0.0:
+            if (self.state_machine.current_state is self.ROLL) or self.roll_god > 0.0 or self.god_timer > 0.0:
                 return
             self.take_hit()
             return
@@ -326,10 +329,10 @@ class Roll:
             self.frame = 11
             self.image = self.image_left
 
-        self.player.roll_grace = 0.0
+        self.player.roll_god = 0.0
 
     def exit(self,event):
-        self.player.roll_grace = 0.08
+        self.player.roll_god = 0.08
         pass
 
     def do(self):
