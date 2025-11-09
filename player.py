@@ -60,7 +60,7 @@ FPS_ATTACK = 20.0
 
 BBOX_HALF_W   = 30.0
 BBOX_HALF_H   = 60.0
-BBOX_Y_OFFSET = -60.0
+BBOX_Y_OFFSET = -65.0
 EPS           = 0.5
 DIR_X_OFFSET = {1:  -15.0,  -1:  15.0}
 BND_DST = 3.0
