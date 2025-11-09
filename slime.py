@@ -1,6 +1,11 @@
 from pico2d import *
 import math
 
+SLIME_BW   = 22.0
+SLIME_BH   = 20.0
+SLIME_BX = 0.0
+SLIME_BY = -10.0
+
 class Slime:
     DETECT_RADIUS   = 260.0
     STOP_DIST       = 24.0
@@ -101,3 +106,16 @@ class Slime:
             self.sheet.clip_draw(x_clip, y_clip, self.w, self.h,self.x, self.y, draw_w, draw_h)
         else:
             self.sheet.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y, draw_w, draw_h)
+
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        cx = self.x + SLIME_BX
+        cy = self.y + SLIME_BY
+        return (cx - SLIME_BW,
+                cy - SLIME_BH,
+                cx + SLIME_BW,
+                cy + SLIME_BH)
+
+    def handle_collision(self, group, other):
+        return
