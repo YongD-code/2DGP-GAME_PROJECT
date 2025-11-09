@@ -112,10 +112,7 @@ class Slime:
     def get_bb(self):
         cx = self.x + SLIME_BX
         cy = self.y + SLIME_BY
-        return (cx - SLIME_BW,
-                cy - SLIME_BH,
-                cx + SLIME_BW,
-                cy + SLIME_BH)
+        return cx - SLIME_BW, cy - SLIME_BH ,cx + SLIME_BW, cy + SLIME_BH
 
     def handle_collision(self, group, other):
         return
