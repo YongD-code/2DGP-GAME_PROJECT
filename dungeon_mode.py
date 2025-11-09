@@ -7,13 +7,16 @@ from slime import Slime
 from dungeon_tile import DungeonMap
 import random
 
-def init():
-    global background, player,dungeon_map
+
+stage_num = 1
+def init(stage = 1):
+    global background, player,dungeon_map, stage_num
+    stage_num = stage
     background = load_image('dungeon_bg.png')
 
     world.clear()
 
-    dungeon_map = DungeonMap()
+    dungeon_map = DungeonMap(stage_num)
     world.dungeon_map = dungeon_map
     world.add_object(dungeon_map,0)
 
