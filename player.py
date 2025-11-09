@@ -104,7 +104,8 @@ class Player:
                 self.ROLL:{right_down:self.RUN,left_down:self.RUN},
                 self.ATTACK:{right_down:self.RUN,left_down:self.RUN},
                 self.JUMP:{},
-                self.PLANT: {s_up: self.IDLE}
+                self.PLANT: {s_up: self.IDLE},
+                self.HIT:{}
             },
             self
         )
