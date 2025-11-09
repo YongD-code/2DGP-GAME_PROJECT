@@ -9,7 +9,7 @@ import random
 
 def init():
     global background, player,dungeon_map
-    background = load_image('dungeon_1stage.png')
+    background = load_image('dungeon_bg.png')
 
     world.clear()
 
