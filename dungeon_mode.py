@@ -36,6 +36,7 @@ def init():
                   ]
     for s in slime_list:
         world.add_object(s, 1)
+        world.add_collision_pair('player:slime', world.player, s)
 
     for t in world.dungeon_map.get_tiles():
         world.add_collision_pair('player:tile', world.player, t)
