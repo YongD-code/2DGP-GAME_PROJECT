@@ -51,10 +51,15 @@ def init(stage = None):
         portal = DungeonPortal()
         world.add_object(portal, 0)
         world.add_collision_pair('player:portal', player, portal)
+
     elif stage_num == 2:
         dungeon_map = DungeonMap(stage_num)
         world.dungeon_map = dungeon_map
         world.add_object(dungeon_map,0)
+
+
+        for t in world.dungeon_map.get_tiles():
+            world.add_collision_pair('player:tile', world.player, t)
 
         portal = DungeonPortal()
         world.add_object(portal, 0)
