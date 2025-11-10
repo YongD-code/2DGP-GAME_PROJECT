@@ -9,17 +9,13 @@ import random
 from background import DungeonPortal
 
 stage_num = 1
-def init(stage = 1):
+def init(stage = None):
     global background, player,dungeon_map, stage_num
-    stage_num = stage
+    if stage is not None:
+        stage_num = stage
     background = load_image('dungeon_bg.png')
     print(f"=== ENTERING DUNGEON STAGE {stage_num} ===")
     world.clear()
-
-    dungeon_map = DungeonMap(stage_num)
-    world.dungeon_map = dungeon_map
-    world.add_object(dungeon_map,0)
-
 
     player = Player()
     player.x, player.y = 110,180
@@ -30,27 +26,48 @@ def init(stage = 1):
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
 
-    slime_list = [Slime(random.randint(500,850), 85,'blue'),
-                  Slime(random.randint(900,1220), 85,'red'),
-                  Slime(random.randint(100,300), 520,'green'),
-                  Slime(random.randint(350, 550), 520, 'red'),
-                  Slime(random.randint(1000,1220), 390,'blue'),
-                  Slime(random.randint(200,350),290,'red'),
-                  Slime(random.randint(400, 700), 290, 'green')
-                  ]
-    for s in slime_list:
-        world.add_object(s, 1)
+    if stage_num == 1:
+        dungeon_map = DungeonMap(stage_num)
+        world.dungeon_map = dungeon_map
+        world.add_object(dungeon_map,0)
 
-    for t in world.dungeon_map.get_tiles():
-        world.add_collision_pair('player:tile', world.player, t)
+        slime_list = [Slime(random.randint(500,850), 85,'blue'),
+                      Slime(random.randint(900,1220), 85,'red'),
+                      Slime(random.randint(100,300), 520,'green'),
+                      Slime(random.randint(350, 550), 520, 'red'),
+                      Slime(random.randint(1000,1220), 390,'blue'),
+                      Slime(random.randint(200,350),290,'red'),
+                      Slime(random.randint(400, 700), 290, 'green')
+                      ]
+        for s in slime_list:
+            world.add_object(s, 1)
 
-    for s in slime_list:
-        world.add_collision_pair('player:slime', world.player, s)
+        for t in world.dungeon_map.get_tiles():
+            world.add_collision_pair('player:tile', world.player, t)
 
-    portal = DungeonPortal()
-    world.add_object(portal, 0)
+        for s in slime_list:
+            world.add_collision_pair('player:slime', world.player, s)
 
-    world.add_collision_pair('player:portal', player, portal)
+        portal = DungeonPortal()
+        world.add_object(portal, 0)
+        world.add_collision_pair('player:portal', player, portal)
+    elif stage_num == 2:
+        dungeon_map = DungeonMap(stage_num)
+        world.dungeon_map = dungeon_map
+        world.add_object(dungeon_map,0)
+
+        portal = DungeonPortal()
+        world.add_object(portal, 0)
+        world.add_collision_pair('player:portal', player, portal)
+
+    elif stage_num == 3:
+        dungeon_map = DungeonMap(stage_num)
+        world.dungeon_map = dungeon_map
+        world.add_object(dungeon_map,0)
+
+        portal = DungeonPortal()
+        world.add_object(portal, 0)
+        world.add_collision_pair('player:portal', player, portal)
 
 def finish():
     world.clear()
