@@ -8,7 +8,7 @@ from dungeon_tile import DungeonMap
 import random
 from background import DungeonPortal
 from skeleton import Skeleton
-
+from goblin import Goblin
 
 stage_num = 1
 def init(stage = 3):
@@ -84,10 +84,20 @@ def init(stage = 3):
         world.dungeon_map = dungeon_map
         world.add_object(dungeon_map,0)
 
+        goblin_list = [Goblin(random.randint(500,850), 95),
+                      Goblin(random.randint(900,1220), 95),
+                      Goblin(random.randint(1000,1220), 500),
+                      Goblin(random.randint(200,350),280),
+                      Goblin(random.randint(500, 800), 390)
+                      ]
+        for s in goblin_list:
+            world.add_object(s, 1)
 
         for t in world.dungeon_map.get_tiles():
             world.add_collision_pair('player:tile', world.player, t)
 
+        for g in goblin_list:
+            world.add_collision_pair('player:goblin', world.player, g)
 
         portal = DungeonPortal()
         world.add_object(portal, 0)
