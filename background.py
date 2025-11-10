@@ -1,4 +1,6 @@
 from pico2d import *
+
+import game_framework
 import world
 
 class Background:
@@ -120,3 +122,29 @@ class House:
     def draw(self):
         self.image.clip_draw(0,0,self.w,self.h,self.x, self.y,self.w * 0.8,self.h * 1)
 
+class DungeonPortal:
+    def __init__(self):
+        self.image = load_image('stage_portal.png')
+        self.w,self.h = 32,32
+        self.x,self.y = 1150, 120
+        self.frame = 0
+        self.fps = 8.0
+        self.radius = 50
+
+    def update(self):
+        self.frame = (self.frame + self.fps * game_framework.frame_time) % 6
+        pass
+
+    def draw(self):
+        col = int(self.frame) % 3
+        row = int(self.frame) // 3
+        left = col * self.w
+        bottom = row * self.h
+        self.image.clip_draw(left, bottom, self.w, self.h, self.x, self.y,self.w * 5,self.h * 3)
+        draw_rectangle(* self.get_bb())
+
+    def get_bb(self):
+        return self.x - self.radius, self.y - self.radius, self.x + self.radius, self.y + self.radius
+
+    def handle_collision(self,group, other):
+        pass
