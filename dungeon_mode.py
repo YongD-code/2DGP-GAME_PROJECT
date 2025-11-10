@@ -7,9 +7,11 @@ from slime import Slime
 from dungeon_tile import DungeonMap
 import random
 from background import DungeonPortal
+from skeleton import Skeleton
+
 
 stage_num = 1
-def init(stage = None):
+def init(stage = 2):
     global background, player,dungeon_map, stage_num
     if stage is not None:
         stage_num = stage
@@ -57,9 +59,21 @@ def init(stage = None):
         world.dungeon_map = dungeon_map
         world.add_object(dungeon_map,0)
 
+        skeleton_list = [Skeleton(random.randint(500,850), 95),
+                      Skeleton(random.randint(900,1220), 95),
+                      Skeleton(random.randint(1000,1220), 500),
+                      Skeleton(random.randint(200,350),300),
+                      Skeleton(random.randint(400, 700), 300)
+                      ]
+        for s in skeleton_list:
+            world.add_object(s, 1)
+
 
         for t in world.dungeon_map.get_tiles():
             world.add_collision_pair('player:tile', world.player, t)
+
+        for s in skeleton_list:
+            world.add_collision_pair('player:skeleton', world.player, s)
 
         portal = DungeonPortal()
         world.add_object(portal, 0)
