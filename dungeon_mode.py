@@ -13,7 +13,7 @@ def init(stage = 1):
     global background, player,dungeon_map, stage_num
     stage_num = stage
     background = load_image('dungeon_bg.png')
-
+    print(f"=== ENTERING DUNGEON STAGE {stage_num} ===")
     world.clear()
 
     dungeon_map = DungeonMap(stage_num)
