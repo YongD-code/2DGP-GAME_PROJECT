@@ -76,9 +76,11 @@ class Skeleton:
         if self.action == 0:
             row = self.idle_row
             frame_count = self.idle_frame_count
+            y_offset = 0
         else:
             row = self.move_row
             frame_count = self.move_frame_count
+            y_offset = 5
 
         idx = int(self.frame) % frame_count
         x_clip = idx * self.w
@@ -88,9 +90,9 @@ class Skeleton:
         draw_h = self.h * 3
 
         if self.dir == 1:
-            self.image.clip_draw(x_clip, y_clip, self.w, self.h,self.x, self.y, draw_w*2, draw_h*2)
+            self.image.clip_draw(x_clip, y_clip, self.w, self.h,self.x, self.y+y_offset, draw_w*2, draw_h*2)
         else:
-            self.image.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y, draw_w*2, draw_h*2)
+            self.image.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y+y_offset, draw_w*2, draw_h*2)
 
         draw_rectangle(*self.get_bb())
 
