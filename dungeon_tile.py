@@ -56,6 +56,20 @@ class DungeonMap:
         pass
 
     def make_tiles_3(self):
+        for i in range(0, 11):
+            self.tiles.append(DungeonTile(86 + i * 32, 200, 1, 2))
+
+        for i in range(0, 11):
+            self.tiles.append(DungeonTile(86 + i * 32, 400, 1, 2))
+
+        for i in range(14, 18):
+            self.tiles.append(DungeonTile(86 + i * 32, 300, 1, 2))
+
+        for i in range(29, 38):
+            self.tiles.append(DungeonTile(16 + i * 32, 200, 1, 2))
+
+        for i in range(29, 38):
+            self.tiles.append(DungeonTile(16 + i * 32, 400, 1, 2))
         pass
 
     def get_tile(self):
