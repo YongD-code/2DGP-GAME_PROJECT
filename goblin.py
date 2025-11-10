@@ -1,4 +1,5 @@
 from pico2d import *
+import random
 
 GOBLIN_BW   = 26.0
 GOBLIN_BH   = 40.0
@@ -16,6 +17,9 @@ class Goblin:
     def __init__(self,x,y):
         self.image1 = load_image('goblin1.png')
         self.image2 = load_image('goblin2.png')
+
+        self.image = random.choice([self.image1, self.image2])
+
         self.cols = 7
         self.rows = 6
         self.w = 18
