@@ -466,6 +466,9 @@ class Jump:
             self.player.x = world.right_boundary
         if self.player.x < world.left_boundary:
             self.player.x = world.left_boundary
+        if self.player.y > 660:
+            self.player.y = 660
+            self.player.vy = 0
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
