@@ -6,7 +6,7 @@ import GAME_PROJECT
 from slime import Slime
 from dungeon_tile import DungeonMap
 import random
-
+from background import DungeonPortal
 
 stage_num = 1
 def init(stage = 1):
@@ -20,12 +20,13 @@ def init(stage = 1):
     world.dungeon_map = dungeon_map
     world.add_object(dungeon_map,0)
 
+
     player = Player()
     player.x, player.y = 110,180
     world.player = player
     world.set_ground_y(180)
     world.set_boundary(110, 1170)
-    world.add_object(player, 1)
+    world.add_object(player, 2)
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
 
@@ -45,6 +46,11 @@ def init(stage = 1):
 
     for s in slime_list:
         world.add_collision_pair('player:slime', world.player, s)
+
+    portal = DungeonPortal()
+    world.add_object(portal, 1)
+
+    world.add_collision_pair('player:portal', player, portal)
 
 def finish():
     world.clear()
