@@ -224,7 +224,7 @@ class Player:
             self.up_dportal = True
             return
 
-        if group == 'player:slime' or group == 'player:skeleton':
+        if group == 'player:slime' or group == 'player:skeleton' or group == 'player:goblin':
             if (self.state_machine.current_state is self.ROLL) or self.roll_god > 0.0 or self.god_timer > 0.0:
                 return
             self.take_hit()
