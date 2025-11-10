@@ -219,6 +219,13 @@ class Player:
         if group != 'player:tile':
             return
 
+        if group == 'player:portal':
+            import loading_mode
+            next_stage = (world.dungeon_map.stage_num % 3) + 1
+            loading_mode.start(next_stage)
+            game_framework.change_mode(loading_mode)
+            return
+
         cur_ox = DIR_X_OFFSET.get(self.dir, 0.0)
         l, b, r, t = self.get_bb()
         cur_cx = self.x + cur_ox
