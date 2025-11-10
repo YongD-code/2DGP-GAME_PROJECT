@@ -11,7 +11,7 @@ from skeleton import Skeleton
 from goblin import Goblin
 
 stage_num = 1
-def init(stage = 3):
+def init(stage = None):
     global background, player,dungeon_map, stage_num
     if stage is not None:
         stage_num = stage
