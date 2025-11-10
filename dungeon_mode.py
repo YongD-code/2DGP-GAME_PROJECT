@@ -48,7 +48,7 @@ def init(stage = 1):
         world.add_collision_pair('player:slime', world.player, s)
 
     portal = DungeonPortal()
-    world.add_object(portal, 1)
+    world.add_object(portal, 0)
 
     world.add_collision_pair('player:portal', player, portal)
 
