@@ -4,7 +4,7 @@ import world, game_framework
 class Hit:
     def __init__(self, player):
         self.player = player
-        self.hit_image = load_image('hit.png')      # dir == 1
+        self.hit_image = load_image('hit.png')
         self.image = self.hit_image
         self.timer = 0.0
         self.knock_timer = 0.0
@@ -12,9 +12,9 @@ class Hit:
 
     def enter(self, event):
         self.image = self.hit_image
-        self.timer = 0.30         # 히트 이미지 표시 시간
-        self.knock_timer = 0.12   # 넉백 유지 시간
-        self.knock_dir = -self.player.dir  # 반대방향 넉백
+        self.timer = 0.30
+        self.knock_timer = 0.1
+        self.knock_dir = -self.player.dir
 
     def exit(self, event):
         pass
@@ -22,12 +22,10 @@ class Hit:
     def do(self):
         dt = game_framework.frame_time
 
-        # 짧은 넉백
         if self.knock_timer > 0.0:
-            self.player.x += self.knock_dir * 200.0 * dt  # 넉백 속도
+            self.player.x += self.knock_dir * 200.0 * dt
             self.knock_timer -= dt
 
-        # 표시 시간 끝나면 복귀
         self.timer -= dt
         if self.timer <= 0.0:
             if self.player.right_input or self.player.left_input:
@@ -35,14 +33,12 @@ class Hit:
             else:
                 self.player.state_machine.change_state(self.player.IDLE)
 
-        # 경계 보정
         if self.player.x > world.right_boundary:
             self.player.x = world.right_boundary
         if self.player.x < world.left_boundary:
             self.player.x = world.left_boundary
 
     def draw(self):
-        # dir이 1이면 그냥 draw, -1이면 좌우반전 composite_draw
         if self.player.dir == 1:
             self.image.draw(self.player.x, self.player.y,self.player.w * 3, self.player.h * 3)
         else:
