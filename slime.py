@@ -1,5 +1,6 @@
 from pico2d import *
 import math
+import random
 
 SLIME_BW   = 22.0
 SLIME_BH   = 20.0
@@ -24,7 +25,7 @@ class Slime:
         self.h = 20
 
         self.x, self.y = x, y
-        self.dir = -1
+        self.dir = random.choice([-1, 1])
         self.speed = Slime.MOVE_SPEED
         self.frame = 0
         self.action = 0

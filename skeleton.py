@@ -1,4 +1,5 @@
 from pico2d import *
+import random
 
 SKELETON_BW   = 26.0
 SKELETON_BH   = 40.0
@@ -21,7 +22,7 @@ class Skeleton:
         self.h = 17
 
         self.x, self.y = x, y
-        self.dir = -1
+        self.dir = random.choice([-1, 1])
         self.speed = Skeleton.MOVE_SPEED
         self.frame = 0
         self.action = 0
