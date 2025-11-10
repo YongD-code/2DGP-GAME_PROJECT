@@ -88,6 +88,7 @@ class Player:
         self.forced_fall = False
         self.god_timer = 0.0
         self.roll_god = 0.0
+        self.up_dportal = False
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -164,6 +165,13 @@ class Player:
                     loading_mode.start(target_stage=1)
                     game_framework.change_mode(loading_mode)
                     return
+
+                if self.up_dportal:
+                    import loading_mode
+                    next_stage = (getattr(world, 'dungeon_map', None).stage_num % 3) + 1
+                    loading_mode.start(next_stage)
+                    game_framework.change_mode(loading_mode)
+
             elif event.key == SDLK_x:
                 if self.state_machine.current_state in [self.ROLL, self.ATTACK, self.HARVEST, self.PLANT]:
                     return
@@ -200,6 +208,7 @@ class Player:
         distance = (dx ** 2 + dy ** 2) ** 0.5
         return distance < portal.radius
 
+
     def get_bb(self):
         ox = DIR_X_OFFSET.get(self.dir, 0.0)
         cx = self.x + ox
@@ -210,6 +219,11 @@ class Player:
                 cy + BBOX_HALF_H)
 
     def handle_collision(self, group, other):
+        if group == 'player:portal':
+            import loading_mode
+            self.up_dportal = True
+            return
+
         if group == 'player:slime':
             if (self.state_machine.current_state is self.ROLL) or self.roll_god > 0.0 or self.god_timer > 0.0:
                 return
@@ -219,12 +233,7 @@ class Player:
         if group != 'player:tile':
             return
 
-        if group == 'player:portal':
-            import loading_mode
-            next_stage = (world.dungeon_map.stage_num % 3) + 1
-            loading_mode.start(next_stage)
-            game_framework.change_mode(loading_mode)
-            return
+
 
         cur_ox = DIR_X_OFFSET.get(self.dir, 0.0)
         l, b, r, t = self.get_bb()
