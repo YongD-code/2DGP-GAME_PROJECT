@@ -30,7 +30,12 @@ class DungeonMap:
     def __init__(self,stage_num = 1):
         self.stage_num = stage_num
         self.tiles = []
-        self.make_tiles_1()
+        if stage_num == 1:
+            self.make_tiles_1()
+        elif stage_num == 2:
+            self.make_tiles_2()
+        elif stage_num == 3:
+            self.make_tiles_3()
 
     def make_tiles_1(self):
         for i in range(0,21):
@@ -47,6 +52,9 @@ class DungeonMap:
 
     def make_tiles_3(self):
         pass
+
+    def get_tile(self):
+        return self.tiles
 
     def update(self):
         pass
