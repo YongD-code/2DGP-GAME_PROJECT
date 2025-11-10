@@ -23,13 +23,10 @@ def finish():
 def update():
     global load_timer, loading
     load_timer += game_framework.frame_time
-
     if load_timer >= loading:
-        try:
-            dungeon_mode.init(stage=next_stage)
-        except TypeError:
-            dungeon_mode.init()
-        game_framework.change_mode(dungeon_mode)
+        if load_timer >= loading:
+            dungeon_mode.stage_num = next_stage
+            game_framework.change_mode(dungeon_mode)
 
 def handle_events():
     events = get_events()
