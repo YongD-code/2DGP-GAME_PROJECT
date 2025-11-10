@@ -166,10 +166,10 @@ class Player:
                     game_framework.change_mode(loading_mode)
                     return
 
-                if self.up_dportal:
+                elif self.up_dportal:
                     import loading_mode
                     next_stage = (getattr(world, 'dungeon_map', None).stage_num % 3) + 1
-                    loading_mode.start(next_stage)
+                    loading_mode.start(target_stage=next_stage)
                     game_framework.change_mode(loading_mode)
 
             elif event.key == SDLK_x:
