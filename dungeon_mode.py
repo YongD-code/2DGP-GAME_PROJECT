@@ -11,7 +11,7 @@ from skeleton import Skeleton
 
 
 stage_num = 1
-def init(stage = 2):
+def init(stage = 3):
     global background, player,dungeon_map, stage_num
     if stage is not None:
         stage_num = stage
@@ -83,6 +83,11 @@ def init(stage = 2):
         dungeon_map = DungeonMap(stage_num)
         world.dungeon_map = dungeon_map
         world.add_object(dungeon_map,0)
+
+
+        for t in world.dungeon_map.get_tiles():
+            world.add_collision_pair('player:tile', world.player, t)
+
 
         portal = DungeonPortal()
         world.add_object(portal, 0)
