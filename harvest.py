@@ -39,6 +39,7 @@ class Plant:
 
         new_crop = Crop(tile_x * TILE_SIZE + TILE_SIZE // 2,
                         tile_y * TILE_SIZE + TILE_SIZE // 2)
+        world.add_object(new_crop,1)
         world.crops.append(new_crop)
 
     def exit(self,event):
