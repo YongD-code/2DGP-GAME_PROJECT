@@ -89,11 +89,9 @@ def update():
 
 def draw():
     clear_canvas()
-    world.render()
-
     for crop in world.crops:
         crop.draw()
-
+    world.render()
     update_canvas()
     pass
 
