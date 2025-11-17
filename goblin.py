@@ -77,6 +77,9 @@ class Goblin:
                 self.frame = (self.frame + 1) % self.move_frame_count
                 self.time_acc = 0.0
 
+        if getattr(self, 'hit_timer', 0) > 0:
+            self.hit_timer -= frame_time
+
     def draw(self):
         if self.action == 0:
             row = self.idle_row
