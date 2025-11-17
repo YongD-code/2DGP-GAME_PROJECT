@@ -226,26 +226,11 @@ class Player:
     def get_attack_bb(self):
         if self.state_machine.current_state is not self.ATTACK:
             return None
-
-        ox = DIR_X_OFFSET.get(self.dir, 0.0)
-        cx = self.x + ox
-        cy = 85
-
-        atk_range_x = 75
-        atk_width = 90
-        atk_height = 70
-
-        if self.dir == 1:
-            l = cx + BBOX_HALF_W
-            r = l + atk_range_x
-        else:
-            r = cx - BBOX_HALF_W
-            l = r - atk_range_x
-
-        b = cy - atk_height * 0.5
-        t = cy + atk_height * 0.5
-
-        return (l, b, r, t)
+        range_x = 80
+        range_y = 40
+        cx = self.x + (range_x * self.dir)
+        cy = self.y - 50
+        return (cx - 65, cy - 75, cx + 45, cy + 30)
 
     def handle_collision(self, group, other):
         if group == 'player:portal':
@@ -346,9 +331,9 @@ class Player:
         return False
 
     def take_hit(self):
-        self.god_timer = 0.6  # 재피격 쿨타임(무적)
-        self.vx *= 0.5  # 살짝 감속 (선택)
-        if self.vy > 0.0:  # 위로 튀지 않게
+        self.god_timer = 0.6
+        self.vx *= 0.5
+        if self.vy > 0.0:
             self.vy = 0.0
         self.state_machine.change_state(self.HIT)
         pass
