@@ -227,14 +227,25 @@ class Player:
         if self.state_machine.current_state is not self.ATTACK:
             return None
 
+        ox = DIR_X_OFFSET.get(self.dir, 0.0)
+        cx = self.x + ox
+        cy = 85
 
-        range_x = 80
-        range_y = 40
+        atk_range_x = 75
+        atk_width = 90
+        atk_height = 70
 
-        cx = self.x + (range_x * self.dir)
-        cy = self.y - 50
+        if self.dir == 1:
+            l = cx + BBOX_HALF_W
+            r = l + atk_range_x
+        else:
+            r = cx - BBOX_HALF_W
+            l = r - atk_range_x
 
-        return (cx - 65, cy - 75, cx + 45, cy + 30)
+        b = cy - atk_height * 0.5
+        t = cy + atk_height * 0.5
+
+        return (l, b, r, t)
 
     def handle_collision(self, group, other):
         if group == 'player:portal':
