@@ -95,17 +95,18 @@ def handle_collision():
                         b.handle_collision(group, a)
 
 def handle_attack_collision():
-    if not hasattr(world, 'player'):
+    global player
+
+    if player is None:
         return
 
-    player = world.player
     atk_bb = player.get_attack_bb()
     if atk_bb is None:
         return
 
     l1, b1, r1, t1 = atk_bb
 
-    for obj in world.objects[1]:
+    for obj in world[1]:
         if not hasattr(obj, 'get_bb'):
             continue
 
