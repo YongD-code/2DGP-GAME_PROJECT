@@ -107,4 +107,6 @@ class Goblin:
         return cx - GOBLIN_BW, cy - GOBLIN_BH , cx + GOBLIN_BW, cy + GOBLIN_BH
 
     def handle_collision(self, group, other):
-        return
+        if group == 'player:attack':
+            self.take_hit()
+            return
