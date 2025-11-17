@@ -103,4 +103,6 @@ class Skeleton:
         return cx - SKELETON_BW, cy - SKELETON_BH , cx + SKELETON_BW, cy + SKELETON_BH
 
     def handle_collision(self, group, other):
-        return
+        if group == 'player:attack':
+            self.take_hit()
+            return
