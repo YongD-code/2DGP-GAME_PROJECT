@@ -218,6 +218,19 @@ class Player:
                 cx + BBOX_HALF_W,
                 cy + BBOX_HALF_H)
 
+    def get_attack_bb(self):
+        if self.state_machine.current_state is not self.ATTACK:
+            return None
+
+
+        range_x = 80
+        range_y = 40
+
+        cx = self.x + (range_x * self.dir)
+        cy = self.y - 50
+
+        return (cx - 60, cy - 70, cx + 45, cy + 30)
+
     def handle_collision(self, group, other):
         if group == 'player:portal':
             import loading_mode
