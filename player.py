@@ -234,7 +234,7 @@ class Player:
         cx = self.x + (range_x * self.dir)
         cy = self.y - 50
 
-        return (cx - 60, cy - 75, cx + 45, cy + 30)
+        return (cx - 65, cy - 75, cx + 45, cy + 30)
 
     def handle_collision(self, group, other):
         if group == 'player:portal':
