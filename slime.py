@@ -19,6 +19,9 @@ class Slime:
         self.green_slime = load_image('green_slime.png')
         self.red_slime   = load_image('red_slime.png')
 
+        self.hp = 4
+        self.hit_timer = 0.0
+
         self.cols = 7
         self.rows = 6
         self.w = 128 // self.cols
@@ -127,7 +130,7 @@ class Slime:
             return
 
         self.hit_timer = 0.3
-        self.hp = getattr(self, 'hp', 3) - 1
+        self.hp -= 1
 
         if self.hp <= 0:
             import world

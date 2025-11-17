@@ -20,6 +20,9 @@ class Goblin:
 
         self.image = random.choice([self.image1, self.image2])
 
+        self.hp = 8
+        self.hit_timer = 0.0
+
         self.cols = 7
         self.rows = 6
         self.w = 18
@@ -118,8 +121,8 @@ class Goblin:
         if getattr(self, 'hit_timer', 0) > 0:
             return
 
+        self.hp -= 1
         self.hit_timer = 0.3
-        self.hp = getattr(self, 'hp', 2) - 1
 
         if self.hp <= 0:
             import world
