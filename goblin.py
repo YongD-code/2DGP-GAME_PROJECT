@@ -126,6 +126,6 @@ class Goblin:
 
         if self.hp <= 0:
             import world
-            world.remove_object(self)
+            world.remove_object(self,1)
         else:
             self.x += -self.dir * 30

@@ -119,11 +119,12 @@ class Skeleton:
         if getattr(self, 'hit_timer', 0) > 0:
             return
 
+
+        self.hp  -=  1
         self.hit_timer = 0.3
-        self.hp = getattr(self, 'hp', 4) - 1
 
         if self.hp <= 0:
             import world
-            world.remove_object(self)
+            world.remove_object(self,1)
         else:
             self.x += -self.dir * 25
