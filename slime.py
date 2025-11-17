@@ -134,7 +134,7 @@ class Slime:
 
         if self.hp <= 0:
             import world
-            world.remove_object(self,1)
+            world.remove_object(self)
         else:
             self.x += -self.dir * 20
 
