@@ -35,11 +35,17 @@ def render(): #그리는 기능
         for o in layer:
             o.draw()
 
-def remove_object(o, layer):
+def remove_object(o, layer=None):
     for layer in world:
         if o in layer:
             layer.remove(o)
-            return
+            break
+
+    for group, (A, B) in list(collision_pairs.items()):
+        if o in A:
+            A.remove(o)
+        if o in B:
+            B.remove(o)
 
 def clear():
     global gametime
