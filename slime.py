@@ -116,4 +116,8 @@ class Slime:
         return cx - SLIME_BW, cy - SLIME_BH ,cx + SLIME_BW, cy + SLIME_BH
 
     def handle_collision(self, group, other):
-        return
+        if group == 'player:attack':
+            self.take_hit()
+            return
+
+
