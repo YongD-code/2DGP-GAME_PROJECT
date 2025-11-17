@@ -120,4 +120,16 @@ class Slime:
             self.take_hit()
             return
 
+    def take_hit(self):
+        if getattr(self, 'hit_timer', 0) > 0:
+            return
+
+        self.hit_timer = 0.3
+        self.hp = getattr(self, 'hp', 3) - 1
+
+        if self.hp <= 0:
+            import world
+            world.remove_object(self)
+        else:
+            self.x += -self.dir * 20
 
