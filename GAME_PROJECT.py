@@ -30,6 +30,7 @@ def init():
     world.player = player
     world.ground = ground
     world.portal = portal
+    world.inventory_icon = inventoryicon
 
     world.set_ground_y(228)
     world.set_boundary(30,1250)
@@ -69,6 +70,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_mode(title_mode)
         else:
+            if hasattr(world, 'inventory_icon') and world.inventory_icon.handle_event(event):
+                return
             world.player.handle_event(event)
     pass
 
