@@ -1,6 +1,6 @@
 from pico2d import *
 import world
-from background import Background, Blacksmith, Ground, House, Portal
+from background import Background, Blacksmith, Ground, House, Portal,InventoryIcon
 from player import Player
 from NPC import Npc
 from time_clock import GameTime
@@ -25,6 +25,7 @@ def init():
     portal = Portal()
     npc = Npc()
     player = Player()
+    inventoryicon = InventoryIcon()
 
     world.player = player
     world.ground = ground
@@ -38,6 +39,7 @@ def init():
     world.add_object(portal, 0)
     world.add_object(blacksmith, 0)
     world.add_object(house, 1)
+    world.add_object(inventoryicon,1)
     world.add_object(npc, 2)
     world.add_object(player, 3)
 
