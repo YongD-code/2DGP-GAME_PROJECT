@@ -154,9 +154,11 @@ class InventoryIcon:
         self.image = load_image('inv_icon.png')
         self.x, self.y = 1200, 50
         self.w, self.h = 32,32
+        self.click = False
 
     def update(self):
         pass
 
     def draw(self):
         self.image.clip_draw(0,0,self.w,self.h,self.x,self.y,self.w*1.5,self.h*1.5)
+        draw_rectangle(self.x - 18, self.y - 22, self.x + 18, self.y + 22)
