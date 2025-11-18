@@ -4,6 +4,7 @@ from background import Background, Blacksmith, Ground, House, Portal,InventoryIc
 from player import Player
 from NPC import Npc
 from time_clock import GameTime
+from inventory import Inventory
 from crop import Crop
 
 import game_framework
@@ -26,11 +27,14 @@ def init():
     npc = Npc()
     player = Player()
     inventoryicon = InventoryIcon()
+    inventory = Inventory()
 
     world.player = player
     world.ground = ground
     world.portal = portal
     world.inventory_icon = inventoryicon
+    world.inventory = inventory
+
 
     world.set_ground_y(228)
     world.set_boundary(30,1250)
@@ -69,10 +73,19 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.change_mode(title_mode)
+        elif hasattr(world, 'inventory_icon') and world.inventory_icon.handle_event(event):
+            world.inventory.toggle()
+            return
+
+        elif hasattr(world, 'inventory') and world.inventory.handle_event(event):
+            return
+
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
+            world.inventory.toggle()
+            return
         else:
-            if hasattr(world, 'inventory_icon') and world.inventory_icon.handle_event(event):
-                return
-            world.player.handle_event(event)
+            if not world.inventory.visible:
+                world.player.handle_event(event)
     pass
 
 
@@ -97,6 +110,8 @@ def draw():
     for crop in world.crops:
         crop.draw()
     world.render()
+    if hasattr(world, 'inventory'):
+        world.inventory.draw()
     update_canvas()
     pass
 
