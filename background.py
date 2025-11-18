@@ -165,9 +165,10 @@ class InventoryIcon:
 
     def handle_event(self, event):
         if event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
-            mx, my = event.x, event.y
-            if self.x - self.w//2 < mx < self.x + self.w//2 and self.y - self.h//2 < my < self.y + self.h//2:
+            mx, my = event.x, 720 - event.y
+            if self.x - 18 < mx < self.x + 18 and self.y - 22 < my < self.y + 22:
                 self.click = not self.click
+                print("Inventory Icon Click:", self.click)
                 return True
 
         return False
