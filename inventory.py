@@ -1,5 +1,6 @@
 from pico2d import *
 
+
 class Inventory:
     def __init__(self):
         self.image = load_image('inventory.png')
@@ -51,8 +52,8 @@ class Inventory:
                                x + self.slot_size / 2, y + self.slot_size / 2)
 
                 if i == self.selected_slot:
-                    draw_rectangle(x - self.slot_size / 2 - 2, y - self.slot_size / 2 - 2,
-                                   x + self.slot_size / 2 + 2, y + self.slot_size / 2 + 2)
+                    draw_rectangle(x - self.slot_size / 2 - 4, y - self.slot_size / 2 - 4,
+                                   x + self.slot_size / 2 + 4, y + self.slot_size / 2 + 4)
 
                 if i == 0:
                     self.draw_crop_icon(x, y, self.test_item['col'], self.test_item['row'])
