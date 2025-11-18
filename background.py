@@ -162,3 +162,12 @@ class InventoryIcon:
     def draw(self):
         self.image.clip_draw(0,0,self.w,self.h,self.x,self.y,self.w*1.5,self.h*1.5)
         draw_rectangle(self.x - 18, self.y - 22, self.x + 18, self.y + 22)
+
+    def handle_event(self, event):
+        if event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
+            mx, my = event.x, event.y
+            if self.x - self.w//2 < mx < self.x + self.w//2 and self.y - self.h//2 < my < self.y + self.h//2:
+                self.click = not self.click
+                return True
+
+        return False
