@@ -63,15 +63,15 @@ class Plant:
 
         item['count'] -= 1
         if item['count'] <= 0:
-            inv.items.pop(inv_index)
+            #inv.items.pop(inv_index)
+
+            for slot in inv.slots:
+                if slot['item'] == inv_index:
+                    slot['item'] = None
 
             for i in range(inv.quickslot_count):
                 if inv.quickslots[i] == inv_index:
                     inv.quickslots[i] = None
-
-            for i in range(inv.quickslot_count):
-                if inv.quickslots[i] is not None and inv.quickslots[i] > inv_index:
-                    inv.quickslots[i] -= 1
 
 
     def exit(self,event):
