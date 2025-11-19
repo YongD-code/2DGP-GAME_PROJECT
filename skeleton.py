@@ -37,8 +37,20 @@ class Skeleton:
         self.idle_frame_count = 4
         self.move_row = 5
         self.move_frame_count = 4
+        self.hit_row = 3
+        self.hit_frame_count = 4
+        self.is_hit = False
+        self.hit_anim_timer = 0.0
 
     def update(self, frame_time):
+        if self.is_hit:
+            self.hit_anim_timer += frame_time
+            if self.hit_anim_timer >= 0.05:
+                self.frame = (self.frame + 1) % self.hit_frame_count
+                self.hit_anim_timer = 0.0
+
+            if self.hit_timer <= 0:
+                self.is_hit = False
         try:
             from world import player, left_boundary, right_boundary
         except ImportError:
@@ -82,14 +94,19 @@ class Skeleton:
             self.hit_timer -= frame_time
 
     def draw(self):
-        if self.action == 0:
-            row = self.idle_row
-            frame_count = self.idle_frame_count
-            y_offset = 0
+        if self.is_hit:
+            row = self.hit_row
+            frame_count = self.hit_frame_count
+            y_offset = 10
         else:
-            row = self.move_row
-            frame_count = self.move_frame_count
-            y_offset = 5
+            if self.action == 0:
+                row = self.idle_row
+                frame_count = self.idle_frame_count
+                y_offset = 0
+            else:
+                row = self.move_row
+                frame_count = self.move_frame_count
+                y_offset = 5
 
         idx = int(self.frame) % frame_count
         x_clip = idx * self.w
@@ -122,6 +139,10 @@ class Skeleton:
 
         self.hp  -=  1
         self.hit_timer = 0.3
+
+        self.is_hit = True
+        self.frame = 0
+        self.hit_anim_timer = 0.0
 
         if self.hp <= 0:
             import world
