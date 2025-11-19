@@ -63,6 +63,10 @@ class Inventory:
             self.x, self.y + self.quickslot_offset_y,
                     self.w * 0.9, self.quickslot_h * 0.9
         )
+    def draw_count_text(self, x, y, count):
+        if not hasattr(self, 'count_font'):
+            self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
+        self.count_font.draw(x + 12, y - 20, f"{count}", (255,255,255))
 
     def draw_crop_icon(self, x, y, col, row):
         sx = col * self.crop_w
