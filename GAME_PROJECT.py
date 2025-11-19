@@ -37,6 +37,15 @@ def init():
     seed_index = world.inventory.add_item("seed_corn")
     world.inventory.items[seed_index]["count"] = 5
 
+    seed_index = world.inventory.add_item("seed_pumpkin")
+    world.inventory.items[seed_index]["count"] = 5
+
+    seed_index = world.inventory.add_item("seed_potato")
+    world.inventory.items[seed_index]["count"] = 5
+
+    seed_index = world.inventory.add_item("seed_strawberry")
+    world.inventory.items[seed_index]["count"] = 5
+
     world.set_ground_y(228)
     world.set_boundary(30,1250)
 
