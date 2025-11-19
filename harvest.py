@@ -1,6 +1,7 @@
 from pico2d import *
 from crop import Crop
 import world
+from text_ani import TextAni
 
 TILE_SIZE = 32
 
@@ -116,6 +117,14 @@ class Harvest:
             crop_type = existing_crop.crop_type
             world.inventory.add_item(crop_type)
 
+            name_kr = {
+                "corn": "옥수수",
+                "pumpkin": "호박",
+                "potato": "감자",
+                "strawberry": "딸기"
+            }
+
+            world.add_object(TextAni(self.player.x, self.player.y + 40, f"{name_kr[crop_type]} +1",duration = 1.0),3)
             world.crops.remove(existing_crop)
 
     def exit(self, event):
