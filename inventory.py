@@ -155,12 +155,20 @@ class Inventory:
         return False
 
     def add_item(self, item_id):
-        for it in self.items:
+        for idx, it in enumerate(self.items):
             if it['id'] == item_id:
                 it['count'] += 1
-                return
+                return idx
 
         self.items.append({'id': item_id, 'count': 1})
+        new_index = len(self.items) - 1
+
+        for slot in self.slots:
+            if slot['item'] is None:
+                slot['item'] = new_index
+                break
+
+        return new_index
 
     def move_to_quickslot(self, slot_index):
 
