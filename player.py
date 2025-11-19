@@ -185,6 +185,14 @@ class Player:
                         self.JUMP.enter(event)
                 else:
                     self.state_machine.change_state(self.JUMP)
+            elif SDLK_1 <= event.key <= SDLK_9:
+                world.inventory.selected_quickslot = event.key - SDLK_1  # 0~8
+                return
+
+                # 10번 슬롯 (0키)
+            elif event.key == SDLK_0:
+                world.inventory.selected_quickslot = 9
+                return
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
