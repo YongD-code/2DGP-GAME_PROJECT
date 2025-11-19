@@ -40,9 +40,13 @@ class Slime:
         self.move_frame_count = 5
         self.hit_row = 3
         self.hit_frame_count = 3
+        self.death_row = 2
+        self.death_frame_count = 5
         self.is_hit = False
         self.hit_anim_timer = 0.0
         self.hit_anim_duration = 0.25
+        self.dead_ani = False
+        self.death_anim_timer = 0.0
 
         self.sheet = None
         self.set_color(color)
@@ -57,6 +61,17 @@ class Slime:
             self.sheet = self.blue_slime
 
     def update(self, frame_time):
+        if self.dead_ani:
+            self.death_anim_timer += frame_time
+            if self.death_anim_timer >= 0.08:
+                self.frame += 1
+                self.death_anim_timer = 0.0
+
+            if self.frame >= self.death_frame_count:
+                import world
+                world.remove_object(self)
+            return
+
         try:
             from world import player, left_boundary, right_boundary
         except ImportError:
@@ -109,7 +124,10 @@ class Slime:
                 self.is_hit = False
 
     def draw(self):
-        if self.is_hit:
+        if self.dead_ani:
+            row = self.death_row
+            frame_count = self.death_frame_count
+        elif self.is_hit:
             row = self.hit_row
             frame_count = self.hit_frame_count
         else:
@@ -150,6 +168,12 @@ class Slime:
 
         self.hit_timer = 0.3
         self.hp -= 1
+
+        if self.hp <= 0:
+            self.dead_ani = True
+            self.death_anim_timer = 0.0
+            self.frame = 0
+            return
 
         self.is_hit = True
         self.hit_anim_timer = 0.0
