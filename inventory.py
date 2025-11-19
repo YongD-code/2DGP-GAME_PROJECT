@@ -79,16 +79,15 @@ class Inventory:
                     draw_rectangle(x - self.slot_size / 2 - 4, y - self.slot_size / 2 - 4,
                                    x + self.slot_size / 2 + 4, y + self.slot_size / 2 + 4)
 
-                if i < len(self.items):
-                    item = self.items[i]
+                slot_index = slot['item']
+                if slot_index is not None:
+                    item = self.items[slot_index]
 
-                    if item['id'] == 'corn':
-                        self.draw_crop_icon(x, y, 0, 11)
+                    icon = self.item_icons[item['id']]
+                    self.draw_crop_icon(x, y, icon["col"], icon["row"])
 
                     if item['count'] > 1:
-                        if not hasattr(self, 'count_font'):
-                            self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
-                        self.count_font.draw(x + 10, y - 20, f"{item['count']}", (255, 255, 255))
+                        self.draw_count_text(x, y, item['count'])
 
         self.image.clip_draw(
             0, 0, self.w, self.quickslot_h,
@@ -172,18 +171,13 @@ class Inventory:
 
     def move_to_quickslot(self, slot_index):
 
-        if slot_index >= len(self.items):
+        slot_item_index = self.slots[slot_index]['item']
+        if slot_item_index is None:
             return
 
-        item_index = slot_index
-
-        target_slot = None
         for i in range(self.quickslot_count):
             if self.quickslots[i] is None:
-                target_slot = i
-                break
+                self.quickslots[i] = slot_item_index
 
-        if target_slot is None:
-            return
-
-        self.quickslots[target_slot] = item_index
+                self.slots[slot_index]['item'] = None
+                return
