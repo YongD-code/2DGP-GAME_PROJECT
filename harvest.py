@@ -35,6 +35,10 @@ class Plant:
 
         item = inv.items[inv_index]
 
+        if not item["id"].startswith("seed_"):
+            print("작물은 심을 수 없습니다. 씨앗만 심을 수 있습니다.")
+            return
+
         if item["id"].startswith("seed_"):
             crop_type = item["id"][5:]
         else:
@@ -68,6 +72,7 @@ class Plant:
             for i in range(inv.quickslot_count):
                 if inv.quickslots[i] is not None and inv.quickslots[i] > inv_index:
                     inv.quickslots[i] -= 1
+
 
     def exit(self,event):
         pass
