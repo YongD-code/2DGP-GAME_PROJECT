@@ -22,7 +22,7 @@ class TextAni:
         if self.alpha < 0:
             self.alpha = 0
 
-    def is_dead(self):
+    def text_dead(self):
         return self.alpha <= 0
 
     def draw(self):
