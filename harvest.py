@@ -80,6 +80,10 @@ class Harvest:
 
         if existing_crop and existing_crop.stage <= existing_crop.max_stage:
             existing_crop.harvest()
+
+            if hasattr(world, 'inventory'):
+                world.inventory.add_item('corn')
+
             world.crops.remove(existing_crop)
 
     def exit(self, event):
