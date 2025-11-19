@@ -98,15 +98,16 @@ class Inventory:
             if i == self.selected_quickslot:
                 draw_rectangle(x - 30, y - 30, x + 30, y + 30)
 
-            slot_item = self.quickslots[i]
-            if slot_item:
-                icon = self.item_icons[slot_item["id"]]
+            slot_item_index = self.quickslots[i]
+
+            if slot_item_index is not None:
+                item = self.items[slot_item_index]
+
+                icon = self.item_icons[item["id"]]
                 self.draw_crop_icon(x, y, icon["col"], icon["row"])
 
-                if slot_item['count'] > 1:
-                    if not hasattr(self, 'count_font'):
-                        self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
-                self.count_font.draw(x + 10, y - 20, f"{slot_item['count']}", (255, 255, 255))
+                if item["count"] > 1:
+                    self.draw_count_text(x, y, item["count"])
 
 
     def draw_count_text(self, x, y, count):
@@ -116,7 +117,7 @@ class Inventory:
 
     def draw_crop_icon(self, x, y, col, row):
         sx = col * self.crop_w
-        sy = (self.crop_rows - 1 - row) * self.crop_h 
+        sy = (self.crop_rows - 1 - row) * self.crop_h
         self.crop_sheet.clip_draw(sx, sy, self.crop_w, self.crop_h, x, y, 48, 48)
 
 
@@ -127,6 +128,15 @@ class Inventory:
 
         if not self.visible:
             return False
+        if event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_RIGHT:
+            mx, my = event.x, 720 - event.y
+
+            for i, slot in enumerate(self.slots):
+                x, y = slot['x'], slot['y']
+                if x - self.slot_size / 2 < mx < x + self.slot_size / 2 and \
+                        y - self.slot_size / 2 < my < y + self.slot_size / 2:
+                    self.move_to_quickslot(i)
+                    return True
 
         if event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
             mx, my = event.x, 720 - event.y
@@ -140,9 +150,33 @@ class Inventory:
         return False
 
     def add_item(self, item_id):
+
         for it in self.items:
             if it['id'] == item_id:
                 it['count'] += 1
                 return
 
         self.items.append({'id': item_id, 'count': 1})
+
+    def move_to_quickslot(self, slot_index):
+
+        if slot_index >= len(self.items):
+            return
+
+        item = self.items[slot_index]
+
+        target_slot = None
+        for i in range(self.quickslot_count):
+            if self.quickslots[i] is None:
+                target_slot = i
+                break
+
+        if target_slot is None:
+            print("퀵슬롯에 빈 칸이 없습니다.")
+            return
+
+        self.quickslots[target_slot] = slot_index
+
+        # 인벤토리 item에서도 제거하고 싶으면 아래처럼:
+        # (원하면 “인벤토리에도 남기기” 방식도 가능)
+        self.items.pop(slot_index)
