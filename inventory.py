@@ -88,3 +88,11 @@ class Inventory:
                     print(f"Selected slot {i}")
                     return True
         return False
+
+    def add_item(self, item_id):
+        for it in self.items:
+            if it['id'] == item_id:
+                it['count'] += 1
+                return
+
+        self.items.append({'id': item_id, 'count': 1})
