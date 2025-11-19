@@ -34,7 +34,11 @@ class Plant:
             return
 
         item = inv.items[inv_index]
-        crop_type = item['id']
+
+        if item["id"].startswith("seed_"):
+            crop_type = item["id"][5:]
+        else:
+            crop_type = item["id"]
 
 
         tile_x = int(self.player.x // TILE_SIZE)
@@ -57,7 +61,14 @@ class Plant:
         item['count'] -= 1
         if item['count'] <= 0:
             inv.items.pop(inv_index)
-            inv.quickslots[slot_index] = None
+
+            for i in range(inv.quickslot_count):
+                if inv.quickslots[i] == inv_index:
+                    inv.quickslots[i] = None
+
+            for i in range(inv.quickslot_count):
+                if inv.quickslots[i] is not None and inv.quickslots[i] > inv_index:
+                    inv.quickslots[i] -= 1
 
     def exit(self,event):
         pass
@@ -99,7 +110,7 @@ class Harvest:
             existing_crop.harvest()
 
             if hasattr(world, 'inventory'):
-                world.inventory.add_item('corn')
+                world.inventory.add_item('seed_corn')
 
             world.crops.remove(existing_crop)
 
