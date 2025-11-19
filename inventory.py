@@ -34,6 +34,11 @@ class Inventory:
 
         self.selected_slot = -1
 
+        self.quickslot_count = 10
+        self.quickslots = [None] * self.quickslot_count
+
+        self.selected_quickslot = 0
+        self.quickslot_positions = []
 
     def toggle(self):
         self.visible = not self.visible
