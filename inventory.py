@@ -50,9 +50,9 @@ class Inventory:
 
         self.item_icons = {
             "corn": {"col": 0, "row": 11},
-            "pumpkin": {"col": 1, "row": 11},
-            "potato": {"col": 2, "row": 11},
-            "strawberry": {"col": 3, "row": 11},
+            "pumpkin": {"col": 0, "row": 10},
+            "potato": {"col": 0, "row": 9},
+            "strawberry": {"col": 0, "row": 8},
 
             "seed_corn": {"col": 5, "row": 11},
             "seed_pumpkin": {"col": 5, "row": 10},
