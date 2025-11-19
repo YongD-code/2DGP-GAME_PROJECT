@@ -40,6 +40,13 @@ class Inventory:
         self.selected_quickslot = 0
         self.quickslot_positions = []
 
+        qy = self.y + self.quickslot_offset_y- 10
+        start_x = self.x - 225
+        gap = 54
+
+        self.quickslot_positions = [
+            (start_x + i * gap, qy) for i in range(self.quickslot_count)
+    ]
     def toggle(self):
         self.visible = not self.visible
         print("Inventory Visible:", self.visible)
@@ -74,8 +81,27 @@ class Inventory:
         self.image.clip_draw(
             0, 0, self.w, self.quickslot_h,
             self.x, self.y + self.quickslot_offset_y,
-                    self.w * 0.9, self.quickslot_h * 0.9
-        )
+                    self.w * 0.9, self.quickslot_h * 0.9)
+
+        for i in range(self.quickslot_count):
+            x, y = self.quickslot_positions[i]
+
+            draw_rectangle(x - 25, y - 25, x + 25, y + 25)
+
+            if i == self.selected_quickslot:
+                draw_rectangle(x - 30, y - 30, x + 30, y + 30)
+
+            slot_item = self.quickslots[i]
+            if slot_item:
+                icon = self.item_icons[slot_item["id"]]
+                self.draw_crop_icon(x, y, icon["col"], icon["row"])
+
+                if slot_item['count'] > 1:
+                    if not hasattr(self, 'count_font'):
+                        self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
+                self.count_font.draw(x + 10, y - 20, f"{slot_item['count']}", (255, 255, 255))
+
+
     def draw_count_text(self, x, y, count):
         if not hasattr(self, 'count_font'):
             self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
@@ -83,7 +109,7 @@ class Inventory:
 
     def draw_crop_icon(self, x, y, col, row):
         sx = col * self.crop_w
-        sy = (self.crop_rows - 1 - row) * self.crop_h  # OpenGL 좌표계 보정
+        sy = (self.crop_rows - 1 - row) * self.crop_h 
         self.crop_sheet.clip_draw(sx, sy, self.crop_w, self.crop_h, x, y, 48, 48)
 
 
