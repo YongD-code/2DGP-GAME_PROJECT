@@ -46,7 +46,14 @@ class Inventory:
 
         self.quickslot_positions = [
             (start_x + i * gap, qy) for i in range(self.quickslot_count)
-    ]
+        ]
+
+        self.item_icons = {
+            "corn": {"col": 0, "row": 11},
+            "carrot": {"col": 1, "row": 11},
+            "pumpkin": {"col": 2, "row": 11},
+            "potato": {"col": 3, "row": 11}
+        }
     def toggle(self):
         self.visible = not self.visible
         print("Inventory Visible:", self.visible)
