@@ -22,8 +22,20 @@ class Plant:
         self.frame = 0
 
     def enter(self, event):
+        inv = world.inventory
+        slot_index = inv.selected_quickslot
+        inv_index = inv.quickslots[slot_index]
+
         self.frame = 0
         self.image = self.image_right if self.player.dir == 1 else self.image_left
+
+        if inv_index is None:
+            print("퀵슬롯이 비어있습니다.")
+            return
+
+        item = inv.items[inv_index]
+        crop_type = item['id']
+
 
         tile_x = int(self.player.x // TILE_SIZE)
         tile_y = int(120 // TILE_SIZE)
@@ -41,6 +53,11 @@ class Plant:
                         tile_y * TILE_SIZE + TILE_SIZE // 2)
         world.add_object(new_crop,1)
         world.crops.append(new_crop)
+
+        item['count'] -= 1
+        if item['count'] <= 0:
+            inv.items.pop(inv_index)
+            inv.quickslots[slot_index] = None
 
     def exit(self,event):
         pass
