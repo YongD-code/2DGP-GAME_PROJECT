@@ -34,7 +34,8 @@ def init():
     world.portal = portal
     world.inventory_icon = inventoryicon
     world.inventory = inventory
-
+    seed_index = world.inventory.add_item("seed_corn")
+    world.inventory.items[seed_index]["count"] = 5
 
     world.set_ground_y(228)
     world.set_boundary(30,1250)
