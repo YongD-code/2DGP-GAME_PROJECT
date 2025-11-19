@@ -89,6 +89,8 @@ class Player:
         self.god_timer = 0.0
         self.roll_god = 0.0
         self.up_dportal = False
+        self.hp = 1
+        self.dead_ani = False
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -98,6 +100,7 @@ class Player:
         self.JUMP = Jump(self)
         self.PLANT = Plant(self)
         self.HIT = Hit(self)
+        self.DEATH = Death(self)
         self.state_machine = StateMachine(
             self.IDLE,
             {
@@ -108,7 +111,8 @@ class Player:
                 self.ATTACK:{right_down:self.RUN,left_down:self.RUN},
                 self.JUMP:{},
                 self.PLANT: {s_up: self.IDLE},
-                self.HIT:{}
+                self.HIT:{},
+                self.DEATH:{}
             },
             self
         )
@@ -142,6 +146,10 @@ class Player:
             self.state_machine.change_state(self.JUMP)
 
     def draw(self):
+        if self.state_machine.current_state is self.DEATH:
+            self.DEATH.draw()
+            return
+
         self.state_machine.draw()
         draw_rectangle(*self.get_bb())
         atk_bb = self.get_attack_bb()
@@ -339,6 +347,17 @@ class Player:
         return False
 
     def take_hit(self):
+        if self.dead_ani:
+            return
+
+        self.hp -= 1
+
+        if self.hp <= 0:
+
+            self.dead_ani = True
+            self.state_machine.change_state(self.DEATH)
+            return
+
         self.god_timer = 0.6
         self.vx *= 0.5
         if self.vy > 0.0:
@@ -601,3 +620,42 @@ class Attack:
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 2.9,self.player.h * 2.9)
+
+class Death:
+    def __init__(self, player):
+        self.player = player
+        self.image_right = load_image('death.png')   # 너가 올린 이미지
+        self.image = self.image_right
+
+        self.frame = 0
+        self.total_frames = 10
+        self.fps = 8.0
+
+    def enter(self, event):
+        self.frame = 0
+        self.player.lock_dir = self.player.dir
+
+        self.player.vx = 0
+        self.player.vy = 0
+
+    def exit(self, event):
+        pass
+
+    def do(self):
+        frame_time = game_framework.frame_time
+        self.frame += self.fps * frame_time
+
+        if self.frame >= self.total_frames - 1:
+            self.frame = self.total_frames - 1
+
+        if self.player.x > world.right_boundary:
+            self.player.x = world.right_boundary
+        if self.player.x < world.left_boundary:
+            self.player.x = world.left_boundary
+
+    def draw(self):
+        frame_idx = int(self.frame)
+        if self.player.dir == 1:
+            self.image.clip_draw(frame_idx * self.player.w, 0,self.player.w, self.player.h,self.player.x, self.player.y,self.player.w * 3, self.player.h * 3)
+        else:
+            self.image.clip_composite_draw(frame_idx* self.player.w, 0,self.player.w, self.player.h,0, 'h',self.player.x, self.player.y,self.player.w * 3, self.player.h * 3)
