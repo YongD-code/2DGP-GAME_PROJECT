@@ -24,11 +24,13 @@ def add_object(o, layer):
 
 def update(frame_time): #업데이트하는 기능
     for layer in world:
-        for o in layer:
+        for o in layer[:]:
             try:
                 o.update(frame_time)
             except TypeError:
                 o.update()
+            if hasattr(o, "is_dead") and o.is_dead():
+                layer.remove(o)
 
 def render(): #그리는 기능
     for layer in world:
