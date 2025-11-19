@@ -43,8 +43,23 @@ class Goblin:
         self.hit_frame_count = 3
         self.is_hit = False
         self.hit_anim_timer = 0.0
+        self.death_row = 2
+        self.death_frame_count = 5
+        self.is_dead = False
+        self.death_anim_timer = 0.0
 
     def update(self, frame_time):
+        if self.is_dead:
+            self.death_anim_timer += frame_time
+            if self.death_anim_timer >= 0.08:
+                self.frame += 1
+                self.death_anim_timer = 0.0
+
+            if self.frame >= self.death_frame_count:
+                import world
+                world.remove_object(self)
+            return
+
         if self.is_hit:
             self.hit_anim_timer += frame_time
             if self.hit_anim_timer >= 0.05:
@@ -96,7 +111,11 @@ class Goblin:
             self.hit_timer -= frame_time
 
     def draw(self):
-        if self.is_hit:
+        if self.is_dead:
+            row = self.death_row
+            frame_count = self.death_frame_count
+            y_offset = 10
+        elif self.is_hit:
             row = self.hit_row
             frame_count = self.hit_frame_count
             y_offset = 10
@@ -140,6 +159,12 @@ class Goblin:
 
         self.hp -= 1
         self.hit_timer = 0.3
+
+        if self.hp <= 0:
+            self.is_dead = True
+            self.frame = 0
+            self.death_anim_timer = 0.0
+            return
 
         self.is_hit = True
         self.frame = 0
