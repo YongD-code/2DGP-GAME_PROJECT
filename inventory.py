@@ -55,8 +55,16 @@ class Inventory:
                     draw_rectangle(x - self.slot_size / 2 - 4, y - self.slot_size / 2 - 4,
                                    x + self.slot_size / 2 + 4, y + self.slot_size / 2 + 4)
 
-                if i == 0:
-                    self.draw_crop_icon(x, y, self.test_item['col'], self.test_item['row'])
+                if i < len(self.items):
+                    item = self.items[i]
+
+                    if item['id'] == 'corn':
+                        self.draw_crop_icon(x, y, 0, 11)
+
+                    if item['count'] > 1:
+                        if not hasattr(self, 'count_font'):
+                            self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
+                        self.count_font.draw(x + 10, y - 20, f"{item['count']}", (255, 255, 255))
 
         self.image.clip_draw(
             0, 0, self.w, self.quickslot_h,
