@@ -355,6 +355,7 @@ class Player:
         if self.hp <= 0:
 
             self.dead_ani = True
+            self.handle_death()
             self.state_machine.change_state(self.DEATH)
             return
 
@@ -365,6 +366,11 @@ class Player:
         self.state_machine.change_state(self.HIT)
         pass
 
+    def handle_death(self):
+        import world
+        from text_ani import DeathTextAni
+
+        world.add_object(DeathTextAni(), 3)
 
 class Roll:
     def __init__(self,player):
