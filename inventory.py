@@ -15,7 +15,7 @@ class Inventory:
         self.slot_size = 54
         self.padding = 6
         self.slots = []
-
+        self.items = []
         start_x = self.x - (self.cols * (self.slot_size + self.padding)) / 2 + self.slot_size / 2 + 32
         start_y = self.y + (self.rows * (self.slot_size + self.padding)) / 2 - self.slot_size / 2 - 32
         for row in range(self.rows):
