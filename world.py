@@ -29,7 +29,7 @@ def update(frame_time): #업데이트하는 기능
                 o.update(frame_time)
             except TypeError:
                 o.update()
-            if hasattr(o, "is_dead") and o.is_dead:
+            if hasattr(o, "is_dead") and o.is_dead():
                 layer.remove(o)
 
 def render(): #그리는 기능
