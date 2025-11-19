@@ -167,7 +167,7 @@ class Inventory:
         if slot_index >= len(self.items):
             return
 
-        item = self.items[slot_index]
+        item_index = slot_index
 
         target_slot = None
         for i in range(self.quickslot_count):
@@ -176,11 +176,6 @@ class Inventory:
                 break
 
         if target_slot is None:
-            print("퀵슬롯에 빈 칸이 없습니다.")
             return
 
-        self.quickslots[target_slot] = slot_index
-
-        # 인벤토리 item에서도 제거하고 싶으면 아래처럼:
-        # (원하면 “인벤토리에도 남기기” 방식도 가능)
-        self.items.pop(slot_index)
+        self.quickslots[target_slot] = item_index
