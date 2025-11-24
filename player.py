@@ -89,7 +89,7 @@ class Player:
         self.god_timer = 0.0
         self.roll_god = 0.0
         self.up_dportal = False
-        self.hp = 1
+        self.hp = 6
         self.dead_ani = False
 
         self.IDLE = Idle(self)
