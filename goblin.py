@@ -160,6 +160,10 @@ class Goblin:
         self.hp -= 1
         self.hit_timer = 0.3
 
+        from text_ani import DamageTextAni
+        import world
+        world.add_object(DamageTextAni(self.x, self.y + 30, 1), 3)
+
         if self.hp <= 0:
             self.is_dead = True
             self.frame = 0
