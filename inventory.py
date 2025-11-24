@@ -65,6 +65,23 @@ class Inventory:
             "seed_potato": {"col": 5, "row": 9},
             "seed_strawberry": {"col": 5, "row": 8},
         }
+
+        self.hover_item_index = None
+        self.hover_slot_index = None
+        self.tooltip_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 18)
+
+        self.item_descriptions = {
+            "corn": "옥수수",
+            "pumpkin": "호박",
+            "potato": "감자",
+            "strawberry": "딸기",
+
+            "seed_corn": "옥수수 씨앗",
+            "seed_pumpkin": "호박 씨앗",
+            "seed_potato": "감자 씨앗",
+            "seed_strawberry": "딸기 씨앗"
+        }
+
     def toggle(self):
         self.visible = not self.visible
         print("Inventory Visible:", self.visible)
@@ -125,6 +142,9 @@ class Inventory:
             mx, my = self.drag_mouse_x, self.drag_mouse_y
             self.draw_crop_icon(mx, my, icon["col"], icon["row"])
 
+        if self.visible and not self.dragging:
+            self.draw_tooltip()
+
     def draw_count_text(self, x, y, count):
         if not hasattr(self, 'count_font'):
             self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
@@ -175,6 +195,17 @@ class Inventory:
                 self.drag_mouse_y = 720 - event.y
                 return True
 
+        if event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
+            mx, my = event.x, 720 - event.y
+            for i, slot in enumerate(self.slots):
+                x, y = slot['x'], slot['y']
+                if x - self.slot_size / 2 < mx < x + self.slot_size / 2 and \
+                        y - self.slot_size / 2 < my < y + self.slot_size / 2:
+                    self.selected_slot = i
+                    print(f"Selected slot {i}")
+                    return True
+            return False
+
         if event.type == SDL_MOUSEBUTTONUP and event.button == SDL_BUTTON_LEFT:
             if self.dragging:
                 mx, my = event.x, 720 - event.y
@@ -204,6 +235,23 @@ class Inventory:
                 self.drag_item_index = None
                 self.drag_slot_index = None
                 return True
+
+        if event.type == SDL_MOUSEMOTION:
+            mx, my = event.x, 720 - event.y
+
+            if not self.dragging:
+                self.hover_item_index = None
+                self.hover_slot_index = None
+
+                for i, slot in enumerate(self.slots):
+                    x, y = slot['x'], slot['y']
+                    if x - self.slot_size / 2 < mx < x + self.slot_size / 2 and \
+                            y - self.slot_size / 2 < my < y + self.slot_size / 2:
+
+                        if slot['item'] is not None:
+                            self.hover_item_index = slot['item']
+                            self.hover_slot_index = i
+                        break
 
         return False
 
@@ -235,3 +283,19 @@ class Inventory:
 
                 self.slots[slot_index]['item'] = None
                 return
+
+    def draw_tooltip(self):
+        if self.hover_item_index is None or self.hover_slot_index is None:
+            return
+
+        slot = self.slots[self.hover_slot_index]
+        sx, sy = slot['x'], slot['y']
+
+        item = self.items[self.hover_item_index]
+        item_id = item['id']
+        desc = self.item_descriptions.get(item_id, "설명 없음")
+
+        tx = sx - 40
+        ty = sy + 40
+
+        self.tooltip_font.draw(tx, ty, desc, (255, 255, 255))
