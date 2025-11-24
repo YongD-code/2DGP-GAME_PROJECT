@@ -16,6 +16,12 @@ class Inventory:
         self.padding = 6
         self.slots = []
         self.items = []
+        self.dragging = False
+        self.drag_item_index = None
+        self.drag_slot_index = None
+        self.drag_mouse_x = 0
+        self.drag_mouse_y = 0
+
         start_x = self.x - (self.cols * (self.slot_size + self.padding)) / 2 + self.slot_size / 2 + 32
         start_y = self.y + (self.rows * (self.slot_size + self.padding)) / 2 - self.slot_size / 2 - 32
         for row in range(self.rows):
@@ -113,6 +119,11 @@ class Inventory:
                 if item["count"] > 1:
                     self.draw_count_text(x, y, item["count"])
 
+        if self.dragging and self.drag_item_index is not None:
+            item = self.items[self.drag_item_index]
+            icon = self.item_icons[item['id']]
+            mx, my = self.drag_mouse_x, self.drag_mouse_y
+            self.draw_crop_icon(mx, my, icon["col"], icon["row"])
 
     def draw_count_text(self, x, y, count):
         if not hasattr(self, 'count_font'):
@@ -144,13 +155,56 @@ class Inventory:
 
         if event.type == SDL_MOUSEBUTTONDOWN and event.button == SDL_BUTTON_LEFT:
             mx, my = event.x, 720 - event.y
+
             for i, slot in enumerate(self.slots):
                 x, y = slot['x'], slot['y']
-                if x - self.slot_size/2 < mx < x + self.slot_size/2 and \
-                   y - self.slot_size/2 < my < y + self.slot_size/2:
-                    self.selected_slot = i
-                    print(f"Selected slot {i}")
+                if x - self.slot_size / 2 < mx < x + self.slot_size / 2 and \
+                        y - self.slot_size / 2 < my < y + self.slot_size / 2:
+
+                    if slot['item'] is not None:
+                        self.dragging = True
+                        self.drag_item_index = slot['item']
+                        self.drag_slot_index = i
+                        self.drag_mouse_x = mx
+                        self.drag_mouse_y = my
+                        return True
+
+        if event.type == SDL_MOUSEMOTION:
+            if self.dragging:
+                self.drag_mouse_x = event.x
+                self.drag_mouse_y = 720 - event.y
+                return True
+
+        if event.type == SDL_MOUSEBUTTONUP and event.button == SDL_BUTTON_LEFT:
+            if self.dragging:
+                mx, my = event.x, 720 - event.y
+
+                target_slot = None
+                for i, slot in enumerate(self.slots):
+                    x, y = slot['x'], slot['y']
+                    if x - self.slot_size / 2 < mx < x + self.slot_size / 2 and \
+                            y - self.slot_size / 2 < my < y + self.slot_size / 2:
+                        target_slot = i
+                        break
+
+                if target_slot is None:
+                    self.dragging = False
+                    self.drag_item_index = None
+                    self.drag_slot_index = None
                     return True
+
+                origin = self.drag_slot_index
+                origin_item = self.drag_item_index
+                target_item = self.slots[target_slot]['item']
+
+                self.slots[target_slot]['item'] = origin_item
+                self.slots[origin]['item'] = target_item
+
+                self.dragging = False
+                self.drag_item_index = None
+                self.drag_slot_index = None
+                return True
+
         return False
 
     def add_item(self, item_id):
