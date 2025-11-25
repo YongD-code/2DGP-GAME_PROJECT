@@ -28,3 +28,8 @@ class Npc:
             self.right_frames[self.frame_index].draw(self.x, self.y, self.w*2.5,self.h*2.5)
         else:
             self.left_frames[self.frame_index].draw(self.x, self.y, self.w*2.5,self.h*2.5)
+
+    def can_talk(self):
+        px = world.player.x
+        return abs(self.x - px) < 80
+
