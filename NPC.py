@@ -12,6 +12,18 @@ class Npc:
         self.timer_delay = 0.15
         self.face = True
 
+        self.dialogue_intro = [
+            "혹시 나를 좀 도와줄 수 있을까?"
+        ]
+
+        self.dialogue_quest = [
+            "옥수수 5개만 구해다 줄래?",
+        ]
+
+        self.dialogue_complete = [
+            "증말 고마워~!! 이건 보상이야."
+        ]
+
     def update(self,player_x = None):
         if world.player.x > self.x:
             self.face = True
