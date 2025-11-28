@@ -110,6 +110,8 @@ class Harvest:
             if cx == tile_x and cy == tile_y:
                 existing_crop = c
                 break
+        if existing_crop is None:
+            return
 
         if existing_crop and existing_crop.stage <= existing_crop.max_stage:
             existing_crop.harvest()
