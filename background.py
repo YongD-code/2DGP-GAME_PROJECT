@@ -88,9 +88,11 @@ class Portal:
         self.timer = 0
         self.timer_delay = 0.6
         self.radius = 80
-
+        self.fps = 8.0
     def update(self):
-        self.timer += 0.3
+        frame_time = game_framework.frame_time
+        self.timer += frame_time * self.fps
+
         if self.timer > self.timer_delay:
             self.frame = (self.frame+1) % 7
             self.timer = 0
