@@ -9,9 +9,9 @@ class Npc:
         self.frame_index = 0
         self.x, self.y = 1060, 180
         self.w,self.h = 64,64
-        self.timer = 0
-        self.timer_delay = 0.15
         self.face = True
+        self.fps = 10.0
+        self.total_frames = 9
 
         self.dialogue_intro = [
             "혹시 나를 좀 도와줄 수 있을까?"
@@ -32,16 +32,18 @@ class Npc:
         else:
             self.face = False
 
-        self.timer += frame_time
-        if self.timer > self.timer_delay:
-            self.frame_index = (self.frame_index + 1) % 9
-            self.timer = 0
+        self.frame_index += self.fps * frame_time
+        if self.frame_index >= self.total_frames:
+            self.frame_index -= self.total_frames
 
     def draw(self):
+        frame = int(self.frame_index)
         if self.face:
-            self.right_frames[self.frame_index].draw(self.x, self.y, self.w*2.5,self.h*2.5)
+            img = self.right_frames[frame]
         else:
-            self.left_frames[self.frame_index].draw(self.x, self.y, self.w*2.5,self.h*2.5)
+            img = self.left_frames[frame]
+
+        img.draw(self.x, self.y, self.w * 2.5, self.h * 2.5)
 
     def can_talk(self):
         px = world.player.x
