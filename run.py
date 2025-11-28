@@ -2,6 +2,7 @@ from pico2d import *
 
 import game_framework
 import world
+from game_framework import frame_time
 
 PIXEL_PER_METER = 60.0
 RUN_SPEED_KMPH = 12.0
@@ -48,7 +49,8 @@ class Run:
 
     def do(self):
         self.frame = (self.frame + 1) % 10
-        self.player.x += 15 * self.player.dir
+
+        self.player.x += RUN_SPEED_PPS* game_framework.frame_time * self.player.dir
 
         if self.player.x > world.right_boundary:
             self.player.x = world.right_boundary
