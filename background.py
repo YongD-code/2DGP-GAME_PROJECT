@@ -19,19 +19,16 @@ class Blacksmith:
         self.frame = 1
         self.w ,self.h = 288,170
         self.x, self.y = 290,190
-        self.timer = 0
-        self.frame_interval = 0.1
+        self.fps = 6.0
 
     def update(self):
         frame_time = game_framework.frame_time
-        self.timer += frame_time
 
-        if self.timer > self.frame_interval:
-            self.frame = (self.frame + 1) % 4 + 1
-            self.timer = 0
+        self.frame += self.fps * frame_time
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.w, 0, self.w , self.h, self.x, self.y,self.w*1.2 , self.h*1.2)
+        frame = int(self.frame%4)+1
+        self.image.clip_draw(frame * self.w, 0, self.w , self.h, self.x, self.y,self.w*1.2 , self.h*1.2)
 
 
 class Ground:
