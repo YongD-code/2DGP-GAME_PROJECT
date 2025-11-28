@@ -6,7 +6,8 @@ from run import Run
 from harvest import Harvest,Plant
 import game_framework
 from hit import Hit
-
+import dialogue
+import quest_manage
 
 def right_down(e):
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key == SDLK_RIGHT
@@ -197,10 +198,32 @@ class Player:
                 world.inventory.selected_quickslot = event.key - SDLK_1  # 0~8
                 return
 
-                # 10번 슬롯 (0키)
             elif event.key == SDLK_0:
                 world.inventory.selected_quickslot = 9
                 return
+
+            elif event.key == SDLK_f:
+                for obj in world.world[2]:
+                    if hasattr(obj, "can_talk") and obj.can_talk():
+
+                        q = world.quest_manage.quests["npc_corn"]["state"]
+
+                        if q == "not_started":
+                            scripts = obj.dialogue_intro + obj.dialogue_quest
+                            world.active_dialogue = dialogue.DialogueUI("npc1", scripts)
+                            world.quest_manage.start_quest("npc_corn")
+
+                        elif q == "in_progress":
+                            scripts = ["아직 옥수수가 부족해!"]
+
+                            world.active_dialogue = dialogue.DialogueUI("npc1", scripts)
+
+                        elif q == "completed":
+                            scripts = obj.dialogue_complete
+                            world.active_dialogue = dialogue.DialogueUI("npc1", scripts)
+
+                        return
+
 
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
