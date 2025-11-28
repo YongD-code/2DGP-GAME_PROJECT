@@ -1,5 +1,6 @@
 from pico2d import *
 import world
+import game_framework
 
 class Npc:
     def __init__(self):
@@ -25,12 +26,13 @@ class Npc:
         ]
 
     def update(self,player_x = None):
+        frame_time = game_framework.frame_time
         if world.player.x > self.x:
             self.face = True
         else:
             self.face = False
 
-        self.timer += get_time()
+        self.timer += frame_time
         if self.timer > self.timer_delay:
             self.frame_index = (self.frame_index + 1) % 9
             self.timer = 0
