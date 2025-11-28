@@ -6,7 +6,8 @@ from NPC import Npc
 from time_clock import GameTime
 from inventory import Inventory
 from crop import Crop
-
+import quest_manage
+import dialogue
 import game_framework
 import title_mode
 
@@ -34,6 +35,7 @@ def init():
     world.portal = portal
     world.inventory_icon = inventoryicon
     world.inventory = inventory
+    world.quest_manage = quest_manage.QuestManage()
     seed_index = world.inventory.add_item("seed_corn")
     world.inventory.items[seed_index]["count"] = 5
 
@@ -79,6 +81,12 @@ def handle_events():
 
     events = get_events()
     for event in events:
+        if hasattr(world, "active_dialogue") and world.active_dialogue:
+            if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+                if not world.active_dialogue.next():
+                    world.active_dialogue = None
+                return True
+
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
@@ -96,7 +104,6 @@ def handle_events():
         else:
             if not world.inventory.visible:
                 world.player.handle_event(event)
-    pass
 
 
 def update():
@@ -111,6 +118,10 @@ def update():
     for crop in world.crops:
         crop.update(frame_time)
 
+    if hasattr(world, "active_dialogue") and world.active_dialogue:
+        world.active_dialogue.update = lambda ft: None
+        return
+
     delay(0.04)
     pass
 
@@ -122,6 +133,8 @@ def draw():
     world.render()
     if hasattr(world, 'inventory'):
         world.inventory.draw()
+    if hasattr(world, "active_dialogue") and world.active_dialogue:
+        world.active_dialogue.draw()
     update_canvas()
     pass
 
