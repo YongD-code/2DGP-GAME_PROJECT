@@ -109,14 +109,10 @@ def handle_events():
 def update():
     global prev_time
 
-    now = get_time()
-    frame_time = now - prev_time
-    prev_time = now
-
-    world.update(frame_time)
+    world.update(game_framework.frame_time)
 
     for crop in world.crops:
-        crop.update(frame_time)
+        crop.update(game_framework.frame_time)
 
     if hasattr(world, "active_dialogue") and world.active_dialogue:
         world.active_dialogue.update = lambda ft: None
