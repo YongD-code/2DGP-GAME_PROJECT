@@ -56,7 +56,7 @@ JUMP_SPEED_PPS = JUMP_SPEED_MPS * PIXEL_PER_METER
 GRAVITY_MPS = 14
 GRAVITY_PPS = GRAVITY_MPS * PIXEL_PER_METER
 
-FPS_ROLL = 0.9
+FPS_ROLL = 20.0
 FPS_JUMP = 8.0
 FPS_ATTACK = 20.0
 
@@ -408,11 +408,11 @@ class Roll:
         self.player.lock_dir = self.player.dir
 
         if self.player.dir == 1:
-            self.frame = 0
+            self.frame = 0.0
             self.image = self.image_right
 
         elif self.player.dir == -1:
-            self.frame = 11
+            self.frame = 11.9
             self.image = self.image_left
 
         self.player.roll_god = 0.0
@@ -422,14 +422,15 @@ class Roll:
         pass
 
     def do(self):
-        frame_time = FPS_ROLL * game_framework.frame_time
+        frame_time = game_framework.frame_time
+
         if self.player.lock_dir == 1:
-            self.frame += 1
+            self.frame += FPS_ROLL * frame_time
             check_RL =  self.frame>=12
 
         else:
-            self.frame -= 1
-            check_RL = self.frame<0
+            self.frame -= FPS_ROLL * frame_time
+            check_RL = self.frame<=0.0
 
         self.player.x += ROLL_SPEED_PPS * frame_time * self.player.lock_dir
 
@@ -449,7 +450,8 @@ class Roll:
             self.player.x = world.left_boundary
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
+        frame = int(self.frame)
+        self.image.clip_draw(frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
 
 class Jump:
     def __init__(self,player):
