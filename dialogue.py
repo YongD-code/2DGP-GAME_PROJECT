@@ -21,5 +21,5 @@ class DialogueUI:
         self.bg.draw(640,120,600,100)
 
         text = self.scripts[self.index]
-        self.font.draw(440, 120, text, (0, 0, 0))
+        self.font.draw(400, 120, text, (0, 0, 0))
 
