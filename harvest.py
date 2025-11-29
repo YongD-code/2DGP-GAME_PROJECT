@@ -1,4 +1,6 @@
 from pico2d import *
+
+import game_framework
 from crop import Crop
 import world
 from text_ani import TextAni
@@ -21,6 +23,7 @@ class Plant:
         self.image_left = load_image('harvest_R.png')
         self.image = self.image_right
         self.frame = 0
+        self.fps = 10.0
 
     def enter(self, event):
         inv = world.inventory
@@ -79,13 +82,14 @@ class Plant:
         pass
 
     def do(self):
-        if self.frame < 2:
-            self.frame += 1
-        else:
+        self.frame += self.fps * game_framework.frame_time
+
+        if self.frame >= 3:
             self.frame = 2
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
+        frame = int(self.frame)
+        self.image.clip_draw(frame * self.player.w, 0, self.player.w, self.player.h, self.player.x, self.player.y, self.player.w * 3,self.player.h * 3)
 
 
 class Harvest:
@@ -95,6 +99,7 @@ class Harvest:
         self.image_left = load_image('harvest_R.png')
         self.image = self.image_right
         self.frame = 0
+        self.fps = 10.0
 
     def enter(self, event):
         self.frame = 0
@@ -134,11 +139,12 @@ class Harvest:
         pass
 
     def do(self):
-        if self.frame < 2:
-            self.frame += 1
-        else:
+        self.frame += self.fps * game_framework.frame_time
+
+        if self.frame >= 3:
             self.frame = 2
 
     def draw(self):
-        self.image.clip_draw(self.frame * self.player.w, 0, self.player.w, self.player.h,
+        frame = int(self.frame)
+        self.image.clip_draw(frame * self.player.w, 0, self.player.w, self.player.h,
                              self.player.x, self.player.y, self.player.w * 3, self.player.h * 3)
