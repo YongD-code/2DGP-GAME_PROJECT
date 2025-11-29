@@ -13,17 +13,27 @@ class Npc:
         self.fps = 10.0
         self.total_frames = 9
 
-        self.dialogue_intro = [
-            "혹시 나를 좀 도와줄 수 있을까?"
-        ]
+        self.quest_ids = ["quest_corn", "quest_slime"]
 
-        self.dialogue_quest = [
-            "옥수수 5개만 구해다 줄래?",
-        ]
+        self.dialogue_intro = {
+            "quest_corn": ["안녕 농부야 내가 뭐 좀 부탁해도 될까?!"],
+            "quest_slime": ["이번엔 몬스터 처리 좀 부탁해도 될까?"],
+        }
 
-        self.dialogue_complete = [
-            "증말 고마워~!! 이건 보상이야."
-        ]
+        self.dialogue_quest = {
+            "quest_corn": ["옥수수 5개 모아줘"],
+            "quest_slime": ["슬라임 10마리만 잡아줘"],
+        }
+
+        self.dialogue_in_progress = {
+            "quest_corn": ["옥수수를 좀 더 열심히 키워야겠는데?"],
+            "quest_slime": ["슬라임 잡기가 아직은 좀 무서운가봐?"],
+        }
+
+        self.dialogue_complete = {
+            "quest_corn": ["옥수수 정도는 별 거 아닌가 보네?","다음 일도 맡겨도 되지?"],
+            "quest_slime": ["귀여운 슬라임들을 벌써 다 잡은거야? 고마워!"],
+        }
 
     def update(self,player_x = None):
         frame_time = game_framework.frame_time
