@@ -37,7 +37,9 @@ def init():
     world.inventory_icon = inventoryicon
     world.inventory = inventory
     world.quest_manage = quest_manage.QuestManage()
+    world.gold = 0
     world.ui = GameUI()
+
 
     seed_index = world.inventory.add_item("seed_corn")
     world.inventory.items[seed_index]["count"] = 5
@@ -117,11 +119,14 @@ def update():
     for crop in world.crops:
         crop.update(game_framework.frame_time)
 
+    if hasattr(world, 'ui'):
+        world.ui.update(game_framework.frame_time)
+
     if hasattr(world, "active_dialogue") and world.active_dialogue:
         world.active_dialogue.update = lambda ft: None
         return
 
-    delay(0.04)
+    # delay(0.04)
     pass
 
 
@@ -138,7 +143,7 @@ def draw():
 
     if hasattr(world, 'ui'):
         world.ui.draw_hp(world.player.hp)
-
+        world.ui.draw_gold(world.gold)
     update_canvas()
     pass
 
