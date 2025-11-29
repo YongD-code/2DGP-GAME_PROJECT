@@ -230,7 +230,7 @@ class Player:
                             qid = quest_completed
                             scripts = obj.dialogue_complete[qid]
                             world.active_dialogue = dialogue.DialogueUI("npc", scripts)
-
+                            world.quest_manage.give_reward(qid)
                             world.quest_manage.quests[qid]["reward_given"] = True
                             return
 
