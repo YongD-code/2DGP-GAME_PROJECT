@@ -32,28 +32,25 @@ class TextAni:
 
 class DeathTextAni:
     def __init__(self):
-        self.x = 440   # 중앙 정렬 보정 (YOU DIED 라서 조금 왼쪽)
+        self.x = 440
         self.y = 360
         self.text = "YOU DIED"
         self.alpha = 1.0
         self.timer = 0
         self.duration = 1.8
         self.font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 90)  # 큰 글씨!
-        self.color = (255, 0, 0)  # 붉게
+        self.color = (255, 0, 0)
 
     def update(self, frame_time):
         self.timer += frame_time
 
-        # 위로 천천히 상승
         self.y += 40 * frame_time
 
-        # 후반부에 알파 감소
         if self.timer > self.duration * 0.4:
             self.alpha -= (frame_time / (self.duration * 0.6))
             if self.alpha < 0:
                 self.alpha = 0
 
-        # 애니메이션 끝 → 타이틀로 자동 이동
         if self.timer >= self.duration:
             import game_framework
             import title_mode
@@ -79,7 +76,7 @@ class DamageTextAni:
 
     def update(self, frame_time):
         self.timer += frame_time
-        self.y += 60 * frame_time  # 더 빠르게 위로
+        self.y += 60 * frame_time
 
         if self.timer > self.duration * 0.4:
             self.alpha -= (frame_time / (self.duration * 0.6))

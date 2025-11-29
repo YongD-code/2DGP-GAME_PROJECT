@@ -203,25 +203,61 @@ class Player:
                 return
 
             elif event.key == SDLK_f:
+                world.quest_manage.check_inventory_quests()
+
                 for obj in world.world[2]:
                     if hasattr(obj, "can_talk") and obj.can_talk():
 
-                        q = world.quest_manage.quests["npc_corn"]["state"]
+                        quest_ids = getattr(obj, "quest_ids", [])
 
-                        if q == "not_started":
-                            scripts = obj.dialogue_intro + obj.dialogue_quest
-                            world.active_dialogue = dialogue.DialogueUI("npc1", scripts)
-                            world.quest_manage.start_quest("npc_corn")
+                        if not quest_ids:
+                            world.active_dialogue = dialogue.DialogueUI("npc", obj.default_dialogue)
+                            return
 
-                        elif q == "in_progress":
-                            scripts = ["아직 옥수수가 부족해!"]
+                        quest_to_start = None
+                        quest_in_progress = None
+                        quest_completed = None
 
-                            world.active_dialogue = dialogue.DialogueUI("npc1", scripts)
+                        for qid in quest_ids:
+                            q = world.quest_manage.quests[qid]
+                            if q["state"] == "completed" and not q.get("reward_given", False):
+                                quest_completed = qid
+                                break
 
-                        elif q == "completed":
-                            scripts = obj.dialogue_complete
-                            world.active_dialogue = dialogue.DialogueUI("npc1", scripts)
+                        if quest_completed is not None:
+                            qid = quest_completed
+                            scripts = obj.dialogue_complete[qid]
+                            world.active_dialogue = dialogue.DialogueUI("npc", scripts)
 
+                            world.quest_manage.quests[qid]["reward_given"] = True
+                            return
+
+                        for qid in quest_ids:
+                            q = world.quest_manage.quests[qid]
+
+                            if q["state"] == "not_started":
+                                quest_to_start = qid
+                                break
+
+                            if q["state"] == "in_progress":
+                                quest_in_progress = qid
+                                break
+
+                        if quest_to_start is not None:
+                            qid = quest_to_start
+                            scripts = obj.dialogue_intro[qid] + obj.dialogue_quest[qid]
+                            world.active_dialogue = dialogue.DialogueUI("npc", scripts)
+                            world.quest_manage.start_quest(qid)
+                            return
+
+                        if quest_in_progress is not None:
+                            qid = quest_in_progress
+                            scripts = obj.dialogue_in_progress[qid]
+                            world.active_dialogue = dialogue.DialogueUI("npc", scripts)
+                            return
+
+                        scripts = obj.dialogue_complete[quest_ids[-1]]
+                        world.active_dialogue = dialogue.DialogueUI("npc", scripts)
                         return
 
 
