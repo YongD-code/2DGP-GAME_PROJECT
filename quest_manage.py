@@ -10,16 +10,18 @@ class QuestManage:
                 "required": 5,
                 "progress": 0,
                 "state": "not_started",
-                "reward_given": False
+                "reward_given": False,
+                "reward": {"gold": 100}
             },
 
             "quest_slime": {
                 "type": "kill",
                 "target": "slime",
-                "required": 10,
+                "required": 5,
                 "progress": 0,
                 "state": "not_started",
-                "reward_given": False
+                "reward_given": False,
+                "reward": {"gold": 200}
             },
         }
 
@@ -50,6 +52,23 @@ class QuestManage:
 
             if total >= q["required"]:
                 q["state"] = "completed"
+
+    def give_reward(self, quest_id):
+        q = self.quests[quest_id]
+
+        if q["reward_given"]:
+            return
+
+        reward = q.get("reward", {})
+
+        if "gold" in reward:
+            world.gold += reward["gold"]
+
+            from text_ani import TextAni
+            world.add_object(
+                TextAni(world.player.x, world.player.y + 80,f"골드 + {reward['gold']}", (255,255,255)),3)
+
+        q["reward_given"] = True
 
     def complete(self, quest_id):
         self.quests[quest_id]["state"] = "completed"
