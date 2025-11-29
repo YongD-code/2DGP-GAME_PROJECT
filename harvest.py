@@ -129,8 +129,6 @@ class Harvest:
             world.add_object(TextAni(self.player.x, self.player.y + 40, f"{name_kr[crop_type]} +1",duration = 1.0),3)
             world.crops.remove(existing_crop)
 
-            if crop_type == "corn":
-                world.quest_manage.add_progress("npc_corn", 1)
 
     def exit(self, event):
         pass
