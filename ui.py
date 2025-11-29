@@ -4,7 +4,7 @@ class GameUI:
     def __init__(self):
         self.sheet = load_image('UI.png')
         self.gold_sheet = load_image('gold.png')
-        self.font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 10)
+        self.font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 32)
         self.HEART_W = 16
         self.HEART_H = 16
 
@@ -56,4 +56,4 @@ class GameUI:
 
         self.gold_sheet.clip_draw(current_frame * self.gold_w, 0 ,self.gold_w, self.gold_h,x, y, 32, 32)
 
-        self.font.draw(x + 40, y - 10, f"{gold_amount}", (255,255,255))
+        self.font.draw(x + 10, y , f" : {gold_amount}", (255,255,255))
