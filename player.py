@@ -91,6 +91,8 @@ class Player:
         self.roll_god = 0.0
         self.up_dportal = False
         self.hp = 6
+        self.max_hp = 6
+        self.max_hearts = 3
         self.dead_ani = False
 
         self.IDLE = Idle(self)
