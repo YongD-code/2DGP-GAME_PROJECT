@@ -10,6 +10,7 @@ import quest_manage
 import dialogue
 import game_framework
 import title_mode
+from ui import GameUI
 
 running = True
 prev_time = 0.0
@@ -36,6 +37,8 @@ def init():
     world.inventory_icon = inventoryicon
     world.inventory = inventory
     world.quest_manage = quest_manage.QuestManage()
+    world.ui = GameUI()
+
     seed_index = world.inventory.add_item("seed_corn")
     world.inventory.items[seed_index]["count"] = 5
 
@@ -129,8 +132,13 @@ def draw():
     world.render()
     if hasattr(world, 'inventory'):
         world.inventory.draw()
+
     if hasattr(world, "active_dialogue") and world.active_dialogue:
         world.active_dialogue.draw()
+
+    if hasattr(world, 'ui'):
+        world.ui.draw_hp(world.player.hp)
+
     update_canvas()
     pass
 

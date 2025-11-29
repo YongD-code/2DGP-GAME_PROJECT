@@ -128,6 +128,9 @@ def draw():
     clear_canvas()
     background.draw(640, 360)
     world.render()
+
+    if hasattr(world, 'ui'):
+        world.ui.draw_hp(world.player.hp)
     update_canvas()
 
 def pause():
