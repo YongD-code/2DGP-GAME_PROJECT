@@ -1,6 +1,8 @@
 from pico2d import *
 import math
 import random
+import world
+
 
 SLIME_BW   = 22.0
 SLIME_BH   = 20.0
@@ -178,6 +180,7 @@ class Slime:
             self.dead_ani = True
             self.death_anim_timer = 0.0
             self.frame = 0
+            world.quest_manage.add_progress("quest_slime", 1)
             return
 
         self.is_hit = True
