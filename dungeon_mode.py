@@ -139,7 +139,12 @@ def handle_events():
     for e in events:
         if e.type == SDL_QUIT:
             game_framework.quit()
-        elif e.type == SDL_KEYDOWN and e.key == SDLK_ESCAPE:
+
+        if e.type == SDL_KEYDOWN and e.key == SDLK_e:
+            world.inventory.toggle()
+            return
+
+        if e.type == SDL_KEYDOWN and e.key == SDLK_ESCAPE:
             game_framework.change_mode(GAME_PROJECT)
         else:
             world.player.handle_event(e)
