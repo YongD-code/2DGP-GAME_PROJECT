@@ -10,6 +10,8 @@ class Inventory:
         self.inv_h = 400
         self.quickslot_h = 112
         self.quickslot_offset_y = -310
+        self.quickslot_R_offset_x = 225
+        self.quickslot_R_offset_y = 10
         self.cols = 6
         self.rows = 5
         self.slot_size = 54
@@ -21,6 +23,8 @@ class Inventory:
         self.drag_slot_index = None
         self.drag_mouse_x = 0
         self.drag_mouse_y = 0
+        self.quickslot_scale = 1.0
+        self.quickslot_ui_scale = 1.0
 
         start_x = self.x - (self.cols * (self.slot_size + self.padding)) / 2 + self.slot_size / 2 + 32
         start_y = self.y + (self.rows * (self.slot_size + self.padding)) / 2 - self.slot_size / 2 - 32
@@ -46,12 +50,12 @@ class Inventory:
         self.selected_quickslot = 0
         self.quickslot_positions = []
 
-        qy = self.y + self.quickslot_offset_y- 10
-        start_x = self.x - 225
-        gap = 54
+        qy = self.y + self.quickslot_offset_y- self.quickslot_R_offset_y
+        start_x = self.x - self.quickslot_R_offset_x
+        self.gap = 54
 
         self.quickslot_positions = [
-            (start_x + i * gap, qy) for i in range(self.quickslot_count)
+            (start_x + i * self.gap, qy) for i in range(self.quickslot_count)
         ]
 
         self.item_icons = {
@@ -111,19 +115,19 @@ class Inventory:
 
                     if item['count'] > 1:
                         self.draw_count_text(x, y, item['count'])
-
-        self.image.clip_draw(
-            0, 0, self.w, self.quickslot_h,
-            self.x, self.y + self.quickslot_offset_y,
-                    self.w * 0.9, self.quickslot_h * 0.9)
+        ui_s = self.quickslot_ui_scale
+        self.image.clip_draw( 0, 0, self.w, self.quickslot_h,self.x, self.y + self.quickslot_offset_y,
+        self.w * 0.9 * ui_s, self.quickslot_h * 0.9 * ui_s)
 
         for i in range(self.quickslot_count):
             x, y = self.quickslot_positions[i]
 
-            draw_rectangle(x - 25, y - 25, x + 25, y + 25)
+            s = self.quickslot_scale
+            draw_rectangle(x - 25 * s, y - 25 * s, x + 25 * s, y + 25 * s)
 
             if i == self.selected_quickslot:
-                draw_rectangle(x - 30, y - 30, x + 30, y + 30)
+                s = self.quickslot_scale
+                draw_rectangle(x - 30* s, y - 30* s, x + 30* s, y + 30* s)
 
             slot_item_index = self.quickslots[i]
 
@@ -153,7 +157,8 @@ class Inventory:
     def draw_crop_icon(self, x, y, col, row):
         sx = col * self.crop_w
         sy = (self.crop_rows - 1 - row) * self.crop_h
-        self.crop_sheet.clip_draw(sx, sy, self.crop_w, self.crop_h, x, y, 48, 48)
+        size = 48 * self.quickslot_scale
+        self.crop_sheet.clip_draw(sx, sy, self.crop_w, self.crop_h, x, y, size, size)
 
 
     def handle_event(self, event):
@@ -299,3 +304,10 @@ class Inventory:
         ty = sy + 40
 
         self.tooltip_font.draw(tx, ty, desc, (255, 255, 255))
+
+    def update_quickslot_positions(self):
+        qy = self.y + self.quickslot_offset_y - self.quickslot_R_offset_y
+        start_x = self.x - self.quickslot_R_offset_x
+        self.quickslot_positions = [
+            (start_x + i * self.gap, qy) for i in range(self.quickslot_count)
+        ]
