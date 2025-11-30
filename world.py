@@ -8,6 +8,8 @@ right_boundary = 1250
 world = [[],[],[],[]]
 crops = []
 tiles = []
+monsters = []
+
 
 player = None
 background = None
