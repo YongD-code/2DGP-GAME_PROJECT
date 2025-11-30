@@ -15,6 +15,7 @@ def init(stage = None):
     global background, player,dungeon_map, stage_num
 
     old_hp = world.player.hp if world.player else None
+    old_gold = getattr(world, "gold", 0)
 
     if stage is not None:
         stage_num = stage
@@ -28,6 +29,8 @@ def init(stage = None):
 
     if old_hp is not None:
         player.hp = old_hp
+
+    world.gold = old_gold
 
     world.set_ground_y(180)
     world.set_boundary(110, 1170)
