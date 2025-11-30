@@ -420,7 +420,7 @@ class Player:
             self.state_machine.change_state(self.DEATH)
             return
 
-        self.god_timer = 0.6
+        self.god_timer = 1.0
         self.vx *= 0.5
         if self.vy > 0.0:
             self.vy = 0.0
