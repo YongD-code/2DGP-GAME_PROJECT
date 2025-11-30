@@ -140,6 +140,9 @@ def handle_events():
         if e.type == SDL_QUIT:
             game_framework.quit()
 
+        if e.type == SDL_KEYDOWN and e.key == SDLK_s:
+            return
+
         if e.type == SDL_KEYDOWN and e.key == SDLK_e:
             world.inventory.toggle()
             return
