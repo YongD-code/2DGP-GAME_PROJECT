@@ -51,10 +51,10 @@ def init(stage = None):
 
         for s in slime_list:
             world.add_collision_pair('player:slime', world.player, s)
-
-        portal = DungeonPortal()
-        world.add_object(portal, 0)
-        world.add_collision_pair('player:portal', player, portal)
+        #
+        # portal = DungeonPortal()
+        # world.add_object(portal, 0)
+        # world.add_collision_pair('player:portal', player, portal)
 
     elif stage_num == 2:
         dungeon_map = DungeonMap(stage_num)
@@ -77,9 +77,9 @@ def init(stage = None):
         for s in skeleton_list:
             world.add_collision_pair('player:skeleton', world.player, s)
 
-        portal = DungeonPortal()
-        world.add_object(portal, 0)
-        world.add_collision_pair('player:portal', player, portal)
+        # portal = DungeonPortal()
+        # world.add_object(portal, 0)
+        # world.add_collision_pair('player:portal', player, portal)
 
     elif stage_num == 3:
         dungeon_map = DungeonMap(stage_num)
@@ -102,9 +102,9 @@ def init(stage = None):
         for g in goblin_list:
             world.add_collision_pair('player:goblin', world.player, g)
 
-        portal = DungeonPortal()
-        world.add_object(portal, 0)
-        world.add_collision_pair('player:portal', player, portal)
+        # portal = DungeonPortal()
+        # world.add_object(portal, 0)
+        # world.add_collision_pair('player:portal', player, portal)
 
 def finish():
     world.clear()
@@ -127,6 +127,13 @@ def update():
     world.player.late_update()
     if hasattr(world, 'ui'):
         world.ui.update(game_framework.frame_time)
+
+    if len(world.monsters) == 0 and not hasattr(world, "spawned_portal"):
+        portal = DungeonPortal()
+        world.add_object(portal, 0)
+        world.add_collision_pair('player:portal', world.player, portal)
+
+        world.spawned_portal = True
     delay(frame_time)
 
 def draw():
