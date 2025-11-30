@@ -9,6 +9,7 @@ world = [[],[],[],[]]
 crops = []
 tiles = []
 monsters = []
+gold = 0
 
 
 player = None
