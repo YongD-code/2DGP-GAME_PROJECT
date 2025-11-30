@@ -14,8 +14,11 @@ stage_num = 1
 def init(stage = None):
     global background, player,dungeon_map, stage_num
 
-    old_hp = world.player.hp if world.player else None
-    old_gold = getattr(world, "gold", 0)
+    world_hp = world.player.hp if world.player else None
+    world_gold = getattr(world, "gold", 0)
+    world_inventory_items = None
+    world_inventory_slots = None
+    world_quickslots = None
 
     if stage is not None:
         stage_num = stage
@@ -27,10 +30,15 @@ def init(stage = None):
     player.x, player.y = 110,180
     world.player = player
 
-    if old_hp is not None:
-        player.hp = old_hp
+    if world_hp is not None:
+        player.hp = world_hp
 
-    world.gold = old_gold
+    world.gold = world_gold
+
+    if world_inventory_items is not None:
+        world.inventory.items = [item.copy() for item in world_inventory_items]
+        world.inventory.slots = [slot.copy() for slot in world_inventory_slots]
+        world.inventory.quickslots = world_quickslots.copy()
 
     world.set_ground_y(180)
     world.set_boundary(110, 1170)
