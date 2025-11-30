@@ -44,6 +44,13 @@ def init(stage = None):
     world.set_boundary(110, 1170)
     world.add_object(player, 2)
     world.monsters = []
+    world.inventory.quickslot_scale = 0.7
+    world.inventory.quickslot_ui_scale = 0.7
+    world.inventory.quickslot_offset_y = -330
+    world.inventory.gap = 38
+    world.inventory.quickslot_R_offset_x = 158
+    world.inventory.quickslot_R_offset_y = 8
+    world.inventory.update_quickslot_positions()
 
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
@@ -158,6 +165,8 @@ def draw():
     clear_canvas()
     background.draw(640, 360)
     world.render()
+    if hasattr(world, 'inventory'):
+        world.inventory.draw()
 
     if hasattr(world, 'ui'):
         world.ui.draw_hp(world.player.hp)
