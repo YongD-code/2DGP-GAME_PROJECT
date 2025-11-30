@@ -25,6 +25,8 @@ def init(stage = None):
     world.set_ground_y(180)
     world.set_boundary(110, 1170)
     world.add_object(player, 2)
+    world.monsters = []
+
     if world.gametime is not None:
         world.add_object(world.gametime, 3)
 
@@ -43,7 +45,7 @@ def init(stage = None):
                       ]
         for s in slime_list:
             world.add_object(s, 1)
-
+            world.monsters.append(s)
         for t in world.dungeon_map.get_tiles():
             world.add_collision_pair('player:tile', world.player, t)
 
@@ -67,7 +69,7 @@ def init(stage = None):
                       ]
         for s in skeleton_list:
             world.add_object(s, 1)
-
+            world.monsters.append(s)
 
         for t in world.dungeon_map.get_tiles():
             world.add_collision_pair('player:tile', world.player, t)
@@ -92,6 +94,7 @@ def init(stage = None):
                       ]
         for s in goblin_list:
             world.add_object(s, 1)
+            world.monsters.append(s)
 
         for t in world.dungeon_map.get_tiles():
             world.add_collision_pair('player:tile', world.player, t)
