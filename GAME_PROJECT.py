@@ -39,7 +39,8 @@ def init():
     world.quest_manage = quest_manage.QuestManage()
     world.gold = 0
     world.ui = GameUI()
-
+    world.inventory.quickslot_scale = 1.0
+    world.inventory.quickslot_ui_scale = 1.0
 
     seed_index = world.inventory.add_item("seed_corn")
     world.inventory.items[seed_index]["count"] = 5
