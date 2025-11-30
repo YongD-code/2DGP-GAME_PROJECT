@@ -134,6 +134,10 @@ class Player:
             if self.roll_god < 0.0:
                 self.roll_god = 0.0
 
+        if self.state_machine.current_state is self.DEATH:
+            self.DEATH.do()
+            return
+
         self.state_machine.update()
 
     def late_update(self):
@@ -162,6 +166,8 @@ class Player:
 
 
     def handle_event(self, event):
+        if self.state_machine.current_state is self.DEATH:
+            return
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_RIGHT:
                 self.right_input = True
@@ -624,6 +630,8 @@ class Attack:
         frame_time = game_framework.frame_time
         fps = FPS_ATTACK * frame_time
 
+        if self.player.hp <= 0:
+            return
         if self.waiting_combo:
             if self.player.attack_queued:
                 self.player.attack_queued = False
