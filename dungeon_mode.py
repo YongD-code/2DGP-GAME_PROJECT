@@ -13,6 +13,9 @@ from goblin import Goblin
 stage_num = 1
 def init(stage = None):
     global background, player,dungeon_map, stage_num
+
+    old_hp = world.player.hp if world.player else None
+
     if stage is not None:
         stage_num = stage
     background = load_image('dungeon_bg.png')
@@ -22,6 +25,10 @@ def init(stage = None):
     player = Player()
     player.x, player.y = 110,180
     world.player = player
+
+    if old_hp is not None:
+        player.hp = old_hp
+
     world.set_ground_y(180)
     world.set_boundary(110, 1170)
     world.add_object(player, 2)
