@@ -168,6 +168,12 @@ class Goblin:
             self.is_dead = True
             self.frame = 0
             self.death_anim_timer = 0.0
+
+            try:
+                world.monsters.remove(self)
+            except ValueError:
+                pass
+
             return
 
         self.is_hit = True

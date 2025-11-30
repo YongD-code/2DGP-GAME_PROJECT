@@ -180,6 +180,12 @@ class Slime:
             self.dead_ani = True
             self.death_anim_timer = 0.0
             self.frame = 0
+
+            try:
+                world.monsters.remove(self)
+            except ValueError:
+                pass
+
             world.quest_manage.add_progress("quest_slime", 1)
             return
 
