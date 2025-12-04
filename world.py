@@ -9,8 +9,6 @@ world = [[],[],[],[]]
 crops = []
 tiles = []
 monsters = []
-gold = 0
-
 
 player = None
 background = None
@@ -21,6 +19,12 @@ portal = None
 npc = None
 gametime = None
 dungeon_map = None
+inventory = None
+inventory_icon = None
+quest_manage = None
+active_dialogue = None
+active_upgrade = None
+gold = 0
 
 def add_object(o, layer):
     world[layer].append(o)
