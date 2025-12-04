@@ -94,6 +94,7 @@ class Player:
         self.max_hp = 6
         self.max_hearts = 3
         self.dead_ani = False
+        self.damage = 1
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
