@@ -95,6 +95,10 @@ def init():
     world.inventory.quickslot_R_offset_y = 10
     world.inventory.gap = 54
     world.inventory.update_quickslot_positions()
+
+    if hasattr(world, "crops"):
+        for crop in world.crops:
+            world.add_object(crop, 2)
     pass
 
 
