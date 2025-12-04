@@ -17,6 +17,13 @@ prev_time = 0.0
 
 def init():
     global running, prev_time,gametime
+    world.dungeon_map = None
+    if world.player is None:
+        player = Player()
+        world.player = player
+    else:
+        player = world.player
+        player.x, player.y = 80, 228
 
     running = True
     prev_time = get_time()
@@ -27,33 +34,38 @@ def init():
     house = House()
     portal = Portal()
     npc = Npc()
-    player = Player()
     inventoryicon = InventoryIcon()
-    inventory = Inventory()
 
-    world.player = player
     world.ground = ground
     world.portal = portal
+    world.npc = npc
     world.inventory_icon = inventoryicon
-    world.inventory = inventory
+    if world.inventory is None:
+        world.inventory = Inventory()
+        world.inventory.quickslot_scale = 1.0
+        world.inventory.quickslot_ui_scale = 1.0
+
+        seed_index = world.inventory.add_item("seed_corn")
+        world.inventory.items[seed_index]["count"] = 5
+
+        seed_index = world.inventory.add_item("seed_pumpkin")
+        world.inventory.items[seed_index]["count"] = 5
+
+        seed_index = world.inventory.add_item("seed_potato")
+        world.inventory.items[seed_index]["count"] = 5
+
+        seed_index = world.inventory.add_item("seed_strawberry")
+        world.inventory.items[seed_index]["count"] = 5
+    else:
+        world.inventory.quickslot_scale = 1.0
+        world.inventory.quickslot_ui_scale = 1.0
+
     world.blacksmith = blacksmith
-    world.quest_manage = quest_manage.QuestManage()
-    world.gold = 0
+
+    if world.quest_manage is None:
+        world.quest_manage = quest_manage.QuestManage()
+
     world.ui = GameUI()
-    world.inventory.quickslot_scale = 1.0
-    world.inventory.quickslot_ui_scale = 1.0
-
-    seed_index = world.inventory.add_item("seed_corn")
-    world.inventory.items[seed_index]["count"] = 5
-
-    seed_index = world.inventory.add_item("seed_pumpkin")
-    world.inventory.items[seed_index]["count"] = 5
-
-    seed_index = world.inventory.add_item("seed_potato")
-    world.inventory.items[seed_index]["count"] = 5
-
-    seed_index = world.inventory.add_item("seed_strawberry")
-    world.inventory.items[seed_index]["count"] = 5
 
     world.set_ground_y(228)
     world.set_boundary(30,1250)
@@ -75,9 +87,14 @@ def init():
         gametime = world.gametime
         world.add_object(gametime, 3)
 
-    world.crops = []
 
     world.active_upgrade = None
+
+    world.inventory.quickslot_offset_y = -310
+    world.inventory.quickslot_R_offset_x = 225
+    world.inventory.quickslot_R_offset_y = 10
+    world.inventory.gap = 54
+    world.inventory.update_quickslot_positions()
     pass
 
 
@@ -117,10 +134,9 @@ def handle_events():
             world.inventory.toggle()
             return
         elif event.type == SDL_KEYDOWN and event.key == SDLK_f:
-            for obj in world.world[2]:
-                if hasattr(obj, "can_talk") and obj.can_talk():
-                    world.player.handle_event(event)
-                    return
+            if world.npc.can_talk():
+                world.player.handle_event(event)
+                return
             if world.blacksmith and world.blacksmith.in_range(world.player):
                 world.active_upgrade = Upgrade()
                 return
@@ -134,7 +150,6 @@ def update():
     global prev_time
 
     world.update(game_framework.frame_time)
-
     for crop in world.crops:
         crop.update(game_framework.frame_time)
 

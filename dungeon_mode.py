@@ -28,9 +28,8 @@ def init(stage = None):
     print(f"=== ENTERING DUNGEON STAGE {stage_num} ===")
     world.clear()
 
-    player = Player()
+    player = world.player
     player.x, player.y = 110,180
-    world.player = player
 
     if world_hp is not None:
         player.hp = world_hp
@@ -134,6 +133,8 @@ def init(stage = None):
         # portal = DungeonPortal()
         # world.add_object(portal, 0)
         # world.add_collision_pair('player:portal', player, portal)
+
+
 
 def finish():
     world.clear()
