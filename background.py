@@ -6,12 +6,16 @@ import world
 class Background:
     def __init__(self):
         self.image = load_image('background.png')
-
+        self.night_image = load_image('background_night.png')
     def update(self):
         pass
 
     def draw(self):
-        self.image.draw(640, 360)
+        hour = world.gametime.hour if world.gametime else 12
+        if 6 <= hour < 17:
+            self.image.draw(640, 360)
+        else:
+            self.night_image.draw(640, 360)
 
 class Blacksmith:
     def __init__(self):
