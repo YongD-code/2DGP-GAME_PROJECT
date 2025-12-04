@@ -11,7 +11,7 @@ import dialogue
 import game_framework
 import title_mode
 from ui import GameUI
-
+from upgrade import Upgrade
 running = True
 prev_time = 0.0
 
@@ -36,6 +36,7 @@ def init():
     world.portal = portal
     world.inventory_icon = inventoryicon
     world.inventory = inventory
+    world.blacksmith = blacksmith
     world.quest_manage = quest_manage.QuestManage()
     world.gold = 0
     world.ui = GameUI()
@@ -75,6 +76,8 @@ def init():
         world.add_object(gametime, 3)
 
     world.crops = []
+
+    world.active_upgrade = None
     pass
 
 
@@ -87,6 +90,12 @@ def handle_events():
 
     events = get_events()
     for event in events:
+        if hasattr(world, "active_upgrade") and world.active_upgrade:
+            if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+                world.active_upgrade.upgrade()
+                if not world.active_upgrade.active:
+                    world.active_upgrade = None
+                return
         if hasattr(world, "active_dialogue") and world.active_dialogue:
             if event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
                 if not world.active_dialogue.next():
@@ -107,6 +116,15 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
             world.inventory.toggle()
             return
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_f:
+            for obj in world.world[2]:
+                if hasattr(obj, "can_talk") and obj.can_talk():
+                    world.player.handle_event(event)
+                    return
+            if world.blacksmith and world.blacksmith.in_range(world.player):
+                world.active_upgrade = Upgrade()
+                return
+
         else:
             if not world.inventory.visible:
                 world.player.handle_event(event)
@@ -145,6 +163,9 @@ def draw():
     if hasattr(world, 'ui'):
         world.ui.draw_hp(world.player.hp)
         world.ui.draw_gold(world.gold)
+
+    if hasattr(world, "active_upgrade") and world.active_upgrade:
+        world.active_upgrade.draw()
     update_canvas()
     pass
 
