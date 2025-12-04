@@ -289,6 +289,9 @@ class Player:
         return None
 
     def on_portal(self):
+        if getattr(world, "dungeon_map", None) is not None:
+            return False
+
         portal = world.portal
         if portal is None:
             return False
