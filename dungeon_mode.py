@@ -9,11 +9,13 @@ import random
 from background import DungeonPortal
 from skeleton import Skeleton
 from goblin import Goblin
+from upgrade import Upgrade
 
 stage_num = 1
 def init(stage = None):
     global background, player,dungeon_map, stage_num
-
+    world_damage = getattr(world.player, "damage", 1)
+    world_damage_level = getattr(world.player, "damage_level", 0)
     world_hp = world.player.hp if world.player else None
     world_gold = getattr(world, "gold", 0)
     world_inventory_items = None
@@ -32,6 +34,8 @@ def init(stage = None):
 
     if world_hp is not None:
         player.hp = world_hp
+    player.damage = world_damage
+    player.damage_level = world_damage_level
 
     world.gold = world_gold
 
