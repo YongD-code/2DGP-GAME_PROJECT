@@ -30,6 +30,9 @@ class Blacksmith:
         frame = int(self.frame%4)+1
         self.image.clip_draw(frame * self.w, 0, self.w , self.h, self.x, self.y,self.w*1.2 , self.h*1.2)
 
+    def in_range(self, player):
+        return abs(self.x - player.x) < 150
+
 
 class Ground:
     def __init__(self):
