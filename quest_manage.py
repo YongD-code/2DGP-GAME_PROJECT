@@ -61,6 +61,27 @@ class QuestManage:
             return
 
         reward = q.get("reward", {})
+        if q["type"] == "collect":
+            target = q["target"]
+            required = q["required"]
+            remaining = required
+
+            for item in world.inventory.items:
+                if item and item["id"] == target:
+                    if item["count"] >= remaining:
+                        item["count"] -= remaining
+                        remaining = 0
+                        break
+                    else:
+                        remaining -= item["count"]
+                        item["count"] = 0
+
+            for slot in world.inventory.slots:
+                idx = slot["item"]
+                if idx is not None:
+                    item = world.inventory.items[idx]
+                    if item["count"] <= 0:
+                        slot["item"] = None
 
         if "gold" in reward:
             world.gold += reward["gold"]
