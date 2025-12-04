@@ -163,6 +163,9 @@ def update():
     world.handle_collision()
     world.handle_attack_collision()
     world.player.late_update()
+    if hasattr(world, "crops"):
+        for crop in world.crops:
+            crop.update(frame_time)
     if hasattr(world, 'ui'):
         world.ui.update(game_framework.frame_time)
 
