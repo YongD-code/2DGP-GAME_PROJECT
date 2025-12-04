@@ -21,8 +21,8 @@ class Npc:
         }
 
         self.dialogue_quest = {
-            "quest_corn": ["옥수수 5개 모아줘"],
-            "quest_slime": ["슬라임 3마리만 잡아줘"],
+            "quest_corn": ["옥수수 5개 모아줘!!"],
+            "quest_slime": ["슬라임 3마리만 잡아줘!!"],
         }
 
         self.dialogue_in_progress = {
@@ -32,7 +32,7 @@ class Npc:
 
         self.dialogue_complete = {
             "quest_corn": ["옥수수 정도는 별 거 아닌가 보네?","다음 일도 맡겨도 되지?"],
-            "quest_slime": ["귀여운 슬라임들을 벌써 다 잡은거야? 고마워!"],
+            "quest_slime": ["귀여운 슬라임들을 벌써 다 잡은거야?","수고했어~!!"],
         }
 
     def update(self,player_x = None):
