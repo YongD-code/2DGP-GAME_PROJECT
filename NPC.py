@@ -22,7 +22,7 @@ class Npc:
 
         self.dialogue_quest = {
             "quest_corn": ["옥수수 5개 모아줘"],
-            "quest_slime": ["슬라임 10마리만 잡아줘"],
+            "quest_slime": ["슬라임 3마리만 잡아줘"],
         }
 
         self.dialogue_in_progress = {
