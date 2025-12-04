@@ -151,14 +151,15 @@ class Skeleton:
             return
 
     def take_hit(self):
+        import world
         if getattr(self, 'hit_timer', 0) > 0:
             return
 
-        self.hp  -=  1
         self.hit_timer = 0.3
+        damage = world.player.damage
+        self.hp -= damage
 
         from text_ani import DamageTextAni
-        import world
         world.add_object(DamageTextAni(self.x, self.y + 30, 1), 3)
 
         if self.hp <= 0:
