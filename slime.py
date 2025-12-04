@@ -175,7 +175,7 @@ class Slime:
 
         from text_ani import DamageTextAni
 
-        world.add_object(DamageTextAni(self.x, self.y + 30, 1), 3)
+        world.add_object(DamageTextAni(self.x, self.y + 30,damage), 3)
 
         if self.hp <= 0:
             self.dead_ani = True
