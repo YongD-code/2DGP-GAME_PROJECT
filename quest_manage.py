@@ -1,5 +1,6 @@
 from pico2d import *
 import world
+import random
 
 class QuestManage:
     def __init__(self):
@@ -17,11 +18,11 @@ class QuestManage:
             "quest_slime": {
                 "type": "kill",
                 "target": "slime",
-                "required": 5,
+                "required": 3,
                 "progress": 0,
                 "state": "not_started",
                 "reward_given": False,
-                "reward": {"gold": 200}
+                "reward": {"gold": 300,"seeds": ["seed_corn", "seed_pumpkin", "seed_potato", "seed_strawberry"]}
             },
         }
 
@@ -68,6 +69,28 @@ class QuestManage:
             world.add_object(
                 TextAni(world.player.x, world.player.y + 80,f"골드 + {reward['gold']}", (255,255,255)),3)
 
+        if "seeds" in reward:
+
+            seed_list = reward["seeds"]
+            seed_id = random.choice(seed_list)
+            fixed_count = 10
+
+
+            for _ in range(fixed_count):
+                world.inventory.add_item(seed_id)
+
+            name_kr = {
+                "seed_corn": "옥수수 씨앗",
+                "seed_pumpkin": "호박 씨앗",
+                "seed_potato": "감자 씨앗",
+                "seed_strawberry": "딸기 씨앗",
+            }
+
+            world.add_object(
+                TextAni(world.player.x, world.player.y + 120,
+                        f"{name_kr.get(seed_id, seed_id)} +10",
+                        (255, 255, 180)), 3
+            )
         q["reward_given"] = True
 
     def complete(self, quest_id):
