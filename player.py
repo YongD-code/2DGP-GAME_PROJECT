@@ -96,6 +96,8 @@ class Player:
         self.dead_ani = False
         self.damage = 1
         self.damage_level = 0
+        self.attack_buff_timer = 0.0
+        self.base_damage = self.damage
 
         self.IDLE = Idle(self)
         self.RUN = Run(self)
@@ -139,6 +141,12 @@ class Player:
         if self.state_machine.current_state is self.DEATH:
             self.DEATH.do()
             return
+
+        if self.attack_buff_timer > 0:
+            self.attack_buff_timer -= game_framework.frame_time
+            self.damage = self.base_damage + 2
+        else:
+            self.damage = self.base_damage
 
         self.state_machine.update()
 
@@ -270,7 +278,10 @@ class Player:
                         world.active_dialogue = dialogue.DialogueUI("npc", scripts)
                         return
 
-
+            elif event.key == SDLK_q:
+                self.use_quickslot_item()
+                return
+            
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 self.right_input = False
@@ -443,6 +454,29 @@ class Player:
         from text_ani import DeathTextAni
 
         world.add_object(DeathTextAni(), 3)
+
+    def use_quickslot_item(self):
+        inv = world.inventory
+
+        slot_index = inv.selected_quickslot
+        item_index = inv.quickslots[slot_index]
+
+        if item_index is None:
+            return
+
+        item = inv.items[item_index]
+        item_id = item["id"]
+
+        if item_id == "potion_heal":
+            self.hp = min(self.max_hp, self.hp + 2)
+
+        elif item_id == "potion_attack":
+            self.attack_buff_timer = 30.0
+
+        item["count"] -= 1
+        if item["count"] <= 0:
+            inv.quickslots[slot_index] = None
+
 
 class Roll:
     def __init__(self,player):
