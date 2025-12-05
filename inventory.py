@@ -101,8 +101,6 @@ class Inventory:
         print("Inventory Visible:", self.visible)
 
     def combine_items(self, item_id1, item_id2):
-        from text_ani import TextAni
-        import world
 
         recipe = {
             ("corn", "pumpkin"): "potion_heal",

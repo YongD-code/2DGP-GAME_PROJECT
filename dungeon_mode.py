@@ -147,7 +147,9 @@ def handle_events():
 
         if e.type == SDL_KEYDOWN and e.key == SDLK_s:
             return
-
+        if hasattr(world, 'inventory') and world.inventory.visible:
+            if world.inventory.handle_event(e):
+                continue
         if e.type == SDL_KEYDOWN and e.key == SDLK_e:
             world.inventory.toggle()
             return
