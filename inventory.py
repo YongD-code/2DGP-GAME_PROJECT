@@ -4,6 +4,13 @@ from pico2d import *
 class Inventory:
     def __init__(self):
         self.image = load_image('inventory.png')
+        self.heal_img = load_image("heal_Potion.png")
+        self.attack_img = load_image("attack_Potion.png")
+
+        self.potion_images = {
+            "potion_heal": self.heal_img,
+            "potion_attack": self.attack_img,
+        }
         self.visible = False
         self.x, self.y = 640, 360
         self.w, self.h = 800, 512
