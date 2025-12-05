@@ -90,12 +90,51 @@ class Inventory:
             "seed_corn": "옥수수 씨앗",
             "seed_pumpkin": "호박 씨앗",
             "seed_potato": "감자 씨앗",
-            "seed_strawberry": "딸기 씨앗"
+            "seed_strawberry": "딸기 씨앗",
+
+            "potion_heal": "체력 회복 물약",
+            "potion_attack": "공격력 증가 물약"
         }
 
     def toggle(self):
         self.visible = not self.visible
         print("Inventory Visible:", self.visible)
+
+    def combine_items(self, item_id1, item_id2):
+        from text_ani import TextAni
+        import world
+
+        recipe = {
+            ("corn", "pumpkin"): "potion_heal",
+            ("pumpkin", "corn"): "potion_heal",
+
+            ("strawberry", "potato"): "potion_attack",
+            ("potato", "strawberry"): "potion_attack",
+        }
+
+        key = (item_id1, item_id2)
+        if key not in recipe:
+            return None
+
+        result_item = recipe[key]
+
+        def remove_one(target_id):
+            for it in self.items:
+                if it and it["id"] == target_id and it["count"] > 0:
+                    it["count"] -= 1
+                    return True
+            return False
+
+        if not remove_one(item_id1) or not remove_one(item_id2):
+            return None
+
+        self.add_item(result_item)
+
+        world.add_object(TextAni(world.player.x, world.player.y + 60,
+                                 f"{result_item} 조합 성공!", (255, 255, 0)), 3)
+
+        return result_item
+
 
     def draw(self):
         if self.visible:
