@@ -130,9 +130,6 @@ class Inventory:
 
         self.add_item(result_item)
 
-        world.add_object(TextAni(world.player.x, world.player.y + 60,
-                                 f"{result_item} 조합 성공!", (255, 255, 0)), 3)
-
         return result_item
 
 
@@ -156,12 +153,15 @@ class Inventory:
                 if slot_index is not None:
                     item = self.items[slot_index]
 
+                    base_size = 48
+                    icon_size = int(base_size * self.quickslot_scale)
+
                     if item['id'] in self.potion_images:
                         img = self.potion_images[item['id']]
-                        img.draw(x, y, 48, 48)
+                        img.draw(x, y, icon_size, icon_size)
                     else:
                         icon = self.item_icons[item['id']]
-                        self.draw_crop_icon(x, y, icon["col"], icon["row"])
+                        self.draw_crop_icon(x, y, icon["col"], icon["row"], size=icon_size)
 
                     if item['count'] > 1:
                         self.draw_count_text(x, y, item['count'])
@@ -184,12 +184,15 @@ class Inventory:
             if slot_item_index is not None:
                 item = self.items[slot_item_index]
 
+                base_size = 48
+                icon_size = int(base_size * self.quickslot_scale)
+
                 if item['id'] in self.potion_images:
                     img = self.potion_images[item['id']]
-                    img.draw(x, y, 48, 48)
+                    img.draw(x, y, icon_size, icon_size)
                 else:
                     icon = self.item_icons[item['id']]
-                    self.draw_crop_icon(x, y, icon["col"], icon["row"])
+                    self.draw_crop_icon(x, y, icon["col"], icon["row"], size=icon_size)
 
                 if item["count"] > 1:
                     self.draw_count_text(x, y, item["count"])
@@ -198,12 +201,16 @@ class Inventory:
             item = self.items[self.drag_item_index]
             mx, my = self.drag_mouse_x, self.drag_mouse_y
 
+            base_size = 48
+            icon_size = int(base_size * self.quickslot_scale)
+
             if item['id'] in self.potion_images:
                 img = self.potion_images[item['id']]
-                img.draw(mx, my, 48, 48)
+                img.draw(mx, my, icon_size, icon_size)
+
             else:
                 icon = self.item_icons[item['id']]
-                self.draw_crop_icon(mx, my, icon["col"], icon["row"])
+                self.draw_crop_icon(mx, my, icon["col"], icon["row"], size=icon_size)
 
         if self.visible and not self.dragging:
             self.draw_tooltip()
@@ -213,10 +220,13 @@ class Inventory:
             self.count_font = load_font('D2Coding-Ver1.3.2-20180524.ttf', 20)
         self.count_font.draw(x + 12, y - 20, f"{count}", (255,255,255))
 
-    def draw_crop_icon(self, x, y, col, row):
+    def draw_crop_icon(self, x, y, col, row, size=None):
         sx = col * self.crop_w
         sy = (self.crop_rows - 1 - row) * self.crop_h
-        size = 48 * self.quickslot_scale
+
+        if size is None:
+            size = int(48 * self.quickslot_scale)
+
         self.crop_sheet.clip_draw(sx, sy, self.crop_w, self.crop_h, x, y, size, size)
 
 
