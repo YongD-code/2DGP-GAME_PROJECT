@@ -156,8 +156,12 @@ class Inventory:
                 if slot_index is not None:
                     item = self.items[slot_index]
 
-                    icon = self.item_icons[item['id']]
-                    self.draw_crop_icon(x, y, icon["col"], icon["row"])
+                    if item['id'] in self.potion_images:
+                        img = self.potion_images[item['id']]
+                        img.draw(x, y, 48, 48)
+                    else:
+                        icon = self.item_icons[item['id']]
+                        self.draw_crop_icon(x, y, icon["col"], icon["row"])
 
                     if item['count'] > 1:
                         self.draw_count_text(x, y, item['count'])
@@ -180,17 +184,26 @@ class Inventory:
             if slot_item_index is not None:
                 item = self.items[slot_item_index]
 
-                icon = self.item_icons[item["id"]]
-                self.draw_crop_icon(x, y, icon["col"], icon["row"])
+                if item['id'] in self.potion_images:
+                    img = self.potion_images[item['id']]
+                    img.draw(x, y, 48, 48)
+                else:
+                    icon = self.item_icons[item['id']]
+                    self.draw_crop_icon(x, y, icon["col"], icon["row"])
 
                 if item["count"] > 1:
                     self.draw_count_text(x, y, item["count"])
 
         if self.dragging and self.drag_item_index is not None:
             item = self.items[self.drag_item_index]
-            icon = self.item_icons[item['id']]
             mx, my = self.drag_mouse_x, self.drag_mouse_y
-            self.draw_crop_icon(mx, my, icon["col"], icon["row"])
+
+            if item['id'] in self.potion_images:
+                img = self.potion_images[item['id']]
+                img.draw(mx, my, 48, 48)
+            else:
+                icon = self.item_icons[item['id']]
+                self.draw_crop_icon(mx, my, icon["col"], icon["row"])
 
         if self.visible and not self.dragging:
             self.draw_tooltip()
@@ -269,24 +282,39 @@ class Inventory:
                         target_slot = i
                         break
 
-                if target_slot is None:
-                    self.dragging = False
-                    self.drag_item_index = None
-                    self.drag_slot_index = None
-                    return True
-
-                origin = self.drag_slot_index
-                origin_item = self.drag_item_index
-                target_item = self.slots[target_slot]['item']
-
-                self.slots[target_slot]['item'] = origin_item
-                self.slots[origin]['item'] = target_item
+                origin_slot = self.drag_slot_index
+                origin_item_index = self.drag_item_index
 
                 self.dragging = False
                 self.drag_item_index = None
                 self.drag_slot_index = None
-                return True
 
+                if target_slot is None:
+                    return True
+
+                target_item_index = self.slots[target_slot]['item']
+
+                if target_item_index is None:
+                    self.slots[target_slot]['item'] = origin_item_index
+                    self.slots[origin_slot]['item'] = None
+                    return True
+
+                item1 = self.items[origin_item_index]
+                item2 = self.items[target_item_index]
+
+                result = self.combine_items(item1["id"], item2["id"])
+
+                if result is not None:
+                    if item1["count"] <= 0:
+                        self.slots[origin_slot]['item'] = None
+                    if item2["count"] <= 0:
+                        self.slots[target_slot]['item'] = None
+                    return True
+
+                self.slots[target_slot]['item'], self.slots[origin_slot]['item'] = \
+                    self.slots[origin_slot]['item'], self.slots[target_slot]['item']
+
+                return True
         if event.type == SDL_MOUSEMOTION:
             mx, my = event.x, 720 - event.y
 
