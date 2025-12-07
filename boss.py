@@ -68,18 +68,36 @@ class Boss:
                 self.state = Boss.IDLE
                 self.frame = 0.0
 
-        elif self.state == Boss.IDLE:
-            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
-
-        elif self.state == Boss.WALK:
-            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.WALK_FRAME_COUNT
-
-
         elif self.state == Boss.ATTACK:
             self.frame += self.frame_per_sec * frame_time
             if self.frame >= Boss.ATTACK_FRAME_COUNT:
                 self.state = Boss.IDLE
                 self.frame = 0.0
+        else:
+            if world.player:
+                dx = world.player.x - self.x
+                distance = abs(dx)
+
+                if dx < 0:
+                    self.dir = 1
+                else:
+                    self.dir = -1
+
+                attack_range = 120
+
+                if distance > attack_range:
+                    self.state = Boss.WALK
+                    self.x += -self.dir * self.speed * frame_time
+
+                    self.x = clamp(50, self.x, 1230)
+                else:
+                    self.state = Boss.IDLE
+
+        if self.state == Boss.IDLE:
+            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
+
+        elif self.state == Boss.WALK:
+            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.WALK_FRAME_COUNT
 
         if self.hit_timer > 0:
             self.hit_timer -= frame_time
