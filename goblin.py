@@ -20,7 +20,7 @@ class Goblin:
 
         self.image = random.choice([self.image1, self.image2])
 
-        self.hp = 8
+        self.hp = 80
         self.hit_timer = 0.0
 
         self.cols = 7

@@ -21,7 +21,7 @@ class Slime:
         self.green_slime = load_image('green_slime.png')
         self.red_slime   = load_image('red_slime.png')
 
-        self.hp = 4
+        self.hp = 40
         self.hit_timer = 0.0
 
         self.cols = 7

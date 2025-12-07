@@ -17,7 +17,7 @@ class Skeleton:
     def __init__(self,x,y):
         self.image = load_image('skeleton.png')
 
-        self.hp = 5
+        self.hp = 50
         self.hit_timer = 0.0
 
 
