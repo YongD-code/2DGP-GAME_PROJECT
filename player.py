@@ -429,11 +429,11 @@ class Player:
 
         return False
 
-    def take_hit(self):
+    def take_hit(self,damage = 1):
         if self.dead_ani:
             return
 
-        self.hp -= 1
+        self.hp -= damage
 
         if self.hp <= 0:
 
