@@ -10,9 +10,10 @@ from background import DungeonPortal
 from skeleton import Skeleton
 from goblin import Goblin
 from upgrade import Upgrade
+from boss import Boss
 
 stage_num = 1
-def init(stage = None):
+def init(stage = 4):
     global background, player,dungeon_map, stage_num
     world_damage = getattr(world.player, "damage", 1)
     world_damage_level = getattr(world.player, "damage_level", 0)
@@ -133,7 +134,19 @@ def init(stage = None):
         # portal = DungeonPortal()
         # world.add_object(portal, 0)
         # world.add_collision_pair('player:portal', player, portal)
+    elif stage_num == 4:
+        dungeon_map = DungeonMap(stage_num)
+        world.dungeon_map = dungeon_map
+        world.add_object(dungeon_map, 0)
 
+        boss_list = [Boss(1000, 55)]
+
+        for b in boss_list:
+            world.add_object(b, 1)
+            world.monsters.append(b)
+
+        for b in boss_list:
+            world.add_collision_pair('player:boss', world.player, b)
 
 
 def finish():
