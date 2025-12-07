@@ -12,7 +12,7 @@ class Upgrade:
         self.bg.draw(640, 120, 600, 120)
         player = world.player
         next_cost = (player.damage_level + 1) * 50
-        next_power = player.damage + 1
+        next_power = player.damage + 10
 
         self.font.draw(400, 140,
             f"공격력 강화", (0,0,0))
@@ -34,6 +34,6 @@ class Upgrade:
         player.damage += 1
         player.damage_level += 1
 
-        world.add_object(TextAni(player.x, player.y + 60, "공격력 +1!", (255,255,100)), 3)
+        world.add_object(TextAni(player.x, player.y + 60, "공격력 +10!", (255,255,100)), 3)
 
         self.active = False
