@@ -94,7 +94,7 @@ class Player:
         self.max_hp = 6
         self.max_hearts = 3
         self.dead_ani = False
-        self.damage = 1
+        self.damage = 10
         self.damage_level = 0
         self.attack_buff_timer = 0.0
         self.base_damage = self.damage

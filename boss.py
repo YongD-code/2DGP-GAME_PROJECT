@@ -6,8 +6,8 @@ from text_ani import DamageTextAni
 BOSS_W = 288
 BOSS_H = 160
 
-BOSS_BB_W = 100
-BOSS_BB_H = 150
+BOSS_BB_W = 120
+BOSS_BB_H = 250
 
 
 class Boss:
@@ -122,7 +122,7 @@ class Boss:
         draw_rectangle(self.x - 150, self.y + 250, self.x + 150, self.y + 265)
         hp_width = 300 * (self.hp / self.max_hp)
         draw_rectangle(self.x - 150, self.y + 250, self.x - 150 + hp_width, self.y + 265)
-        # draw_rectangle(*self.get_bb()) # 충돌 박스 디버깅용
+        draw_rectangle(*self.get_bb()) # 충돌 박스 디버깅용
 
     def get_bb(self):
         return self.x - BOSS_BB_W, self.y, self.x + BOSS_BB_W, self.y + BOSS_BB_H
@@ -154,4 +154,4 @@ class Boss:
             return
         self.state = Boss.HIT
         self.frame = 0.0
-        self.x += -self.dir * 10
+        self.x += self.dir * 10
