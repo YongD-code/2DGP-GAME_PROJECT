@@ -63,6 +63,11 @@ class Boss:
                 self.frame = Boss.DIE_FRAME_COUNT - 1
             return
 
+        if world.player and world.player.hp <= 0:
+            self.state = Boss.IDLE
+            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
+            return
+
         if self.state == Boss.HIT:
             self.frame += self.frame_per_sec * frame_time * 1.5
             if self.frame >= Boss.HIT_FRAME_COUNT:
