@@ -39,13 +39,14 @@ class Boss:
         self.x, self.y = x, y
         self.hp = 300
         self.max_hp = self.hp
-        self.damage = 30
+        self.damage = 3
         self.state = Boss.IDLE
         self.dir = 1
 
         self.frame = 0.0
         self.frame_per_sec = 8.0
         self.speed = 50.0
+        self.attack_processed = False
 
         self.hit_timer = 0.0
         self.is_dead = False
@@ -70,9 +71,21 @@ class Boss:
 
         elif self.state == Boss.ATTACK:
             self.frame += self.frame_per_sec * frame_time
+
+            current_frame = int(self.frame)
+
+            if 10 <= current_frame <= 13 and not self.attack_processed:
+
+                if world.player and abs(world.player.x - self.x) < 200:
+                    world.player.take_hit(self.damage)
+
+                    self.attack_processed = True
+
             if self.frame >= Boss.ATTACK_FRAME_COUNT:
                 self.state = Boss.IDLE
                 self.frame = 0.0
+                self.attack_processed = False
+
         else:
             if world.player:
                 dx = world.player.x - self.x
@@ -83,7 +96,7 @@ class Boss:
                 else:
                     self.dir = -1
 
-                attack_range = 120
+                attack_range = 150
 
                 if distance > attack_range:
                     self.state = Boss.WALK
@@ -91,7 +104,9 @@ class Boss:
 
                     self.x = clamp(50, self.x, 1230)
                 else:
-                    self.state = Boss.IDLE
+                    self.state = Boss.ATTACK
+                    self.frame = 0.0
+                    self.attack_processed = False
 
         if self.state == Boss.IDLE:
             self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
