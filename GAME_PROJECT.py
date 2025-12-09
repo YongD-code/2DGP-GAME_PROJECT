@@ -24,6 +24,9 @@ def init():
     else:
         player = world.player
         player.x, player.y = 80, 228
+        player.hp = player.max_hp
+        player.dead_ani = False
+        player.state_machine.change_state(player.IDLE)
 
     running = True
     prev_time = get_time()
