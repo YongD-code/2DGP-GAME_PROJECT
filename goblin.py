@@ -14,11 +14,16 @@ class Goblin:
     MOVE_FRAME_TIME = 0.10
     MOVE_SPEED      = 80.0
     hp_bar = load_image('hp.png')
+    goblin_hit_sound = None
     def __init__(self,x,y):
         self.image1 = load_image('goblin1.png')
         self.image2 = load_image('goblin2.png')
 
         self.image = random.choice([self.image1, self.image2])
+
+        if not Goblin.goblin_hit_sound:
+            Goblin.goblin_hit_sound = load_wav('sound/goblin_hit.wav')
+            Goblin.goblin_hit_sound.set_volume(32)
 
         self.hp = 80
         self.max_hp = 80
@@ -163,6 +168,9 @@ class Goblin:
         self.hit_timer = 0.3
         damage = world.player.damage
         self.hp -= damage
+
+        if Goblin.goblin_hit_sound is not None:
+            Goblin.goblin_hit_sound.play()
 
         from text_ani import DamageTextAni
 
