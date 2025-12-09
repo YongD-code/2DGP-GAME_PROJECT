@@ -18,10 +18,15 @@ class Slime:
     MOVE_FRAME_TIME = 0.10
     MOVE_SPEED      = 110.0
     hp_bar = load_image('hp.png')
+    slime_hit_sound = None
     def __init__(self, x, y, color='blue'):
         self.blue_slime  = load_image('blue_slime.png')
         self.green_slime = load_image('green_slime.png')
         self.red_slime   = load_image('red_slime.png')
+
+        if not Slime.slime_hit_sound:
+            Slime.slime_hit_sound = load_wav('sound/slime.wav')
+            Slime.slime_hit_sound.set_volume(32)
 
         self.hp = 40
         self.max_hp = 40
@@ -176,6 +181,9 @@ class Slime:
         self.hit_timer = 0.3
         damage = world.player.damage
         self.hp -= damage
+
+        if Slime.slime_hit_sound is not None:
+            Slime.slime_hit_sound.play()
 
         from text_ani import DamageTextAni
 
