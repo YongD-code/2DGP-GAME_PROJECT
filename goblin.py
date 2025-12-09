@@ -147,7 +147,7 @@ class Goblin:
         else:
             self.image.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y+y_offset, draw_w*2, draw_h*2)
 
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         self.draw_hp_bar()
 
     def get_bb(self):

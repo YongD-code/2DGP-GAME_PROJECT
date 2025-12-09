@@ -144,7 +144,7 @@ class Skeleton:
         else:
             self.image.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y+y_offset, draw_w*2, draw_h*2)
 
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         self.draw_hp_bar()
 
     def get_bb(self):
@@ -168,7 +168,7 @@ class Skeleton:
 
         if Skeleton.skeleton_hit_sound is not None:
             Skeleton.skeleton_hit_sound.play()
-            
+
         from text_ani import DamageTextAni
         world.add_object(DamageTextAni(self.x, self.y + 30, damage), 3)
 

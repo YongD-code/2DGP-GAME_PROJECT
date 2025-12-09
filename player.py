@@ -178,11 +178,11 @@ class Player:
             return
 
         self.state_machine.draw()
-        draw_rectangle(*self.get_bb())
+        # draw_rectangle(*self.get_bb())
         atk_bb = self.get_attack_bb()
         if atk_bb:
             l, b, r, t = atk_bb
-            draw_rectangle(l, b, r, t)
+            # draw_rectangle(l, b, r, t)
 
 
     def handle_event(self, event):
