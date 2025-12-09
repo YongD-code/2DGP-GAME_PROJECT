@@ -14,8 +14,13 @@ class Skeleton:
     MOVE_FRAME_TIME = 0.10
     MOVE_SPEED      = 110.0
     hp_bar = load_image('hp.png')
+    skeleton_hit_sound = None
     def __init__(self,x,y):
         self.image = load_image('skeleton.png')
+
+        if not Skeleton.skeleton_hit_sound:
+            Skeleton.skeleton_hit_sound = load_wav('sound/skeleton_hit.wav')
+            Skeleton.skeleton_hit_sound.set_volume(32)
 
         self.hp = 50
         self.max_hp = 50
@@ -161,6 +166,9 @@ class Skeleton:
         damage = world.player.damage
         self.hp -= damage
 
+        if Skeleton.skeleton_hit_sound is not None:
+            Skeleton.skeleton_hit_sound.play()
+            
         from text_ani import DamageTextAni
         world.add_object(DamageTextAni(self.x, self.y + 30, damage), 3)
 
