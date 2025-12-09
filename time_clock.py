@@ -9,7 +9,7 @@ class GameTime:
         self.total_time = 0.0
         self.hour = 6
         self.minute = 0.0
-        self.time_speed = 200.0
+        self.time_speed = 8.0
 
     def update(self,frame_time):
         self.total_time += frame_time * self.time_speed
