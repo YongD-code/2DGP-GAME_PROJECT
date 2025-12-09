@@ -9,19 +9,22 @@ SLIME_BH   = 20.0
 SLIME_BX = 0.0
 SLIME_BY = -10.0
 
+
+
 class Slime:
     DETECT_RADIUS   = 260.0
     STOP_DIST       = 24.0
     IDLE_FRAME_TIME = 0.15
     MOVE_FRAME_TIME = 0.10
     MOVE_SPEED      = 110.0
-
+    hp_bar = load_image('hp.png')
     def __init__(self, x, y, color='blue'):
         self.blue_slime  = load_image('blue_slime.png')
         self.green_slime = load_image('green_slime.png')
         self.red_slime   = load_image('red_slime.png')
 
         self.hp = 40
+        self.max_hp = 40
         self.hit_timer = 0.0
 
         self.cols = 7
@@ -153,6 +156,7 @@ class Slime:
             self.sheet.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y, draw_w, draw_h)
 
         draw_rectangle(*self.get_bb())
+        self.draw_hp_bar()
 
     def get_bb(self):
         cx = self.x + SLIME_BX
@@ -200,3 +204,13 @@ class Slime:
         else:
             self.x += -self.dir * 20
 
+    def draw_hp_bar(self):
+        bar_w = 128
+        bar_h = 32
+        x = self.x
+        y = self.y + 25
+
+        ratio = max(self.hp / self.max_hp, 0)
+        fill_w = int(bar_w * ratio)
+
+        self.hp_bar.clip_draw(0, 0,fill_w, bar_h,x - (bar_w // 2) + fill_w / 2,y,fill_w * 0.5, bar_h)

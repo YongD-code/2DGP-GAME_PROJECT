@@ -13,11 +13,12 @@ class Skeleton:
     IDLE_FRAME_TIME = 0.15
     MOVE_FRAME_TIME = 0.10
     MOVE_SPEED      = 110.0
-
+    hp_bar = load_image('hp.png')
     def __init__(self,x,y):
         self.image = load_image('skeleton.png')
 
         self.hp = 50
+        self.max_hp = 50
         self.hit_timer = 0.0
 
 
@@ -139,6 +140,7 @@ class Skeleton:
             self.image.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, self.y+y_offset, draw_w*2, draw_h*2)
 
         draw_rectangle(*self.get_bb())
+        self.draw_hp_bar()
 
     def get_bb(self):
         cx = self.x + SKELETON_BX
@@ -183,3 +185,14 @@ class Skeleton:
             world.remove_object(self)
         else:
             self.x += -self.dir * 25
+
+    def draw_hp_bar(self):
+        bar_w = 128
+        bar_h = 32
+        x = self.x
+        y = self.y + 50
+
+        ratio = max(self.hp / self.max_hp, 0)
+        fill_w = int(bar_w * ratio)
+
+        self.hp_bar.clip_draw(0, 0, fill_w, bar_h, x - (bar_w // 2) + fill_w / 2, y, fill_w * 0.7, bar_h)
