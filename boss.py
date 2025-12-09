@@ -158,8 +158,10 @@ class Boss:
             self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.WALK_FRAME_COUNT
 
         elif self.state == Boss.ATTACK:
-            self.frame += self.frame_per_sec * frame_time
-
+            if self.hp < self.max_hp / 2:
+                self.frame += self.frame_per_sec * frame_time * 2
+            else:
+                self.frame += self.frame_per_sec * frame_time
             current_frame = int(self.frame)
 
             if 10 <= current_frame <= 13 and not self.attack_processed:
