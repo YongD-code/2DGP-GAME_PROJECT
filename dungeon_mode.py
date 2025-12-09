@@ -13,8 +13,10 @@ from upgrade import Upgrade
 from boss import Boss
 
 stage_num = 1
-def init(stage = 4):
+def init(stage = None):
     global background, player,dungeon_map, stage_num
+    if hasattr(world, "spawned_portal"):
+        del world.spawned_portal
     world_damage = getattr(world.player, "damage", 1)
     world_damage_level = getattr(world.player, "damage_level", 0)
     world_hp = world.player.hp if world.player else None
@@ -185,6 +187,7 @@ def update():
         world.ui.update(game_framework.frame_time)
 
     if len(world.monsters) == 0 and not hasattr(world, "spawned_portal"):
+    # if not hasattr(world, "spawned_portal"):
         portal = DungeonPortal()
         world.add_object(portal, 0)
         world.add_collision_pair('player:portal', world.player, portal)
