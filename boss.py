@@ -166,7 +166,7 @@ class Boss:
 
             if 10 <= current_frame <= 13 and not self.attack_processed:
 
-                if world.player and abs(world.player.x - self.x) < 200:
+                if world.player and abs(world.player.x - self.x) < 250:
 
                     if world.player.state_machine.current_state is world.player.ROLL:
                         pass
