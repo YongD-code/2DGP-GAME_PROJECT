@@ -1,7 +1,9 @@
 from pico2d import *
+import math
 import world
 from text_ani import DamageTextAni
-
+from behavior_tree import BehaviorTree, Action, Condition, Sequence, Selector
+import game_framework
 
 BOSS_W = 288
 BOSS_H = 160
@@ -13,12 +15,12 @@ BOSS_BB_H = 250
 class Boss:
     image = None
     hp_bar = load_image('hp.png')
+
     IDLE_ROW = 4
     WALK_ROW = 3
     ATTACK_ROW = 2
     HIT_ROW = 1
     DEAD_ROW = 0
-
 
     IDLE_FRAME_COUNT = 6
     WALK_FRAME_COUNT = 12
@@ -31,6 +33,9 @@ class Boss:
     DEAD = 2
     WALK = 3
     HIT = 4
+
+    ATTACK_RANGE = 250
+    ATTACK_COOL = 2.0
 
     def __init__(self, x, y):
         if Boss.image is None:
@@ -46,13 +51,87 @@ class Boss:
         self.frame = 0.0
         self.frame_per_sec = 8.0
         self.speed = 50.0
+
         self.attack_processed = False
+        self.attack_cool = 0.0
 
         self.hit_timer = 0.0
         self.is_dead = False
 
         self.w, self.h = BOSS_W, BOSS_H
         self.ground_y = world.ground_y
+
+        self.build_behavior_tree()
+
+    def distance_to_player(self):
+        px = world.player.x
+        return abs(px - self.x)
+
+
+    def player_is_near(self, r):
+        return self.distance_to_player() < r
+
+
+    def player_near(self, r):
+        return BehaviorTree.SUCCESS if self.player_is_near(r) else BehaviorTree.FAIL
+
+
+    def attack_ready(self):
+        return BehaviorTree.SUCCESS if self.attack_cool <= 0 else BehaviorTree.FAIL
+
+
+    def action_attack(self):
+        self.state = Boss.ATTACK
+        self.frame = 0.0
+        self.attack_processed = False
+        if self.hp < self.max_hp / 2:
+            self.attack_cool = Boss.ATTACK_COOL / 2
+        else:
+            self.attack_cool = Boss.ATTACK_COOL
+        return BehaviorTree.SUCCESS
+
+    def action_chase_player(self):
+        self.state = Boss.WALK
+
+        px = world.player.x
+        self.dir = -1 if px > self.x else 1
+
+        self.x += -self.dir * self.speed * game_framework.frame_time
+        self.x = clamp(50, self.x, 1230)
+
+        if abs(px - self.x) < 120:
+            pass
+
+        return BehaviorTree.RUNNING
+
+    def action_idle(self):
+        self.state = Boss.IDLE
+        return BehaviorTree.SUCCESS
+
+    def is_attacking(self):
+        if self.state == Boss.ATTACK:
+            return BehaviorTree.SUCCESS
+        else:
+            return BehaviorTree.FAIL
+
+    def build_behavior_tree(self):
+        c0 = Condition("공격 중인가?", self.is_attacking)
+
+        c1 = Condition("공격 가능?", self.attack_ready)
+        c2 = Condition("플레이어가 가까운가?", self.player_near, Boss.ATTACK_RANGE)
+        a1 = Action("공격 시작", self.action_attack)
+        attack_seq = Sequence("공격", c1,c2, a1)
+
+        c3 = Condition("플레이어 감지?", self.player_near, Boss.ATTACK_RANGE + 200)
+        a2 = Action("추적", self.action_chase_player)
+        chase_seq = Sequence("추적", c3,a2)
+
+        a4 = Action("대기", self.action_idle)
+
+        root = Selector("보스 루트", c0, attack_seq, chase_seq, a4)
+
+        self.bt = BehaviorTree(root)
+
 
     def update(self, frame_time):
 
@@ -63,16 +142,20 @@ class Boss:
                 self.frame = Boss.DIE_FRAME_COUNT - 1
             return
 
-        if world.player and world.player.hp <= 0:
-            self.state = Boss.IDLE
-            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
-            return
 
-        if self.state == Boss.HIT:
-            self.frame += self.frame_per_sec * frame_time * 1.5
-            if self.frame >= Boss.HIT_FRAME_COUNT:
-                self.state = Boss.IDLE
-                self.frame = 0.0
+        if self.attack_cool > 0:
+            self.attack_cool -= frame_time
+
+        if self.hit_timer > 0:
+            self.hit_timer -= frame_time
+
+        self.bt.run()
+
+        if self.state == Boss.IDLE:
+            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
+
+        elif self.state == Boss.WALK:
+            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.WALK_FRAME_COUNT
 
         elif self.state == Boss.ATTACK:
             self.frame += self.frame_per_sec * frame_time
@@ -91,44 +174,13 @@ class Boss:
                         pass
                     else:
                         world.player.take_hit(self.damage)
-
-                    self.attack_processed = True
+                self.attack_processed = True
 
             if self.frame >= Boss.ATTACK_FRAME_COUNT:
                 self.state = Boss.IDLE
                 self.frame = 0.0
                 self.attack_processed = False
 
-        else:
-            if world.player:
-                dx = world.player.x - self.x
-                distance = abs(dx)
-
-                if dx < 0:
-                    self.dir = 1
-                else:
-                    self.dir = -1
-
-                attack_range = 150
-
-                if distance > attack_range:
-                    self.state = Boss.WALK
-                    self.x += -self.dir * self.speed * frame_time
-
-                    self.x = clamp(50, self.x, 1230)
-                else:
-                    self.state = Boss.ATTACK
-                    self.frame = 0.0
-                    self.attack_processed = False
-
-        if self.state == Boss.IDLE:
-            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
-
-        elif self.state == Boss.WALK:
-            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.WALK_FRAME_COUNT
-
-        if self.hit_timer > 0:
-            self.hit_timer -= frame_time
 
     def draw(self):
         if self.is_dead:
@@ -143,17 +195,12 @@ class Boss:
         elif self.state == Boss.ATTACK:
             row = Boss.ATTACK_ROW
             frame_count = Boss.ATTACK_FRAME_COUNT
-        elif self.state == Boss.HIT:
-            row = Boss.HIT_ROW
-            frame_count = Boss.HIT_FRAME_COUNT
         else:
             row = Boss.IDLE_ROW
             frame_count = Boss.IDLE_FRAME_COUNT
 
         idx = int(self.frame) % frame_count
-
         x_clip = idx * self.w
-
         y_clip = row * self.h
 
         draw_w = self.w * 3
@@ -168,14 +215,13 @@ class Boss:
         # draw_rectangle(*self.get_bb()) # 충돌 박스 디버깅용
 
         self.draw_hp_bar()
+
     def get_bb(self):
         return self.x - BOSS_BB_W, self.y, self.x + BOSS_BB_W, self.y + BOSS_BB_H
 
     def handle_collision(self, group, other):
-
         if group == 'player:attack':
             self.take_hit(other.damage)
-            return
 
     def take_hit(self, damage):
         if self.hit_timer > 0 or self.is_dead:
@@ -195,7 +241,6 @@ class Boss:
                 world.monsters.remove(self)
             except ValueError:
                 pass
-            return
 
     def draw_hp_bar(self):
         bar_w = 128
