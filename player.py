@@ -199,8 +199,14 @@ class Player:
                     return
 
                 elif self.up_dportal:
+                    cur = getattr(world.dungeon_map, 'stage_num', 1)
+                    if cur >= 4:
+                        import GAME_PROJECT
+                        game_framework.change_mode(GAME_PROJECT)
+                        return
+
                     import loading_mode
-                    next_stage = (getattr(world, 'dungeon_map', None).stage_num % 3) + 1
+                    next_stage = cur + 1
                     loading_mode.start(target_stage=next_stage)
                     game_framework.change_mode(loading_mode)
 
