@@ -15,6 +15,10 @@ BOSS_BB_H = 250
 class Boss:
     image = None
     hp_bar = load_image('hp.png')
+    boss_hit_sound = None
+    boss_attack_sound = None
+    boss_dead_sound = None
+    boss_rage_sound = None
 
     IDLE_ROW = 4
     WALK_ROW = 3
@@ -41,6 +45,22 @@ class Boss:
         if Boss.image is None:
             Boss.image = load_image('Boss.png')
 
+        if not Boss.boss_hit_sound:
+            Boss.boss_hit_sound = load_wav('sound/boss_hit.wav')
+            Boss.boss_hit_sound.set_volume(32)
+
+        if not Boss.boss_attack_sound:
+            Boss.boss_attack_sound = load_wav('sound/boss_attack.wav')
+            Boss.boss_attack_sound.set_volume(32)
+
+        if not Boss.boss_dead_sound:
+            Boss.boss_dead_sound = load_wav('sound/boss_dead.wav')
+            Boss.boss_dead_sound.set_volume(64)
+
+        if not Boss.boss_rage_sound:
+            Boss.boss_rage_sound = load_wav('sound/rage.wav')
+            Boss.boss_rage_sound.set_volume(32)
+
         self.x, self.y = x, y
         self.hp = 300
         self.max_hp = self.hp
@@ -60,6 +80,7 @@ class Boss:
 
         self.w, self.h = BOSS_W, BOSS_H
         self.ground_y = world.ground_y
+        self.rage = False
 
         self.build_behavior_tree()
 
@@ -169,7 +190,8 @@ class Boss:
             current_frame = int(self.frame)
 
             if 10 <= current_frame <= 13 and not self.attack_processed:
-
+                if Boss.boss_attack_sound is not None:
+                    Boss.boss_attack_sound.play()
                 if world.player and abs(world.player.x - self.x) < 250:
 
                     if world.player.state_machine.current_state is world.player.ROLL:
@@ -236,10 +258,20 @@ class Boss:
         self.hit_timer = 0.3
         self.hp -= damage
 
+        if not self.rage and self.hp < self.max_hp / 2:
+            self.rage = True
+            if Boss.boss_rage_sound is not None:
+                Boss.boss_rage_sound.play()
+
+        if Boss.boss_hit_sound is not None:
+            Boss.boss_hit_sound.play()
+
         world.add_object(DamageTextAni(self.x, self.y + 280, damage), 3)
 
         if self.hp <= 0:
             self.is_dead = True
+            if Boss.boss_dead_sound is not None:
+                Boss.boss_dead_sound.play()
             self.state = Boss.DEAD
             self.frame = 0.0
 
