@@ -7,6 +7,10 @@ class Background:
     def __init__(self):
         self.image = load_image('background.png')
         self.night_image = load_image('background_night.png')
+        self.bgm = load_music('sound/village.mp3')
+        self.bgm.set_volume(32)
+        self.bgm.repeat_play()
+
     def update(self):
         pass
 
