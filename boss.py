@@ -12,7 +12,7 @@ BOSS_BB_H = 250
 
 class Boss:
     image = None
-
+    hp_bar = load_image('hp.png')
     IDLE_ROW = 4
     WALK_ROW = 3
     ATTACK_ROW = 2
@@ -157,11 +157,9 @@ class Boss:
         else:
             self.image.clip_composite_draw(x_clip, y_clip, self.w, self.h, 0, 'h', self.x, draw_y, draw_w, draw_h)
 
-        draw_rectangle(self.x - 150, self.y + 250, self.x + 150, self.y + 265)
-        hp_width = 300 * (self.hp / self.max_hp)
-        draw_rectangle(self.x - 150, self.y + 250, self.x - 150 + hp_width, self.y + 265)
-        draw_rectangle(*self.get_bb()) # 충돌 박스 디버깅용
+        # draw_rectangle(*self.get_bb()) # 충돌 박스 디버깅용
 
+        self.draw_hp_bar()
     def get_bb(self):
         return self.x - BOSS_BB_W, self.y, self.x + BOSS_BB_W, self.y + BOSS_BB_H
 
@@ -193,3 +191,14 @@ class Boss:
         self.state = Boss.HIT
         self.frame = 0.0
         self.x += self.dir * 10
+
+    def draw_hp_bar(self):
+        bar_w = 128
+        bar_h = 32
+        x = self.x
+        y = self.y + 270
+
+        ratio = max(self.hp / self.max_hp, 0)
+        fill_w = int(bar_w * ratio)
+
+        self.hp_bar.clip_draw(0, 0,fill_w, bar_h,x - (bar_w // 2) + fill_w / 2,y,fill_w * 2.5, bar_h * 3)
