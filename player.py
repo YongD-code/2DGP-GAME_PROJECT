@@ -69,8 +69,18 @@ BND_DST = 3.0
 
 
 class Player:
+    player_hit_sound = None
+    player_dead_sound = None
     def __init__(self):
         self.image = load_image('_idle.png')
+        if not Player.player_hit_sound:
+            Player.player_hit_sound = load_wav('sound/player_hit.wav')
+            Player.player_hit_sound.set_volume(32)
+
+        if not Player.player_dead_sound:
+            Player.player_dead_sound = load_wav('sound/player_dead.wav')
+            Player.player_dead_sound.set_volume(32)
+
         self.x,self.y = 80,228
         self.frame = 0
         self.w = 120
@@ -441,9 +451,14 @@ class Player:
 
         self.hp -= damage
 
+        if Player.player_hit_sound is not None:
+            Player.player_hit_sound.play()
+
         if self.hp <= 0:
 
             self.dead_ani = True
+            if Player.player_dead_sound is not None:
+                Player.player_dead_sound.play()
             self.handle_death()
             self.state_machine.change_state(self.DEATH)
             return
