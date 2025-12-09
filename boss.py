@@ -82,7 +82,15 @@ class Boss:
             if 10 <= current_frame <= 13 and not self.attack_processed:
 
                 if world.player and abs(world.player.x - self.x) < 200:
-                    world.player.take_hit(self.damage)
+
+                    if world.player.state_machine.current_state is world.player.ROLL:
+                        pass
+                    elif world.player.roll_god > 0:
+                        pass
+                    elif world.player.god_timer > 0:
+                        pass
+                    else:
+                        world.player.take_hit(self.damage)
 
                     self.attack_processed = True
 
@@ -188,9 +196,6 @@ class Boss:
             except ValueError:
                 pass
             return
-        self.state = Boss.HIT
-        self.frame = 0.0
-        self.x += self.dir * 10
 
     def draw_hp_bar(self):
         bar_w = 128
