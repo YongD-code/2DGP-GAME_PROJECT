@@ -13,8 +13,12 @@ from upgrade import Upgrade
 from boss import Boss
 
 stage_num = 1
+dungeon_bgm = None
+boss_bgm = None
+current_bgm = None
+
 def init(stage = None):
-    global background, player,dungeon_map, stage_num
+    global background, player,dungeon_map, stage_num,dungeon_bgm, boss_bgm, current_bgm
     if hasattr(world, "spawned_portal"):
         del world.spawned_portal
     world_damage = getattr(world.player, "damage", 1)
@@ -28,7 +32,28 @@ def init(stage = None):
     if stage is not None:
         stage_num = stage
     background = load_image('dungeon_bg.png')
-    print(f"=== ENTERING DUNGEON STAGE {stage_num} ===")
+
+    if dungeon_bgm is None:
+        dungeon_bgm = load_music('sound/dungeon.mp3')
+        dungeon_bgm.set_volume(32)
+
+    if boss_bgm is None:
+        boss_bgm = load_music('sound/boss.mp3')
+        boss_bgm.set_volume(32)
+
+    if stage_num == 4:
+        if current_bgm != 'boss':
+            if current_bgm == 'dungeon':
+                dungeon_bgm.stop()
+            boss_bgm.repeat_play()
+            current_bgm = 'boss'
+    else:
+        if current_bgm != 'dungeon':
+            if current_bgm == 'boss':
+                boss_bgm.stop()
+            dungeon_bgm.repeat_play()
+            current_bgm = 'dungeon'
+
     world.clear()
 
     player = world.player
@@ -152,6 +177,12 @@ def init(stage = None):
 
 
 def finish():
+    global dungeon_bgm, boss_bgm, current_bgm
+    if dungeon_bgm is not None:
+        dungeon_bgm.stop()
+    if boss_bgm is not None:
+        boss_bgm.stop()
+    current_bgm = None
     world.clear()
 
 def handle_events():
@@ -186,8 +217,8 @@ def update():
     if hasattr(world, 'ui'):
         world.ui.update(game_framework.frame_time)
 
-    if len(world.monsters) == 0 and not hasattr(world, "spawned_portal"):
-    # if not hasattr(world, "spawned_portal"):
+    # if len(world.monsters) == 0 and not hasattr(world, "spawned_portal"):
+    if not hasattr(world, "spawned_portal"):
         portal = DungeonPortal()
         world.add_object(portal, 0)
         world.add_collision_pair('player:portal', world.player, portal)
