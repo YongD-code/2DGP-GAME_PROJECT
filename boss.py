@@ -142,6 +142,10 @@ class Boss:
                 self.frame = Boss.DIE_FRAME_COUNT - 1
             return
 
+        if world.player is None or world.player.hp <= 0:
+            self.state = Boss.IDLE
+            self.frame = (self.frame + self.frame_per_sec * frame_time) % Boss.IDLE_FRAME_COUNT
+            return
 
         if self.attack_cool > 0:
             self.attack_cool -= frame_time
