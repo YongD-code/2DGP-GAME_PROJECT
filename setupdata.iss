@@ -11,7 +11,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{5BD151F6-CF18-4DCE-97AA-B70AE83ED1BC}
+AppId={{2419800E-84CF-42D0-B271-EE9B8641D28A}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -34,7 +34,7 @@ DisableProgramGroupPage=yes
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\2DGP\2DGP-GAME_PROJECT\temp
-OutputBaseFilename=DungeonFarmerSetup2022184010
+OutputBaseFilename=Game_2022184010_Setup
 SetupIconFile=C:\2DGP\2DGP-GAME_PROJECT\DungeonFarmerIcon.ico
 SolidCompression=yes
 WizardStyle=modern dark
