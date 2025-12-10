@@ -217,8 +217,8 @@ def update():
     if hasattr(world, 'ui'):
         world.ui.update(game_framework.frame_time)
 
-    # if len(world.monsters) == 0 and not hasattr(world, "spawned_portal"):
-    if not hasattr(world, "spawned_portal"):
+    if len(world.monsters) == 0 and not hasattr(world, "spawned_portal"):
+    # if not hasattr(world, "spawned_portal"):
         portal = DungeonPortal()
         world.add_object(portal, 0)
         world.add_collision_pair('player:portal', world.player, portal)

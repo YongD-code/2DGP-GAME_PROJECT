@@ -22,7 +22,7 @@ class Crop:
 
     def update(self,frame_time):
         self.timer += frame_time
-        if self.timer > 1.0 and self.stage > self.max_stage:
+        if self.timer > 8.0 and self.stage > self.max_stage:
             self.stage -= 1
             self.timer = 0
 
