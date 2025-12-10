@@ -346,6 +346,12 @@ class Inventory:
         for idx, it in enumerate(self.items):
             if it['id'] == item_id:
                 it['count'] += 1
+
+                if not any(slot['item'] == idx for slot in self.slots):
+                    for slot in self.slots:
+                        if slot['item'] is None:
+                            slot['item'] = idx
+                            break
                 return idx
 
         self.items.append({'id': item_id, 'count': 1})
@@ -355,7 +361,6 @@ class Inventory:
             if slot['item'] is None:
                 slot['item'] = new_index
                 break
-
         return new_index
 
     def move_to_quickslot(self, slot_index):
@@ -363,7 +368,9 @@ class Inventory:
         slot_item_index = self.slots[slot_index]['item']
         if slot_item_index is None:
             return
-
+        for i in range(self.quickslot_count):
+            if self.quickslots[i] == slot_item_index:
+                return
         for i in range(self.quickslot_count):
             if self.quickslots[i] is None:
                 self.quickslots[i] = slot_item_index

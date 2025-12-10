@@ -31,7 +31,8 @@ class Upgrade:
             return
 
         world.gold -= cost
-        player.damage += 1
+        player.base_damage += 10
+        player.damage = player.base_damage
         player.damage_level += 1
 
         world.add_object(TextAni(player.x, player.y + 60, "공격력 +10!", (255,255,100)), 3)

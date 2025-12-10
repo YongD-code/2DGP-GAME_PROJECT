@@ -8,11 +8,11 @@ class QuestManage:
             "quest_corn": {
                 "type": "collect",
                 "target": "corn",
-                "required": 5,
+                "required": 3,
                 "progress": 0,
                 "state": "not_started",
                 "reward_given": False,
-                "reward": {"gold": 100}
+                "reward": {"gold": 100,"seeds": ["seed_corn"]}
             },
 
             "quest_slime": {
@@ -24,8 +24,19 @@ class QuestManage:
                 "reward_given": False,
                 "reward": {"gold": 300,"seeds": ["seed_corn", "seed_pumpkin", "seed_potato", "seed_strawberry"]}
             },
-        }
 
+            "quest_potato": {
+                "type": "collect",
+                "target": "potato",
+                "required": 3,
+                "progress": 0,
+                "state": "not_started",
+                "reward_given": False,
+                "reward": {"gold": 150, "seeds": ["seed_corn", "seed_pumpkin", "seed_potato", "seed_strawberry"]}
+            },
+        }
+        self.quest_cycle = ["quest_corn", "quest_slime", "quest_potato"]
+        self.quest_index = 0
     def start_quest(self, quest_id):
         q = self.quests[quest_id]
         q["state"] = "in_progress"
@@ -113,6 +124,14 @@ class QuestManage:
                         (255, 255, 180)), 3
             )
         q["reward_given"] = True
+
+        self.quest_index = (self.quest_index + 1) % len(self.quest_cycle)
+
+        next_qid = self.quest_cycle[self.quest_index]
+
+        self.quests[next_qid]["state"] = "not_started"
+        self.quests[next_qid]["progress"] = 0
+        self.quests[next_qid]["reward_given"] = False
 
     def complete(self, quest_id):
         self.quests[quest_id]["state"] = "completed"

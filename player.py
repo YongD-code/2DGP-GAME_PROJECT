@@ -135,6 +135,9 @@ class Player:
         )
 
     def update(self):
+        if hasattr(world, 'inventory') and world.inventory.visible:
+            world.player.state_machine.change_state(world.player.IDLE)
+            return
         self.prev_x = self.x
         self.prev_y = self.y
         self.prev_dir = self.dir
@@ -154,7 +157,7 @@ class Player:
 
         if self.attack_buff_timer > 0:
             self.attack_buff_timer -= game_framework.frame_time
-            self.damage = self.base_damage + 2
+            self.damage = self.base_damage + 10
         else:
             self.damage = self.base_damage
 
